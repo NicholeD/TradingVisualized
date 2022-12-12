@@ -15,7 +15,7 @@ public class ConversionTester {
         System.out.println(json);
         List<Fish> fish2 = JsonFishConverter.convertToFish(json);
         System.out.println(fish2);
-        List<Fish> fish3 = JsonFishConverter.convertToFishFromFile(new File("C:\\Users\\ajben\\Documents\\JsonString.txt"));
+        List<Fish> fish3 = JsonFishConverter.convertToFishFromFile(new File("exe\\TV_Data\\data.txt"));
         System.out.println(fish3);
         System.out.println(JsonFishConverter.convertToJson(fish3));
     }
