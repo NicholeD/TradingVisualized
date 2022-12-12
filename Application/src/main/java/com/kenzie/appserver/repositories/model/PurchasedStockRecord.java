@@ -1,10 +1,14 @@
 package com.kenzie.appserver.repositories.model;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
+
 @DynamoDBTable(tableName = "purchased")
 public class PurchasedStockRecord {
     private String name;
     private String symbol;
-    private Date dateOfPurchase;
+    private String dateOfPurchase;
     private Double purchasePrice;
     private int shares;
 
@@ -26,11 +30,11 @@ public class PurchasedStockRecord {
     }
 
     @DynamoDBAttribute(attributeName = "DateOfPurchase")
-    public Date getDateOfPurchase() {
+    public String getDateOfPurchase() {
         return dateOfPurchase;
     }
 
-    public void setDateOfPurchase(Date dateOfPurchase) {
+    public void setDateOfPurchase(String dateOfPurchase) {
         this.dateOfPurchase = dateOfPurchase;
     }
 

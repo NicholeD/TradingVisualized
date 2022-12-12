@@ -3,11 +3,11 @@ package com.kenzie.appserver.service.model;
 public class PurchasedStock {
     private final String name;
     private final String symbol;
-    private final Date dateOfPurchase;
+    private final String dateOfPurchase;
     private final Double purchasePrice;
     private final int shares;
 
-    public PurchasedStock(String name, String symbol, Date dateOfPurchase, Double purchasePrice, int shares) {
+    public PurchasedStock(String name, String symbol, String dateOfPurchase, Double purchasePrice, int shares) {
         this.name = name;
         this.symbol = symbol;
         this.dateOfPurchase = dateOfPurchase;
@@ -23,7 +23,7 @@ public class PurchasedStock {
         return symbol;
     }
 
-    public Date getDateOfPurchase() {
+    public String getDateOfPurchase() {
         return dateOfPurchase;
     }
 
