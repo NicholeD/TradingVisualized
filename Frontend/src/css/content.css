@@ -74,8 +74,8 @@
 }
 
 .button {
-  background-color: #2d3136; /* Green */
-    border: 2px solid #31c48d;
+  background-color: #1f2833;
+    border: 2px solid #45a29f;
     color: white;
     padding: 8px;
     text-align: center;
@@ -85,6 +85,7 @@
     margin: 4px 2px;
     transition-duration: 0.4s;
     cursor: pointer;
+    font-family: arial;
 }
 
 .button:hover {
@@ -99,16 +100,18 @@
     margin: 20px auto 20px auto;
     padding: 20px 5px 20px 20px;
     font-weight: bold;
-    color: #003366;
-    border: 3px solid #003366;
+    color: #727272;
+    border: 3px solid #45a29f;
     border-radius: 10px;
-    background-color: aliceblue;
+    background-color: #1f2833;
 }
+
+
 input[type=text]{
     padding: 5px;
-    background-color: #CBCED6;
+    background-color: #c6c7c9;
     text-color: green;
-    border: 1px solid #31c48d
+    border: 1px solid #45a29f;
 }
 .holdings
 {
@@ -150,7 +153,7 @@ input[type=text]{
 
 .jiffy{
     width: 400px;
-    height: 236px;
+    height: 200px;
     margin: 50px 50px;
     background-image: url();
     background-size: 100%;
@@ -159,10 +162,9 @@ input[type=text]{
 }
 .jiffyfront{
     width: 400px;
-    height: 302px;
-
-    margin: 50px 50px;
-    background-image: url();
+    height: 275px;
+    margin: 20px 20px;
+    background-image: url("./images/jiffyFront.png");
     background-size: 100%;
     background-repeat: no-repeat;
     float: left;

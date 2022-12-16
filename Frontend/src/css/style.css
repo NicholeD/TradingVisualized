@@ -23,7 +23,7 @@ body{
 }
 .header {
 
-    background-color: #2d3136;
+    background-color: #1f2833;
     color: var(--primary-color);
     height: 80px;
     background-image: url();
@@ -35,7 +35,7 @@ body{
     width: 80px;
     height: 80px;
     float: left;
-    background-image: url();
+    background-image: url("./images/logo-no-background.png");
     background-size: 100%;
     background-repeat: no-repeat;
 }
@@ -55,7 +55,7 @@ body{
 .content{
     height:100%;
     padding-bottom: 10px;
-    background: url("./backgroundwebsite.jpg") no-repeat center center fixed;
+    background: url("./images/background.jpg") no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -63,18 +63,18 @@ body{
 }
 .divider{
     border-top: 10px solid #bbb;
-    border-color: #31c48d;
-    color: #31c48d;
+    border-color: #45a29f;
+    color: #45a29f;
 }
 
 .footer{
     width: 100%;
     height: 200px;
-    color: #31c48d;
-    background-color: #2d3136;
+    color: #55c8c4;
+    background-color: #1f2833;
 }
 .footer a:link, a:visited{
-    color: #31c48d;
+    color: #45a29f;
     text-decoration: none;
 }
 .footer a:hover{
@@ -91,10 +91,10 @@ body{
     float: left;
 }
 .secondlogo{
-    margin: auto;
-    width: 100px;
-    height: 80px;
-    background-image: url();
+    margin-left: 30px;
+    width: 200px;
+    height: 200px;
+    background-image: url("./images/logo-no-background2.png");
     background-size: 100%;
     background-repeat: no-repeat;
 }

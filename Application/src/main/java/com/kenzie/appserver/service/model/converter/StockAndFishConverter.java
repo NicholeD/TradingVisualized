@@ -4,6 +4,8 @@ import com.kenzie.appserver.service.model.Fish;
 import com.kenzie.appserver.service.model.Stock;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class StockAndFishConverter {
 
@@ -13,8 +15,8 @@ public class StockAndFishConverter {
         fish.setName(stock.getName()); //not sure if fish name should be stock name or stock symbol
         fish.setPrice(stock.getPurchasePrice());
         fish.setQuantity(stock.getQuantity());
-//        fish.setSize();  this is going to be either a ratio of the price and quantity of stock or not sure
-        fish.setStatus(true);
+        fish.setSize((float) stock.getPurchasePrice()*stock.getQuantity());
+        fish.setStatus(true); // might need to change this per scoots last message
         return fish;
     }
 
@@ -25,6 +27,21 @@ public class StockAndFishConverter {
         return stock;
     }
 
+    public static List<Fish> stockListToFishList(List<Stock> stockList){
+        return stockList.stream()
+                .map(s -> new Fish(s.getName(),(float)(s.getPurchasePrice()*s.getQuantity()),s.getQuantity(), s.getPurchasePrice(), true))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Stock> fishListToStockList(List<Fish> fishList){
+        return fishList.stream()
+                .map(f -> {
+                    String symbol = ""; // watch out for using this converter, symbol will be blank until ask about it
+                    System.out.println("symbol will be blank until fixed fishListToStockList converter");
+                    return new Stock(symbol, f.getName(), f.getPrice(), LocalDateTime.now().toString());
+                })
+                .collect(Collectors.toList());
+    }
 
 
 
