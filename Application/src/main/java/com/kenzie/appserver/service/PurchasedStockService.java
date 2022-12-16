@@ -2,12 +2,9 @@ package com.kenzie.appserver.service;
 
 import com.kenzie.appserver.repositories.PurchasedStockRepository;
 import com.kenzie.appserver.repositories.model.PurchasedStockRecord;
-import com.kenzie.appserver.service.model.PurchasedStock;
 
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
