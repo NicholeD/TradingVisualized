@@ -21,7 +21,7 @@ public class FishService {
         return fish;
     }
 
-    public Fish addNewFish(String name, float size, double quantity, double price, boolean status) {
+    public Fish addNewFish(String name, float size, double quantity, double price, String status) {
         FishRecord fishRecord = new FishRecord();
         fishRecord.setName(name);
         fishRecord.setSize(size);

@@ -5,12 +5,12 @@ public class Fish {
     private float size;
     private double quantity;
     private double price;
-    private boolean status;
+    private String status;
 
     public Fish() {
     }
 
-    public Fish(String name, float size, double quantity, double price, boolean status) {
+    public Fish(String name, float size, double quantity, double price, String status) {
         this.name = name;
         this.size = size;
         this.quantity = quantity;
@@ -50,11 +50,11 @@ public class Fish {
         this.price = price;
     }
 
-    public boolean isStatus() {
+    public String isStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 

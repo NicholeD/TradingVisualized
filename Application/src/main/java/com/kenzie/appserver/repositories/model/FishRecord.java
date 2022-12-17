@@ -22,7 +22,7 @@ public class FishRecord {
     private double price;
 
     @DynamoDBAttribute(attributeName = "status")
-    private boolean status;
+    private String status;
 
     public String getName() {
         return name;
@@ -56,11 +56,11 @@ public class FishRecord {
         this.price = price;
     }
 
-    public boolean isStatus() {
+    public String isStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
