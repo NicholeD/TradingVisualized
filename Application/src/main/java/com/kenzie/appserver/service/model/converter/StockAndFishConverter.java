@@ -16,7 +16,7 @@ public class StockAndFishConverter {
         fish.setPrice(stock.getPurchasePrice());
         fish.setQuantity(stock.getQuantity());
         fish.setSize((float) stock.getPurchasePrice()*stock.getQuantity());
-        fish.setStatus(true); // might need to change this per scoots last message
+        fish.setStatus("active"); // might need to change this per scoots last message
         return fish;
     }
 
@@ -29,7 +29,7 @@ public class StockAndFishConverter {
 
     public static List<Fish> stockListToFishList(List<Stock> stockList){
         return stockList.stream()
-                .map(s -> new Fish(s.getName(),(float)(s.getPurchasePrice()*s.getQuantity()),s.getQuantity(), s.getPurchasePrice(), true))
+                .map(s -> new Fish(s.getName(),(float)(s.getPurchasePrice()*s.getQuantity()),s.getQuantity(), s.getPurchasePrice(), "Active"))
                 .collect(Collectors.toList());
     }
 

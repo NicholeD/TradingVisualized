@@ -15,7 +15,7 @@ public class FishResponse {
     @JsonProperty("price")
     public double price;
     @JsonProperty("status")
-    public boolean status;
+    public String status;
 
     public String getName() {
         return name;
@@ -49,11 +49,11 @@ public class FishResponse {
         this.price = price;
     }
 
-    public boolean isStatus() {
+    public String isStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 }
