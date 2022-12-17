@@ -1,10 +1,14 @@
 package com.kenzie.appserver.service;
 
+import com.kenzie.appserver.repositories.PortfolioRepository;
+import com.kenzie.appserver.repositories.model.PortfolioRecord;
 import com.kenzie.appserver.service.model.Portfolio;
 import com.kenzie.appserver.service.model.Stock;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Service
 public class PortfolioService {
@@ -24,13 +28,12 @@ public class PortfolioService {
         Portfolio portfolio = new Portfolio();
         portfolio.setFunds(portfolioRecord.getFunds());
 
-        List<Stock> stocks = portfolioRecord.getStocks() {
+        List<Stock> stocks = portfolioRecord.getStocks();
             for(Stock stock : stocks) {
                 portfolio.addStock(stock);
             }
             return portfolio;
         }
-    }
 
     public Portfolio updatePortfolio(Portfolio portfolio, Stock stock) {
         double totalCost = stock.getPurchasePrice() * stock.getQuantity();
