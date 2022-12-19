@@ -1,7 +1,10 @@
 package com.kenzie.appserver.controller;
 
 import com.amazonaws.Response;
+import com.kenzie.appserver.controller.model.SearchStockResponse;
 import com.kenzie.appserver.controller.model.StockResponse;
+import com.kenzie.appserver.service.StockService;
+import com.kenzie.appserver.service.model.Stock;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +17,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -24,10 +28,10 @@ public class StockController {
 
     @GetMapping("/{symbol}")
     public ResponseEntity<SearchStockResponse> getStocksBySymbol(@PathVariable("symbol") String symbol) {
-        StockResponse stockresponse = stockService.getStocksBySymbol(symbol);
+        StockResponse stockResponse = stockService.getStocksBySymbol(symbol);
 
         //If there is no stock, return 204
-        if (stockresponse == null) {
+        if (stockResponse == null) {
             return ResponseEntity.notFound().build();
         }
         //Otherwise, convert into searchStockResponse and return it.
@@ -43,11 +47,11 @@ public class StockController {
         return date.atStartOfDay(ZoneId.systemDefault());
     }
 
-    private SearchedStockResponse createSearchStockResponse(StockResponse stockResponse, String symbol) {
+    private SearchStockResponse createSearchStockResponse(StockResponse stockResponse, String symbol) {
         List<Stock> stocks = new ArrayList<>();
         String name = stockService.getStockNameBySymbol(symbol);
 
-        Map<String, HashMap<String, String>> stockByDay = stockResponse.getStocksByDay();
+        Map<String, HashMap<String, String>> stocksByDay = stockResponse.getStocksByDay();
 
         for(Map.Entry<String, HashMap<String, String>> day : stocksByDay.entrySet()) {
             Stock stock = new Stock(symbol, name, Double.valueOf(day.getValue().get("4. close")), (day.getKey()));
