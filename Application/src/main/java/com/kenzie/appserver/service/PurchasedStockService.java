@@ -8,13 +8,13 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class PurchasedStockService {
-    private PurchasedStockRepository purchasedStockRepository;
+//@Service
+//public class PurchasedStockService {
+//    private PurchasedStockRepository purchasedStockRepository;
 
-    public PurchasedStockService(PurchasedStockRepository purchasedStockRepository) {
-        this.purchasedStockRepository = purchasedStockRepository;
-        }
+//    public PurchasedStockService(PurchasedStockRepository purchasedStockRepository) {
+//        this.purchasedStockRepository = purchasedStockRepository;
+//        }
 
 //    public PurchasedStock purchaseStock(PurchaseStockRequest purchaseStockRequest) { //TODO - "String" needs to be "Stock", waiting for Stock model to be created
 //        if (purchaseStockRequest.getShares() <=0) {
@@ -43,18 +43,18 @@ public class PurchasedStockService {
 //
 //
 // why did i write this method in this service class again?? wouldn't this be under a portfolio service class??
-    public List<PurchasedStock> findByStockSymbol(String symbol) {
-            List<PurchasedStockRecord> purchasedStockRecords = purchasedStockRepository
-        .findByStockSymbol(symbol);
-
-            List<PurchasedStock> purchasedStock = new ArrayList<>();
-
-            for (PurchasedStockRecord record : purchasedStockRecords) {
-                purchasedStock.add(new PurchasedStock(record.getName(), record.getSymbol(),
-        record.getDateOfPurchase(), record.getPurchasePrice(), record.getShares()));
-        }
-
-            return purchasedStock;
-
-        }
- }
+//    public List<PurchasedStock> findByStockSymbol(String symbol) {
+//            List<PurchasedStockRecord> purchasedStockRecords = purchasedStockRepository
+//        .findByStockSymbol(symbol);
+//
+//            List<PurchasedStock> purchasedStock = new ArrayList<>();
+//
+//            for (PurchasedStockRecord record : purchasedStockRecords) {
+//                purchasedStock.add(new PurchasedStock(record.getName(), record.getSymbol(),
+//        record.getDateOfPurchase(), record.getPurchasePrice(), record.getShares()));
+//        }
+//
+//            return purchasedStock;
+//
+//        }
+// }

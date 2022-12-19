@@ -78,6 +78,20 @@ public class JsonFishConverter {
         }
         try {
             mapper.writeValue(file, fishList);
+            BufferedReader reader = new BufferedReader(new java.io.FileReader(file));
+            StringBuffer buffer = new StringBuffer();
+            String line = reader.readLine();
+            while(line != null) {
+                line = line.replace("[", "");
+                line = line.replace("]", "");
+                line = line.replace("},", "}");
+                buffer.append(line);
+                line = reader.readLine();
+            }
+            reader.close();
+            java.io.FileWriter writer = new java.io.FileWriter(file);
+            writer.write(buffer.toString());
+            writer.close();
         } catch (IOException e) {
             System.out.println("An Error has Occurred with the Mapper During Conversion to File");
         }
