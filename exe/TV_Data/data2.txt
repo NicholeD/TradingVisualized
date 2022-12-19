@@ -1,0 +1,1 @@
+{"name":"one","size":10.0,"quantity":100.0,"price":30.0}{"name":"two","size":11.0,"quantity":88.0,"price":24.5}{"name":"three","size":13.0,"quantity":14.0,"price":111.0}{"name":"four","size":15.0,"quantity":56.0,"price":50.0}
