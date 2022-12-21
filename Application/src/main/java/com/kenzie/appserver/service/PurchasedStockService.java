@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Service
 public class PurchasedStockService {
     private PurchasedStockRepository purchasedStockRepository;
@@ -50,6 +51,7 @@ public class PurchasedStockService {
 
 
 // why did i write this method in this service class again?? wouldn't this be under a portfolio service class??
+
     public List<PurchasedStock> findByStockSymbol(String symbol) {
             List<PurchasedStockRecord> purchasedStockRecords = purchasedStockRepository
         .findByStockSymbol(symbol);
@@ -84,3 +86,4 @@ public class PurchasedStockService {
         return new PurchasedStock(record.getUserId(), stock, stock.getPurchaseDate());
     }
  }
+
