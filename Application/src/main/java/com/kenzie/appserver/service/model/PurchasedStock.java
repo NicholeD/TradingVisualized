@@ -1,14 +1,12 @@
 package com.kenzie.appserver.service.model;
 
-import java.time.ZonedDateTime;
-
 public class PurchasedStock {
     private String userId;
 
     public Stock stock;
-    public ZonedDateTime orderDate;
+    public String orderDate;
 
-    public PurchasedStock(String userId, Stock stock, ZonedDateTime orderDate) {
+    public PurchasedStock(String userId, Stock stock, String orderDate) {
         this.userId = userId;
         this.stock = stock;
         this.orderDate = orderDate;
@@ -30,11 +28,11 @@ public class PurchasedStock {
         this.stock = stock;
     }
 
-    public ZonedDateTime getOrderDate() {
+    public String getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(ZonedDateTime orderDate) {
+    public void setOrderDate(String orderDate) {
         this.orderDate = orderDate;
     }
 }

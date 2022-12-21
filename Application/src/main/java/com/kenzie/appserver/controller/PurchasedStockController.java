@@ -8,6 +8,10 @@ import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kenzie.appserver.controller.model.PurchaseStockRequest;
 import com.kenzie.appserver.controller.model.PurchasedStockResponse;
+import com.kenzie.appserver.service.PortfolioService;
+import com.kenzie.appserver.service.PurchaseStockService;
+import com.kenzie.appserver.service.StockService;
+import com.kenzie.appserver.service.model.Stock;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +31,7 @@ public class PurchasedStockController {
     @PostMapping
     public ResponseEntity<PurchasedStockResponse> purchaseStock(
             @RequestBody PurchaseStockRequest purchasedStockRequest) throws InsufficientResourcesException {
-        String name = stockService.getStockByNameSymbol(purchasedStockRequest.getStockSymbol());
+        String name = stockService.getStockNameBySymbol(purchasedStockRequest.getStockSymbol());
 
         Stock stock = new Stock(purchasedStockRequest.getStockSymbol(),
                 name,
@@ -39,13 +43,13 @@ public class PurchasedStockController {
 
         PurchasedStockResponse purchasedStockResponse = new PurchasedStockResponse();
         purchasedStockResponse.setUserId(purchasedStockRequest.getUserId());
-        purchasedStockResponse.setSymbol(stock.getSymbol());
-        purchasedStockResponse.setName(name);
+        purchasedStockResponse.setStockSymbol(stock.getSymbol());
+        purchasedStockResponse.setUserId(name);
         purchasedStockResponse.setPurchasePrice(stock.getPurchasePrice());
         purchasedStockResponse.setShares(stock.getQuantity());
-        purchasedStockResponse.setTotalPaid(stock.getPurchasePrice()*stock.getQuantity());
+        purchasedStockResponse.setPurchasePrice(stock.getPurchasePrice()*stock.getQuantity());
         purchasedStockResponse.setPurchaseDate(stock.getPurchaseDate());
-        purchasedStockResponse.setOrderedDate(purchasedStockRequest.getOrderDate());
+        purchasedStockResponse.setOrderDate(purchasedStockRequest.getOrderDate());
 
         HashMap<String, AttributeValue> keyToGet = new HashMap<>();
         keyToGet.put("id", new AttributeValue(purchasedStockRequest.getUserId()));

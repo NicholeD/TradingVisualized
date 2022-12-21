@@ -19,6 +19,6 @@ public class PurchaseStockService {
 
     public PurchasedStock purchaseStock(String userId, Stock stock) throws InsufficientResourcesException {
 
-        return new PurchasedStock(userId, stock, ZonedDateTime.now());
+        return new PurchasedStock(userId, stock, ZonedDateTime.now().toString());
     }
 }
