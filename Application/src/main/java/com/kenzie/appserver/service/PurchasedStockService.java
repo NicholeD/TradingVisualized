@@ -67,13 +67,10 @@ public class PurchasedStockService {
         }
 
     private PurchasedStockRecord purchaseRequestToRecord(PurchaseStockRequest request) {
-        PurchasedStockRecord purchasedStockRecord = new PurchasedStockRecord();
-        purchasedStockRecord.setUserId(request.getUserId());
-        purchasedStockRecord.setName(request.getStockName());  //TODO - cached list of key-value map?? key = symbol, value = name??
-        purchasedStockRecord.setSymbol(request.getStockSymbol());
-        purchasedStockRecord.setDateOfPurchase(LocalDate.now().toString());
-        purchasedStockRecord.setPurchasePrice(request.getPurchasePrice());
-        purchasedStockRecord.setShares(request.getShares());
+        PurchasedStockRecord purchasedStockRecord = new PurchasedStockRecord(request.getUserId(),
+                request.getStockName(), request.getStockSymbol(), LocalDate.now().toString(),
+                request.getPurchasePrice(), request.getShares());
+        
         purchasedStockRepository.save(purchasedStockRecord);
 
         return purchasedStockRecord;
