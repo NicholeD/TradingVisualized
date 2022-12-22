@@ -70,7 +70,7 @@ public class PurchasedStockService {
         PurchasedStockRecord purchasedStockRecord = new PurchasedStockRecord(request.getUserId(),
                 request.getStockName(), request.getStockSymbol(), LocalDate.now().toString(),
                 request.getPurchasePrice(), request.getShares());
-        
+
         purchasedStockRepository.save(purchasedStockRecord);
 
         return purchasedStockRecord;

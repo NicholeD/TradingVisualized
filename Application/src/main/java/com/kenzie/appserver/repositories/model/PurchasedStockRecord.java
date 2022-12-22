@@ -42,6 +42,8 @@ public class PurchasedStockRecord {
     @DynamoDBRangeKey(attributeName = "RecordId")
     public UUID getRecordId() { return recordId; }
 
+    public void setRecordId() { this.recordId = getRecordId(); }
+
     @DynamoDBAttribute(attributeName = "Name")
     public String getName() {
         return name;

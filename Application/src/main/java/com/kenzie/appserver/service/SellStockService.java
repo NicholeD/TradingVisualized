@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 public class SellStockService {
@@ -24,41 +25,44 @@ public class SellStockService {
     }
 
     public SoldStockRecord sellStock(SellStockRequest sellStockRequest) {
+
         if (sellStockRequest.getShares() <= 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Qty has to be greater than 0, one simply cannot sell nothing");
         }
-        //TODO - request to purchasedStockRecord
-        PurchasedStockRecord purchasedStockRecord = purchasedStockRepository.
-        PurchasedStockRecord newRecord = requestToRecord(sellStockRequest);
 
+        //Retrieving record to update with new qty or delete
+        Optional<PurchasedStockRecord> purchasedStockRecord = purchasedStockRepository.findById(
+                sellStockRequest.getRecordId().toString());
 
-        //TODO - update purchasedStockRepository quantity of stock - throw exceptions if request is greater than owned shares
-        //TODO - add sold price $ (current price * shares) to user funds
+        int ownedShares = purchasedStockRecord.get().getShares();
+
+        if (sellStockRequest.getShares() < ownedShares) {
+            purchasedStockRecord.get().setShares((ownedShares - sellStockRequest.getShares()));
+            //saving over the record for ease rather than implementing @Transactional
+            purchasedStockRepository.save(purchasedStockRecord.get());
+        } else if (sellStockRequest.getShares() == ownedShares) {
+            purchasedStockRepository.delete(purchasedStockRecord.get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "One cannot simply sell more than one owns.");
+        }
+
+        return requestToSellRecord(sellStockRequest, purchasedStockRecord.get());
+
     }
 
     private PurchasedStockRecord requestToRecord(SellStockRequest request) {
-        PurchasedStockRecord record = new PurchasedStockRecord();
-        record.setUserId(request.getUserId());
-        record.setName(request.getStockName());
-        record.setSymbol(request.getStockSymbol());
-        record.setDateOfPurchase(request.getPurchaseDate());
-        record.setShares(request.getShares());
-        //not setting purchase price (request contains current sale price & record contains past price)
+        PurchasedStockRecord record = new PurchasedStockRecord(request.getUserId(),
+                request.getStockName(), request.getStockSymbol(),
+                request.getPurchaseDate(), request.getsalePrice(), request.getShares());
 
         return record;
     }
 
-    private SoldStockRecord purchaseToSellRecord(PurchasedStockRecord purchasedStockRecord, SellStockRequest request) {
-            SoldStockRecord soldRecord = new SoldStockRecord();
-            soldRecord.setSellerUserId(purchasedStockRecord.getUserId());
-            soldRecord.setStockName(purchasedStockRecord.getName());
-            soldRecord.setStockSymbol(purchasedStockRecord.getSymbol());
-            soldRecord.setDateOfSale(LocalDate.now().toString());
-            soldRecord.setDateOfPurchase(purchasedStockRecord.getDateOfPurchase());
-            soldRecord.setPurchasedStockPrice(purchasedStockRecord.getPurchasePrice());
-            soldRecord.setSalePrice(request.getsalePrice());
-            soldRecord.setShares(purchasedStockRecord.getShares());
+    private SoldStockRecord requestToSellRecord(SellStockRequest request, PurchasedStockRecord record) {
+            SoldStockRecord soldRecord = new SoldStockRecord(request.getUserId(), record.getRecordId(),
+                    request.getStockName(), request.getStockSymbol(), LocalDate.now().toString(),
+                    request.getPurchaseDate(), record.getPurchasePrice(), request.getsalePrice(), request.getShares());
 
             return soldRecord;
     }

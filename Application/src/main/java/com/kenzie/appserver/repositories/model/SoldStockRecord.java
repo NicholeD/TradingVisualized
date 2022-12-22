@@ -2,11 +2,15 @@ package com.kenzie.appserver.repositories.model;
 
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
+
+import java.util.UUID;
 
 //TODO for future rollout features: 'sold' table as part of a user's transaction history
 //@DynamoDBTable(tableName = "sold")
 public class SoldStockRecord {
-    private String sellerUserId;
+    private String userId;
+    private UUID recordId;
     private String stockName;
     private String stockSymbol;
     private String dateOfSale;
@@ -17,14 +21,35 @@ public class SoldStockRecord {
     private int shares;
     private Double realizedProfit;
 
-    //@DynamoDBHashKey(attributeName = "UserId")
-    public String getSellerUserId() {
-        return sellerUserId;
+    public SoldStockRecord(String userId, UUID recordId, String stockName, String stockSymbol,
+                           String dateOfSale, String dateOfPurchase, Double purchasedStockPrice, Double saleStockPrice,
+                           int shares) {
+        this.userId = userId;
+        this.recordId = recordId;
+        this.stockName = stockName;
+        this.stockSymbol = stockSymbol;
+        this.dateOfSale = dateOfSale;
+        this.dateOfPurchase = dateOfPurchase;
+        this.purchasedStockPrice = purchasedStockPrice;
+        this.saleStockPrice = saleStockPrice;
+        this.saleTotal = saleStockPrice * shares;
+        this.shares = shares;
+        this.realizedProfit = (purchasedStockPrice * shares) - this.saleTotal;
     }
 
-    public void setSellerUserId(String sellerUserId) {
-        this.sellerUserId = sellerUserId;
+    //@DynamoDBHashKey(attributeName = "UserId")
+    public String getUserId() {
+        return userId;
     }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    //@DynamoDBRangeKey(attributeName = "RecordId")
+    public UUID getRecordId() { return recordId; }
+
+    public void setRecordId(UUID recordId) { this.recordId = recordId; }
 
     //@DynamoDBAttribute(attributeName = "Name")
     public String getStockName() {
@@ -85,8 +110,8 @@ public class SoldStockRecord {
         return saleTotal;
     }
 
-    private void setSaleTotal() {
-        this.saleTotal = getSaleStockPrice() * getShares();
+    private void setSaleTotal(Double saleTotal) {
+        this.saleTotal = saleTotal;
     }
 
     //@DynamoDBAttribute(attributeName = "quantity")

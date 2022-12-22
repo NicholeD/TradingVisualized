@@ -10,5 +10,4 @@ import java.util.List;
 public interface PurchasedStockRepository extends CrudRepository<PurchasedStockRecord, String> {
     List<PurchasedStockRecord> findByStockSymbol(String symbol);
 
-
 }

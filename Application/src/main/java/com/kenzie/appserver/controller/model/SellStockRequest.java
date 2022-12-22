@@ -2,12 +2,17 @@ package com.kenzie.appserver.controller.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotEmpty;
+import java.util.UUID;
 
 public class SellStockRequest {
 
     @NotEmpty
     @JsonProperty("userId")
     private String userId;
+
+    @NotEmpty
+    @JsonProperty("recordId")
+    private UUID recordId;
 
     @JsonProperty("stockSymbol")
     private String stockSymbol;
@@ -25,9 +30,10 @@ public class SellStockRequest {
     private String purchaseDate;
 
 
-    public SellStockRequest(String userId, String stockSymbol, String stockName,
+    public SellStockRequest(String userId, UUID recordId, String stockSymbol, String stockName,
                             double salePrice, int shares, String purchaseDate) {
         this.userId = userId;
+        this.recordId = recordId;
         this.stockSymbol = stockSymbol;
         this.stockName = stockName;
         this.salePrice = salePrice;
@@ -41,6 +47,10 @@ public class SellStockRequest {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public UUID getRecordId() {
+        return recordId;
     }
 
     public String getStockSymbol() {
