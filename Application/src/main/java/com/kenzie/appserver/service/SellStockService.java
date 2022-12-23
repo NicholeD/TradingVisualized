@@ -44,8 +44,10 @@ public class SellStockService {
             purchasedStockRecord.get().setShares((ownedShares - sellStockRequest.getShares()));
             //saving over the record for ease rather than implementing @Transactional
             purchasedStockRepository.save(purchasedStockRecord.get());
+            //TODO - update fishRecord - need fishRecordId property to identify OR maybe purchasedStockRecord??
         } else if (sellStockRequest.getShares() == ownedShares) {
             purchasedStockRepository.delete(purchasedStockRecord.get());
+            //TODO - would need to delete cooresponding fish
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "One cannot simply sell more than one owns.");
         }
@@ -70,6 +72,7 @@ public class SellStockService {
 //
 //        return soldStocks;
 //    }
+
     private PurchasedStockRecord requestToRecord(SellStockRequest request) {
         PurchasedStockRecord record = new PurchasedStockRecord(request.getUserId(),
                 request.getStockName(), request.getStockSymbol(),

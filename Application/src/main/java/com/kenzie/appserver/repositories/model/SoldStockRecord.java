@@ -6,7 +6,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 
 import java.util.UUID;
 
-//TODO for future rollout features: 'sold' table as part of a user's transaction history
+//TODO - of we want a user's transaction history (uncomment & create SoldStockRepository)
 //@DynamoDBTable(tableName = "sold")
 public class SoldStockRecord {
     private String userId;

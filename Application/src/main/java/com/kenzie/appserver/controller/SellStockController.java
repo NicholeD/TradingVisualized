@@ -24,9 +24,7 @@ public class SellStockController {
 
     @PostMapping
     public ResponseEntity<SellStockResponse> sellStock(@RequestBody SellStockRequest sellStockRequest) {
-        //TODO
 
-        //sell stock
         SoldStockRecord soldStockRecord = sellStockService.sellStock(sellStockRequest);
 
         Stock stock = recordToStock(soldStockRecord);
