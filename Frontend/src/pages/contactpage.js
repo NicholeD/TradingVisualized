@@ -58,12 +58,15 @@ class ContactPage extends BaseClass {
         let subject = document.getElementById("contactsubject").value;
         let message = document.getElementById("contactmessage").value;
 
-        const createdContact = await this.client.createContact(id,name,email,subject,message, this.errorHandler);
-        this.dataStore.set("contact", createdContact);
+        //const createdContact = await this.client.createContact(id,name,email,subject,message, this.errorHandler);
+        //this.dataStore.set("contact", createdContact);
 
-        if (createdContact) {
-            this.showMessage(`Message sent from ${createdContact.name}!`);
-            await this.onGetContact();
+        if (subject == "General") {
+            this.showMessage(`Message sent from ${name}!`);
+        } else if (subject == "Feature Request") {
+            this.showMessage(`Thank you ${name}, We will take your Request under Review!`);
+        } else if (subject == "Bug Report") {
+            this.showMessage(`Thank you ${name}, We take all Reports very seriously!`);
         } else {
             this.errorHandler("Error creating!  Try again...");
         }
