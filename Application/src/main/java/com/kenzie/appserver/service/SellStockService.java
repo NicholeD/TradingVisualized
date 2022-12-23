@@ -19,12 +19,9 @@ import java.util.Optional;
 @Service
 public class SellStockService {
     private PurchasedStockRepository purchasedStockRepository;
-    private FishRepository fishRepository;
 
-    public SellStockService(PurchasedStockRepository purchasedStockRepository,
-                            FishRepository fishRepository) {
+    public SellStockService(PurchasedStockRepository purchasedStockRepository) {
         this.purchasedStockRepository = purchasedStockRepository;
-        this.fishRepository = fishRepository;
     }
 
     public SoldStockRecord sellStock(SellStockRequest sellStockRequest) {
@@ -44,10 +41,9 @@ public class SellStockService {
             purchasedStockRecord.get().setShares((ownedShares - sellStockRequest.getShares()));
             //saving over the record for ease rather than implementing @Transactional
             purchasedStockRepository.save(purchasedStockRecord.get());
-            //TODO - update fishRecord - need fishRecordId property to identify OR maybe purchasedStockRecord??
+
         } else if (sellStockRequest.getShares() == ownedShares) {
             purchasedStockRepository.delete(purchasedStockRecord.get());
-            //TODO - would need to delete cooresponding fish
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "One cannot simply sell more than one owns.");
         }
