@@ -1,19 +1,18 @@
 package com.kenzie.appserver.controller.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.constraints.NotEmpty;
-import java.time.LocalDate;
 import java.util.UUID;
 
-public class SellStockRequest {
-
+public class SellStockResponse {
     @NotEmpty
     @JsonProperty("userId")
     private String userId;
 
     @NotEmpty
     @JsonProperty("recordId")
-    private UUID recordId;
+    private UUID recordID;
 
     @JsonProperty("stockSymbol")
     private String stockSymbol;
@@ -27,21 +26,8 @@ public class SellStockRequest {
     @JsonProperty("shares")
     private int shares;
 
-    @JsonProperty("sellStockDate")
+    @JsonProperty("sellDate")
     private String sellStockDate;
-
-
-    public SellStockRequest(String userId, UUID recordId, String stockSymbol, String stockName,
-                            double salePrice, int shares) {
-        this.userId = userId;
-
-        this.recordId = recordId;
-        this.stockSymbol = stockSymbol;
-        this.stockName = stockName;
-        this.salePrice = salePrice;
-        this.shares = shares;
-        this.sellStockDate = LocalDate.now().toString();
-    }
 
     public String getUserId() {
         return userId;
@@ -51,8 +37,12 @@ public class SellStockRequest {
         this.userId = userId;
     }
 
-    public UUID getRecordId() {
-        return recordId;
+    public UUID getRecordID() {
+        return recordID;
+    }
+
+    public void setRecordID(UUID recordID) {
+        this.recordID = recordID;
     }
 
     public String getStockSymbol() {
@@ -71,11 +61,11 @@ public class SellStockRequest {
         this.stockName = stockName;
     }
 
-    public double getsalePrice() {
+    public double getSalePrice() {
         return salePrice;
     }
 
-    public void setsalePrice(double salePrice) {
+    public void setSalePrice(double salePrice) {
         this.salePrice = salePrice;
     }
 
