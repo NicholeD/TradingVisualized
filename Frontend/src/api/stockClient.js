@@ -27,7 +27,7 @@ export default class StockClient extends BaseClass{
             console.log(response);
             return response.data;
         }catch (error){
-            this.handleError("getConcert", error, errorCallback)
+            this.handleError("getStocks", error, errorCallback)
         }
     }
 

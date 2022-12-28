@@ -7,10 +7,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Time Travel Trading</title>
+    <title>Trading Visualized</title>
     <meta name="author" content="Jiffy Labs Inc.">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><!--Sets mobile resolution-->
-
+    <script src="https://code.jscharting.com/latest/jscharting.js"></script>
     <script type="text/javascript" src="stockpage.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <link rel="stylesheet" type="text/css" href="css/menu.css">
@@ -18,6 +18,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body >
+
     <header class="header">
          <div class="companyname">
              <a href="index.html"><img src="./css/images/logo-no-background.png" height="40" /></a>
@@ -46,7 +47,7 @@
             <div class="divider"></div>
             <div class="overflowcontent">
                 <!--content area-->
-                <div style="margin: 20px; height:450px">
+                <div style="margin: 20px; height:600px">
                     <div align="center">
                 <form id="form">
                    <label class="label"> Search Stock: </label>
@@ -56,7 +57,14 @@
                 </form>
                     </div>
                     <div id="stockresults"></div>
+                    <div id="chart"></div>
+                    <div id="overlay">
+                        <button id="close-button">Close</button>
+                        <div id="expanded-chart"></div>
+                    </div>
                 </div>
+
+
                 <!--content area-->
             </div>
         </div>
