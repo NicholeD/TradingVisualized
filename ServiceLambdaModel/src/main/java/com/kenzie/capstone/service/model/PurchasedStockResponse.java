@@ -1,30 +1,16 @@
-package com.kenzie.appserver.controller.model;
+package com.kenzie.capstone.service.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import javax.validation.constraints.NotEmpty;
-
-//TODO - need to delete bc now in lambda??
 public class PurchasedStockResponse {
 
-    @NotEmpty
-    @JsonProperty("userId")
     private String userId;
 
-    @JsonProperty("stockSymbol")
     private String stockSymbol;
 
-    @JsonProperty("purchasePrice")
     private double purchasePrice;
 
-    @JsonProperty("shares")
     private int shares;
 
-    @JsonProperty("purchaseDate")
     private String purchaseDate;
-
-    @JsonProperty("orderDate")
-    private String orderDate;
 
     public String getUserId() {
         return userId;
@@ -64,13 +50,5 @@ public class PurchasedStockResponse {
 
     public void setPurchaseDate(String purchaseDate) {
         this.purchaseDate = purchaseDate;
-    }
-
-    public String getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(String orderDate) {
-        this.orderDate = orderDate;
     }
 }

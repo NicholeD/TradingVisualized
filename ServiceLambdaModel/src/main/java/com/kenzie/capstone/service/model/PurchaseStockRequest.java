@@ -1,30 +1,31 @@
-package com.kenzie.appserver.controller.model;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import javax.validation.constraints.NotEmpty;
+package com.kenzie.capstone.service.model;
 
 //TODO - need to delete bc now in lambda??
-public class PurchasedStockResponse {
+public class PurchaseStockRequest {
 
-    @NotEmpty
-    @JsonProperty("userId")
     private String userId;
 
-    @JsonProperty("stockSymbol")
     private String stockSymbol;
 
-    @JsonProperty("purchasePrice")
+    private String stockName;
+
     private double purchasePrice;
 
-    @JsonProperty("shares")
     private int shares;
 
-    @JsonProperty("purchaseDate")
     private String purchaseDate;
 
-    @JsonProperty("orderDate")
-    private String orderDate;
+
+    public PurchaseStockRequest(String userId, String stockSymbol,
+                                String stockName, double purchasePrice,
+                                int shares, String purchaseDate) {
+        this.userId = userId;
+        this.stockSymbol = stockSymbol;
+        this.stockName = stockName;
+        this.purchasePrice = purchasePrice;
+        this.shares = shares;
+        this.purchaseDate = purchaseDate;
+    }
 
     public String getUserId() {
         return userId;
@@ -35,11 +36,19 @@ public class PurchasedStockResponse {
     }
 
     public String getStockSymbol() {
-        return  stockSymbol;
+        return stockSymbol;
     }
 
     public void setStockSymbol(String stockSymbol) {
         this.stockSymbol = stockSymbol;
+    }
+
+    public String getStockName() {
+        return stockName;
+    }
+
+    public void setStockName(String stockName) {
+        this.stockName = stockName;
     }
 
     public double getPurchasePrice() {
@@ -66,11 +75,4 @@ public class PurchasedStockResponse {
         this.purchaseDate = purchaseDate;
     }
 
-    public String getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(String orderDate) {
-        this.orderDate = orderDate;
-    }
 }

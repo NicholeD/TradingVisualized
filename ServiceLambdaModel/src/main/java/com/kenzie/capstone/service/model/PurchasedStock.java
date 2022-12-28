@@ -1,15 +1,15 @@
-package com.kenzie.appserver.service.model;
-//TODO - need to delete bc now in lambda??
+package com.kenzie.capstone.service.model;
+
 public class PurchasedStock {
     private String userId;
 
     public Stock stock;
-    public String orderDate;
+    public String purchasedDate;
 
-    public PurchasedStock(String userId, Stock stock, String orderDate) {
+    public PurchasedStock(String userId, Stock stock, String purchasedDate) {
         this.userId = userId;
         this.stock = stock;
-        this.orderDate = orderDate;
+        this.purchasedDate = purchasedDate;
     }
 
     public String getUserId() {
@@ -28,11 +28,11 @@ public class PurchasedStock {
         this.stock = stock;
     }
 
-    public String getOrderDate() {
-        return orderDate;
+    public String getpurchasedDate() {
+        return purchasedDate;
     }
 
-    public void setOrderDate(String orderDate) {
-        this.orderDate = orderDate;
+    public void setpurchasedDate(String purchasedDate) {
+        this.purchasedDate = purchasedDate;
     }
 }
