@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.EventObject;
 
 
-// @Component
+@Component
 public abstract class ApplicationStartUpListener implements EventListener {
     public void handleStartupEvent(EventObject event) {
         // Open the text file in a text editor
