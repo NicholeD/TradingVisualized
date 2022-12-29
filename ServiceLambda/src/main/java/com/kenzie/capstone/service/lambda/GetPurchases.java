@@ -7,21 +7,21 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kenzie.capstone.service.PurchaseService;
-import com.kenzie.capstone.service.converter.JsonStringToPurchasedStockConverter;
 import com.kenzie.capstone.service.dependency.DaggerServiceComponent;
 import com.kenzie.capstone.service.dependency.ServiceComponent;
 import com.kenzie.capstone.service.exceptions.InvalidDataException;
-import com.kenzie.capstone.service.model.PurchaseStockRequest;
-import com.kenzie.capstone.service.model.PurchasedStockResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class AddPurchase implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+import java.util.HashMap;
+import java.util.Map;
+
+public class GetPurchases implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     static final Logger log = LogManager.getLogger();
+
     @Override
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent input, Context context) {
-        JsonStringToPurchasedStockConverter jsonStringToPurchasedStockConverter = new JsonStringToPurchasedStockConverter();
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         //for debugging:
@@ -30,14 +30,24 @@ public class AddPurchase implements RequestHandler<APIGatewayProxyRequestEvent, 
         ServiceComponent serviceComponent = DaggerServiceComponent.create();
         PurchaseService purchaseService = serviceComponent.providePurchaseService();
 
-        APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Content-Type", "application/json");
+
+        APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);
+
+        String userId = input.getPathParameters().get("userId");
+
+        if (userId == null || userId.length() == 0) {
+            return response
+                    .withStatusCode(400)
+                    .withBody("UserId is invalid");
+        }
 
         try {
-            PurchaseStockRequest purchaseStockRequest = jsonStringToPurchasedStockConverter.convert(input.getBody());
-            PurchasedStockResponse purchasedStockResponse = purchaseService.addPurchasedStock(purchaseStockRequest);
+            String output = gson.toJson(purchaseService.getPurchasedStocks(userId));
             return response
                     .withStatusCode(200)
-                    .withBody(gson.toJson(purchasedStockResponse));
+                    .withBody(output);
         } catch (InvalidDataException e) {
             return response
                     .withStatusCode(400)

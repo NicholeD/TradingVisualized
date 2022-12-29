@@ -6,7 +6,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 import java.util.UUID;
-
+//TODO - need to delete bc now in lambda??
 @DynamoDBTable(tableName = "purchased")
 public class PurchasedStockRecord {
 

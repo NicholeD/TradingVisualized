@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotEmpty;
 
+//TODO - need to delete bc now in lambda??
 public class PurchaseStockRequest {
 
     @NotEmpty
