@@ -12,8 +12,9 @@ import java.util.EventObject;
 
 
 @Component
-public abstract class ApplicationStartUpListener implements EventListener {
-    public void handleStartupEvent(EventObject event) {
+public class ApplicationStartUpListener {
+    @EventListener(ContextRefreshedEvent.class)
+    public void handleStartupEvent(ContextRefreshedEvent event) {
         // Open the text file in a text editor
         openTextFile("text.txt");
     }
