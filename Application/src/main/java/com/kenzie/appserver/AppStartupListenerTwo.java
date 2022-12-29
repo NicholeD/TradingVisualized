@@ -11,31 +11,31 @@ THESE ARE ESSENTIALLY DUMMY CLASSES WHILE I PLAY WITH THE POSSIBILITIES FOR HOW 
 PLEASE LET ME KNOW WHAT DIRECTIONS YOU ADVISE OR WHERE YOU THINK I SHOULD BE LOOKING TO PROPERLY BUILD THIS!
  */
 
-class StartupListener implements EventListener {
-    public void handleStartupEvent(EventObject event) {
-        // Read the contents of the text file
-        String text = readTextFile("text.txt");
-
-        // Print the contents of the text file to the console
-        System.out.println(text);
-    }
-
-    private String readTextFile(String s) {
-    }
-}
-
-// Event generator class
-class StartupEventGenerator {
-    private List<EventListener> listeners = new ArrayList<EventListener>();
-
-    public void addEventListener(EventListener listener) {
-        listeners.add(listener);
-    }
-
-    public void generateStartupEvent() {
-        EventObject event = new EventObject(this);
-        for (EventListener listener : listeners) {
-            listener.handleStartupEvent(event);
-        }
-    }
-}
+//class StartupListener implements EventListener {
+//    public void handleStartupEvent(EventObject event) {
+//        // Read the contents of the text file
+//        String text = readTextFile("text.txt");
+//
+//        // Print the contents of the text file to the console
+//        System.out.println(text);
+//    }
+//
+//    private String readTextFile(String s) {
+//    }
+//}
+//
+//// Event generator class
+//class StartupEventGenerator {
+//    private List<EventListener> listeners = new ArrayList<EventListener>();
+//
+//    public void addEventListener(EventListener listener) {
+//        listeners.add(listener);
+//    }
+//
+//    public void generateStartupEvent() {
+//        EventObject event = new EventObject(this);
+//        for (EventListener listener : listeners) {
+//            listener.handleStartupEvent(event);
+//        }
+//    }
+//}
