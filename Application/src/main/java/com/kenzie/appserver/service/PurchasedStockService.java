@@ -54,7 +54,7 @@ public class PurchasedStockService {
 
     public List<PurchasedStock> findByStockSymbol(String symbol) {
             List<PurchasedStockRecord> purchasedStockRecords = purchasedStockRepository
-        .findByStockSymbol(symbol);
+        .findBySymbol(symbol);
 
             List<PurchasedStock> purchasedStock = new ArrayList<>();
 

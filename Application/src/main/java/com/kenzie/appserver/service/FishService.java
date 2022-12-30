@@ -4,7 +4,9 @@ import com.kenzie.appserver.repositories.FishRepository;
 import com.kenzie.appserver.repositories.model.FishRecord;
 import com.kenzie.appserver.service.model.Fish;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
+import org.springframework.stereotype.Service;
 
+@Service
 public class FishService {
     private FishRepository fishRepository;
     private LambdaServiceClient lambdaServiceClient;

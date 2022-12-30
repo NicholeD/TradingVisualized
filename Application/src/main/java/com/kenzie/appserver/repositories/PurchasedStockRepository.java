@@ -8,5 +8,5 @@ import java.util.List;
 
 @EnableScan
 public interface PurchasedStockRepository extends CrudRepository<PurchasedStockRecord, String> {
-    List<PurchasedStockRecord> findByStockSymbol(String symbol);
+    List<PurchasedStockRecord> findBySymbol(String symbol);
 }
