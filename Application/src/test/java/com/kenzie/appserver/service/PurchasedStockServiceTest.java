@@ -14,36 +14,20 @@ import java.time.LocalDate;
 import static org.mockito.Mockito.mock;
 
 public class PurchasedStockServiceTest {
-    private PurchasedStockService purchasedStockService;
-    private PurchasedStockRepository purchasedStockRepository;
-    private FishRepository fishRepository;
+
 
     @BeforeEach
     void setup() {
-        purchasedStockRepository = mock(PurchasedStockRepository.class);
-        fishRepository = mock(FishRepository.class);
-        purchasedStockService = new PurchasedStockService(purchasedStockRepository,
-                fishRepository);
+
     }
 
     @Test
     public void purchaseStock_stockIsPurchased() {
         //GIVEN
-        String userId = "userId";
-        String symbol = "symbol";
-        String name = "name";
-        Stock stock = new Stock(symbol, name,
-                10.0, 5, LocalDate.now().toString());
-        PurchasedStock purchasedStock = new PurchasedStock(userId, stock, stock.getPurchaseDate());
-
-        PurchaseStockRequest request = new PurchaseStockRequest(userId, symbol, name, stock.getPurchasePrice(),
-                stock.getQuantity(), stock.getPurchaseDate(), stock.getPurchaseDate());
 
         //WHEN
-       PurchasedStock purchasedStock1 = purchasedStockService.purchaseStock(request);
 
         //THEN
-        Assertions.assertEquals(purchasedStock, purchasedStock1);
     }
 
     @Test
