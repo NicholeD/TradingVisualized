@@ -31,4 +31,15 @@ public class FishService {
         fishRepository.save(fishRecord);
         return new Fish(name, size, quantity, price, status);
     }
+
+    public Fish addNewFish(Fish fish) {
+        FishRecord fishRecord = new FishRecord();
+        fishRecord.setName(fish.getName());
+        fishRecord.setSize(fish.getSize());
+        fishRecord.setQuantity(fish.getQuantity());
+        fishRecord.setPrice(fish.getPrice());
+        fishRecord.setStatus(fish.isStatus());
+        fishRepository.save(fishRecord);
+        return fish;
+    }
 }
