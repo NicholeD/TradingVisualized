@@ -1,5 +1,7 @@
 package com.kenzie.appserver.service.model.converter;
 
+import com.kenzie.appserver.repositories.PurchasedStockRepository;
+import com.kenzie.appserver.service.StockService;
 import com.kenzie.appserver.service.model.Fish;
 import com.kenzie.appserver.service.model.Stock;
 
@@ -16,14 +18,15 @@ public class StockAndFishConverter {
         fish.setPrice(stock.getPurchasePrice());
         fish.setQuantity(stock.getQuantity());
         fish.setSize((float) stock.getPurchasePrice()*stock.getQuantity());
-        fish.setStatus("active"); // might need to change this per scoots last message
+        fish.setStatus("Active"); // might need to change this per scoots last message
         return fish;
     }
 
     public static Stock fishToStock(Fish fish){
-        String symbol = ""; //some way to get a symbol are change stock class to add it down the line
+        StockService stockService = new StockService();
         String dayOfPurchase = ""; //dont know if we want this to be accurate
-        Stock stock = new Stock(symbol, fish.getName(), fish.getPrice(), LocalDateTime.now().toString());
+        String name = stockService.getStockNameBySymbol(fish.getName());
+        Stock stock = new Stock(fish.getName(), name, fish.getPrice(), LocalDateTime.now().toString());
         return stock;
     }
 
@@ -34,15 +37,14 @@ public class StockAndFishConverter {
     }
 
     public static List<Stock> fishListToStockList(List<Fish> fishList){
+        StockService stockService = new StockService();
         return fishList.stream()
                 .map(f -> {
-                    String symbol = ""; // watch out for using this converter, symbol will be blank until ask about it
-                    System.out.println("symbol will be blank until fixed fishListToStockList converter");
-                    return new Stock(symbol, f.getName(), f.getPrice(), LocalDateTime.now().toString());
+                    String name = stockService.getStockNameBySymbol(f.getName());
+                    System.out.println("StockFishConverterList could be a lot of calls to external api.");
+                    return new Stock(f.getName(), name, f.getPrice(), LocalDateTime.now().toString());
                 })
                 .collect(Collectors.toList());
     }
-
-
 
 }

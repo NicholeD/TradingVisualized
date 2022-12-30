@@ -14,7 +14,7 @@ public class StockService {
 
     @GetMapping
     public StockResponse getStocksBySymbol(String symbol) {
-        String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&apikey=5DA1NYHTSAKVQ99Z&symbol=" + symbol;
+        String url = String.format("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=%s&apikey=5DA1NYHTSAKVQ99Z", symbol);
 
         StockResponse stockResponse = restTemplate.getForObject(url, StockResponse.class);
 

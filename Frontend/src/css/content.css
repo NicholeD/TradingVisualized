@@ -45,20 +45,66 @@
     background-size: contain;
 }
 .stock{
-    width: 150px;
-    margin: 10px;
+    width: 200px;
+    margin: 5px;
     padding: 5px;
-    border-radius: 10px;
+    border-radius: 5px;
     background-color: aliceblue;
     border: 3px solid #003366;
-    overflow:hidden;
+    position: relative;
     float: left;
 }
+
 .stock a:hover{
     background-image: url("https://zastrow.com/kenzie/ttt/images/buy2.png");
     background-position: center;
 }
+
 #stocklist {
+}
+#stockresults {
+    color: #55c8c4;
+    display: inline;
+}
+#chart {
+    display: inline;
+    width: 100px;
+    height: 100px;
+    max-width: 100px;
+    max-height: 100px;
+    float: left;
+}
+#chart :hover {
+    cursor: pointer;
+}
+#overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+  }
+#close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1500;
+  }
+
+  #expanded-chart-container {
+    width: 80%;
+    height: 80%;
+    margin: auto;
+  }
+
+#oldStockPrice {
+    float: bottom;
+    margin: 10px;
+    clear: both;
+    display: block;
 }
 .about{
     width: 70%;
