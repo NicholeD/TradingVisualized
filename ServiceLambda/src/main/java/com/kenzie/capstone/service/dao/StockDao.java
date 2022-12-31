@@ -3,7 +3,6 @@ package com.kenzie.capstone.service.dao;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.ConditionalCheckFailedException;
 import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
 import com.google.common.collect.ImmutableMap;
@@ -12,14 +11,14 @@ import com.kenzie.capstone.service.model.PurchasedStockRecord;
 
 import java.util.List;
 
-public class PurchaseDao {
+public class StockDao implements Dao {
     private DynamoDBMapper mapper;
 
-    public PurchaseDao(DynamoDBMapper mapper) {
+    public StockDao(DynamoDBMapper mapper) {
         this.mapper = mapper;
     }
 
-    public PurchasedStockRecord addPurchase(PurchasedStockRecord record) {
+    public PurchasedStockRecord addPurchasedStock(PurchasedStockRecord record) {
         try {
             //TODO - not sure if this is right...userId or recordId? Do we even need this?
             mapper.save(record, new DynamoDBSaveExpression()
@@ -34,7 +33,7 @@ public class PurchaseDao {
         return record;
     }
 
-    public List<PurchasedStockRecord> findPurchasedStocks(String userId) {
+    public List<PurchasedStockRecord> findByUserId(String userId) {
         PurchasedStockRecord purchaseRecord = new PurchasedStockRecord();
         purchaseRecord.setUserId(userId);
 

@@ -6,7 +6,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.kenzie.capstone.service.PurchaseService;
+import com.kenzie.capstone.service.StockService;
 import com.kenzie.capstone.service.dependency.DaggerServiceComponent;
 import com.kenzie.capstone.service.dependency.ServiceComponent;
 import com.kenzie.capstone.service.exceptions.InvalidDataException;
@@ -28,7 +28,7 @@ public class GetPurchases implements RequestHandler<APIGatewayProxyRequestEvent,
         log.info(gson.toJson(input));
 
         ServiceComponent serviceComponent = DaggerServiceComponent.create();
-        PurchaseService purchaseService = serviceComponent.providePurchaseService();
+        StockService stockService = serviceComponent.provideStockService();
 
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
@@ -44,7 +44,7 @@ public class GetPurchases implements RequestHandler<APIGatewayProxyRequestEvent,
         }
 
         try {
-            String output = gson.toJson(purchaseService.getPurchasedStocks(userId));
+            String output = gson.toJson(stockService.getPurchasedStocks(userId));
             return response
                     .withStatusCode(200)
                     .withBody(output);
