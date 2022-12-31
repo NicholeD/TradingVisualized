@@ -1,6 +1,8 @@
 package com.kenzie.appserver.service.model;
 
 public class Fish {
+
+    private String id;
     private String name;
     private float size;
     private double quantity;
@@ -10,6 +12,14 @@ public class Fish {
     public Fish() {
     }
 
+    public Fish(String id, String name, float size, double quantity, double price, String status) {
+        this.id = id;
+        this.name = name;
+        this.size = size;
+        this.quantity = quantity;
+        this.price = price;
+        this.status = status;
+    }
     public Fish(String name, float size, double quantity, double price, String status) {
         this.name = name;
         this.size = size;
@@ -17,7 +27,12 @@ public class Fish {
         this.price = price;
         this.status = status;
     }
-
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
     public String getName() {
         return name;
     }
