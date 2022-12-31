@@ -2,6 +2,7 @@ package com.kenzie.capstone.service.model;
 
 public class Stock {
 
+    private String userId;
     private final String symbol;
 
     private final String name;
@@ -26,6 +27,14 @@ public class Stock {
         this.purchasePrice = purchasePrice;
         this.quantity = 1;
         this.purchaseDate = purchaseDate;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getSymbol() {

@@ -6,6 +6,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.kenzie.appserver.controller.model.*;
 import com.kenzie.appserver.repositories.model.SoldStockRecord;
+import com.kenzie.appserver.repositories.model.StockRecord;
 import com.kenzie.appserver.service.StockService;
 import com.kenzie.appserver.service.model.SoldStock;
 import com.kenzie.appserver.service.model.Stock;
@@ -27,10 +28,12 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/stocks")
 public class StockController {
-    private StockService stockService = new StockService();
+    private StockService stockService;
 
     //TODO - should this be lambda client?
     AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
+
+    public StockController(StockService stockService) { this.stockService = stockService; }
 
     @GetMapping("/{symbol}")
     public ResponseEntity<SearchStockResponse> getStocksBySymbol(@PathVariable("symbol") String symbol) {
@@ -51,13 +54,13 @@ public class StockController {
             @RequestBody PurchaseStockRequest purchasedStockRequest) throws InsufficientResourcesException {
         String name = stockService.getStockNameBySymbol(purchasedStockRequest.getStockSymbol());
 
-        Stock stock = new Stock(purchasedStockRequest.getStockSymbol(),
-                name,
-                purchasedStockRequest.getPurchasePrice(),
-                purchasedStockRequest.getShares(),
-                purchasedStockRequest.getPurchaseDate());
-
-        //purchaseStockService.purchaseStock(purchasedStockRequest.getUserId(), stock);
+        StockRecord stock = new StockRecord();
+        stock.setUserId(purchasedStockRequest.getUserId());
+        stock.setSymbol(purchasedStockRequest.getStockSymbol());
+        stock.setName(purchasedStockRequest.getStockName());
+        stock.setPurchasePrice(purchasedStockRequest.getPurchasePrice());
+        stock.setQuantity(purchasedStockRequest.getShares());
+        stock.setPurchaseDate(purchasedStockRequest.getPurchaseDate());
 
         PurchasedStockResponse purchasedStockResponse = new PurchasedStockResponse();
         purchasedStockResponse.setUserId(purchasedStockRequest.getUserId());
@@ -88,7 +91,9 @@ public class StockController {
         Stock stock = recordToStock(soldStockRecord);
 
         SoldStock soldStock = new SoldStock(sellStockRequest.getUserId(),
-                sellStockRequest.getRecordId(), stock, LocalDate.now().toString());
+                sellStockRequest.getRecordId(), sellStockRequest.getStockSymbol(),
+                sellStockRequest.getStockName(), sellStockRequest.getsalePrice(),
+                sellStockRequest.getShares(), LocalDate.now().toString());
 
         SellStockResponse response = createSellStockResponse(soldStock);
 
@@ -137,10 +142,10 @@ public class StockController {
         SellStockResponse sellStockResponse = new SellStockResponse();
         sellStockResponse.setUserId(soldStock.getUserId());
         sellStockResponse.setRecordID(soldStock.getRecordId());
-        sellStockResponse.setStockSymbol(soldStock.getStock().getSymbol());
-        sellStockResponse.setStockName(soldStock.getStock().getName());
-        sellStockResponse.setSalePrice(soldStock.getStock().getPurchasePrice());
-        sellStockResponse.setShares(soldStock.getStock().getQuantity());
+        sellStockResponse.setStockSymbol(soldStock.getSymbol());
+        sellStockResponse.setStockName(soldStock.getName());
+        sellStockResponse.setSalePrice(soldStock.getSoldPrice());
+        sellStockResponse.setShares(soldStock.getQuantity());
         sellStockResponse.setSellStockDate(soldStock.getSoldDate());
 
         return sellStockResponse;

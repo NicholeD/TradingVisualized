@@ -11,8 +11,6 @@ import java.util.List;
 
 public class StockServiceClient {
     private static final String ADD_PURCHASE_ENDPOINT = "purchasedstocks/add";
-    //TODO - use 'add' endpoint to update as well?
-    //private static final String UPDATE_PURCHASE_ENDPOINT = "purchasedstocks/update";
     private static final String GET_PURCHASED_STOCK_ENDPOINT = "purchasedstocks/{userId}";
     private ObjectMapper mapper;
 

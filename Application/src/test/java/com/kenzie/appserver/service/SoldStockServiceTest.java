@@ -1,16 +1,16 @@
 package com.kenzie.appserver.service;
 
-import com.kenzie.appserver.repositories.PurchasedStockRepository;
+import com.kenzie.appserver.repositories.StockRepository;
 import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
 
 import static org.mockito.Mockito.mock;
 
 public class SoldStockServiceTest {
-    private PurchasedStockRepository purchasedStockRepository;
+    private StockRepository stockRepository;
 
     @BeforeEach
-    void setup() { purchasedStockRepository = mock(PurchasedStockRepository.class); }
+    void setup() { stockRepository = mock(StockRepository.class); }
 
     @Test
     void sellStock_purchasedStockIsUpdated() {

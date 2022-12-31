@@ -1,26 +1,17 @@
 package com.kenzie.appserver.service.model;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-//TODO - need to delete bc now in lambda??
-@DynamoDBTable(tableName = "Portfolio")
 public class Stock {
 
-    @DynamoDBRangeKey(attributeName = "symbol")
+    private String userId;
+
     private final String symbol;
 
-    @DynamoDBHashKey(attributeName = "id")
     private final String name;
 
-    @DynamoDBAttribute(attributeName = "purchasePrice")
     private final double purchasePrice;
 
-    @DynamoDBAttribute(attributeName = "quantity")
     private final int quantity;
 
-    @DynamoDBAttribute(attributeName = "purchaseDate")
     private final String purchaseDate;
 
     public Stock(String symbol, String name, double purchasePrice, int quantity, String purchaseDate) {
@@ -37,6 +28,14 @@ public class Stock {
         this.purchasePrice = purchasePrice;
         this.quantity = 1;
         this.purchaseDate = purchaseDate;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getSymbol() {
@@ -58,4 +57,5 @@ public class Stock {
     public String getPurchaseDate() {
         return purchaseDate;
     }
+
 }

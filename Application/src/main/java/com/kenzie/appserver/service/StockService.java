@@ -4,11 +4,10 @@ import com.kenzie.appserver.controller.model.PurchaseStockRequest;
 import com.kenzie.appserver.controller.model.SellStockRequest;
 import com.kenzie.appserver.controller.model.StockResponse;
 import com.kenzie.appserver.repositories.FishRepository;
-import com.kenzie.appserver.repositories.PurchasedStockRepository;
+import com.kenzie.appserver.repositories.StockRepository;
 import com.kenzie.appserver.repositories.model.FishRecord;
-import com.kenzie.appserver.repositories.model.PurchasedStockRecord;
 import com.kenzie.appserver.repositories.model.SoldStockRecord;
-import com.kenzie.appserver.service.model.PurchasedStock;
+import com.kenzie.appserver.repositories.model.StockRecord;
 import com.kenzie.appserver.service.model.Stock;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,18 +15,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class StockService {
     private RestTemplate restTemplate = new RestTemplate();
 
-    private PurchasedStockRepository purchasedStockRepository;
+    private StockRepository stockRepository;
     private FishRepository fishRepository;
+
+    public StockService(StockRepository stockRepository, FishRepository fishRepository) {
+        this.stockRepository = stockRepository;
+        this.fishRepository = fishRepository;
+    }
 
     @GetMapping
     public StockResponse getStocksBySymbol(String symbol) {
@@ -48,13 +48,13 @@ public class StockService {
     }
 
     //TODO - change implementation to wire to lambda's dao to call api (get rid of above methods and put in lambda)
-    public List<PurchasedStock> findByStockSymbol(String symbol) {
-        List<PurchasedStockRecord> purchasedStockRecords = purchasedStockRepository
-                .findBySymbol(symbol);
+    public List<Stock> findByUserId(String userId) {
+        List<StockRecord> stockRecords = stockRepository
+                .findByUserId(userId);
 
-        List<PurchasedStock> purchasedStock = new ArrayList<>();
+        List<Stock> purchasedStock = new ArrayList<>();
 
-        for (PurchasedStockRecord record : purchasedStockRecords) {
+        for (StockRecord record : stockRecords) {
             purchasedStock.add(recordToStock(record));
         }
 
@@ -62,24 +62,24 @@ public class StockService {
 
     }
 
-    public PurchasedStock purchaseStock(PurchaseStockRequest purchaseStockRequest) {
+    public Stock purchaseStock(PurchaseStockRequest purchaseStockRequest) {
         if (purchaseStockRequest.getShares() <=0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Qty has to be greater than 0, one simply cannot purchase nothing");
         }
 
-        PurchasedStockRecord record = purchaseRequestToRecord(purchaseStockRequest);
-        purchasedStockRepository.save(record);
+        StockRecord record = purchaseRequestToRecord(purchaseStockRequest);
+        stockRepository.save(record);
 
         FishRecord fishRecord= new FishRecord();
         fishRecord.setName(record.getName());
         fishRecord.setPrice(record.getPurchasePrice());
-        fishRecord.setQuantity(record.getShares());
+        fishRecord.setQuantity(record.getQuantity());
         fishRepository.save(fishRecord);
 
-        PurchasedStock purchasedStock = recordToStock(record);
+        Stock stock = recordToStock(record);
 
-        return purchasedStock;
+        return stock;
     }
 
     public SoldStockRecord sellStock(SellStockRequest sellStockRequest) {
@@ -90,18 +90,18 @@ public class StockService {
         }
 
         //Retrieving record to update with new qty or delete
-        Optional<PurchasedStockRecord> purchasedStockRecord = purchasedStockRepository.findById(
+        Optional<StockRecord> purchasedStockRecord = stockRepository.findById(
                 sellStockRequest.getRecordId().toString());
 
-        int ownedShares = purchasedStockRecord.get().getShares();
+        int ownedShares = purchasedStockRecord.get().getQuantity();
 
         if (sellStockRequest.getShares() < ownedShares) {
-            purchasedStockRecord.get().setShares((ownedShares - sellStockRequest.getShares()));
+            purchasedStockRecord.get().setQuantity((ownedShares - sellStockRequest.getShares()));
             //saving over the record for ease rather than implementing @Transactional
-            purchasedStockRepository.save(purchasedStockRecord.get());
+            stockRepository.save(purchasedStockRecord.get());
 
         } else if (sellStockRequest.getShares() == ownedShares) {
-            purchasedStockRepository.delete(purchasedStockRecord.get());
+            stockRepository.delete(purchasedStockRecord.get());
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "One cannot simply sell more than one owns.");
         }
@@ -111,34 +111,31 @@ public class StockService {
     }
 
     /** Helpers */
-    private PurchasedStockRecord purchaseRequestToRecord(PurchaseStockRequest request) {
-        PurchasedStockRecord purchasedStockRecord = new PurchasedStockRecord(request.getUserId(),
-                request.getStockName(), request.getStockSymbol(), LocalDate.now().toString(),
-                request.getPurchasePrice(), request.getShares());
+    private StockRecord purchaseRequestToRecord(PurchaseStockRequest request) {
+        StockRecord stockRecord = new StockRecord();
+        stockRecord.setUserId(request.getUserId());
+        stockRecord.setSymbol(request.getStockSymbol());
+        stockRecord.setName(request.getStockName());
+        stockRecord.setPurchasePrice(request.getPurchasePrice());
+        stockRecord.setQuantity(request.getShares());
+        stockRecord.setPurchaseDate(request.getPurchaseDate());
 
-        purchasedStockRepository.save(purchasedStockRecord);
+        stockRepository.save(stockRecord);
 
-        return purchasedStockRecord;
+        return stockRecord;
     }
 
-    private PurchasedStock recordToStock(PurchasedStockRecord record) {
+    private Stock recordToStock(StockRecord record) {
         Stock stock = new Stock(record.getSymbol(), record.getName(), record.getPurchasePrice(),
-                record.getShares(), record.getDateOfPurchase());
+                record.getQuantity(), record.getPurchaseDate());
+        stock.setUserId(record.getUserId());
 
-        return new PurchasedStock(record.getUserId(), stock, stock.getPurchaseDate());
+        return stock;
     }
 
-    private PurchasedStockRecord requestToPurchasedRecord(SellStockRequest request) {
-        PurchasedStockRecord record = new PurchasedStockRecord(request.getUserId(),
-                request.getStockName(), request.getStockSymbol(),
-                request.getSellStockDate(), request.getsalePrice(), request.getShares());
-
-        return record;
-    }
-
-    private SoldStockRecord requestToSellRecord(SellStockRequest request, PurchasedStockRecord record) {
-        SoldStockRecord soldRecord = new SoldStockRecord(request.getUserId(), record.getRecordId(),
-                request.getStockName(), request.getStockSymbol(), record.getDateOfPurchase(),
+    private SoldStockRecord requestToSellRecord(SellStockRequest request, StockRecord record) {
+        SoldStockRecord soldRecord = new SoldStockRecord(request.getUserId(),
+                request.getStockName(), request.getStockSymbol(), record.getPurchaseDate(),
                 request.getSellStockDate(), record.getPurchasePrice(), request.getsalePrice(), request.getShares());
 
         return soldRecord;
