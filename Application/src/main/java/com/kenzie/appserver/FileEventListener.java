@@ -3,14 +3,13 @@ package com.kenzie.appserver;
 import com.kenzie.appserver.service.FishService;
 import com.kenzie.appserver.service.model.Fish;
 import com.kenzie.appserver.service.model.converter.JsonFishConverter;
-import org.hibernate.validator.constraints.ScriptAssert;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.util.List;
 
 @Component
@@ -20,8 +19,8 @@ public class FileEventListener {
     private File file;
     private FishService fishService;
 
-    public FileEventListener(FishService fishService) {
-        file = new File("/home/tanner/Kenzie/capstone_projects/ata-capstone-project-tv/exe/TV_Data/data.txt");
+    public FileEventListener(FishService fishService) throws IOException {
+        file = new File("C:/Users/zchal/kenzie/ata-capstone-project-tv/exe/TV_Data/data.txt");
         lastModified = file.lastModified();
         this.fishService = fishService;
     }

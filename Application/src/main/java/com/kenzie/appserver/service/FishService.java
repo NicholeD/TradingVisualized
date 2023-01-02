@@ -4,17 +4,18 @@ import com.kenzie.appserver.repositories.FishRepository;
 import com.kenzie.appserver.repositories.model.FishRecord;
 import com.kenzie.appserver.service.model.Fish;
 import com.kenzie.capstone.service.client.LambdaServiceClient;
+import com.kenzie.capstone.service.client.StockServiceClient;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FishService {
     private FishRepository fishRepository;
-    private LambdaServiceClient lambdaServiceClient;
+    private StockServiceClient stockServiceClient;
     //This is hopefully useful... but I don't exactly know what it is doing atm...
 
-    public FishService(FishRepository fishRepository, LambdaServiceClient lambdaServiceClient) {
+    public FishService(FishRepository fishRepository, StockServiceClient stockServiceClient) {
         this.fishRepository = fishRepository;
-        this.lambdaServiceClient = lambdaServiceClient;
+        this.stockServiceClient = stockServiceClient;
     }
 
     public Fish findByName(String name) {

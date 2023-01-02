@@ -5,6 +5,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.kenzie.appserver.controller.model.*;
+import com.kenzie.appserver.repositories.model.PurchasedStockRecord;
 import com.kenzie.appserver.repositories.model.SoldStockRecord;
 import com.kenzie.appserver.repositories.model.StockRecord;
 import com.kenzie.appserver.service.StockService;
@@ -65,12 +66,15 @@ public class StockController {
         PurchasedStockResponse purchasedStockResponse = new PurchasedStockResponse();
         purchasedStockResponse.setUserId(purchasedStockRequest.getUserId());
         purchasedStockResponse.setStockSymbol(stock.getSymbol());
-        purchasedStockResponse.setUserId(name);
         purchasedStockResponse.setPurchasePrice(stock.getPurchasePrice());
         purchasedStockResponse.setShares(stock.getQuantity());
         purchasedStockResponse.setPurchasePrice(stock.getPurchasePrice()*stock.getQuantity());
         purchasedStockResponse.setPurchaseDate(stock.getPurchaseDate());
         purchasedStockResponse.setOrderDate(purchasedStockRequest.getOrderDate());
+
+        PurchasedStockRecord record = new PurchasedStockRecord(stock.getUserId(),
+                name, stock.getSymbol(), stock.getPurchaseDate(), stock.getPurchasePrice(),
+                stock.getQuantity());
 
         HashMap<String, AttributeValue> keyToGet = new HashMap<>();
         keyToGet.put("id", new AttributeValue(purchasedStockRequest.getUserId()));
@@ -78,15 +82,18 @@ public class StockController {
         keyToGet.put("quantity", new AttributeValue().withN(Integer.toString(purchasedStockRequest.getShares())));
         keyToGet.put("purchaseDate", new AttributeValue(purchasedStockRequest.getPurchaseDate()));
         keyToGet.put("purchasePrice", new AttributeValue().withN(Double.toString(purchasedStockRequest.getPurchasePrice())));
+        keyToGet.put("recordId", new AttributeValue((record.getRecordId())));
+        keyToGet.put("name", new AttributeValue(name));
         client.putItem("Portfolio", keyToGet);
 
-        return ResponseEntity.created(URI.create("/purchasedstocks/" + purchasedStockResponse.getUserId())).body(purchasedStockResponse);
+        return ResponseEntity.created(URI.create("/stocks/" + purchasedStockResponse.getUserId())).body(purchasedStockResponse);
     }
 
-    @PostMapping
+    @PostMapping("/sell")
     public ResponseEntity<SellStockResponse> sellStock(@RequestBody SellStockRequest sellStockRequest) {
 
         SoldStockRecord soldStockRecord = stockService.sellStock(sellStockRequest);
+
 
         Stock stock = recordToStock(soldStockRecord);
 
@@ -100,7 +107,7 @@ public class StockController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/portfolio/{userId}")
     public ResponseEntity<ScanResult> getPortfolioByUserId(@PathVariable("userId") String userId) {
         ScanResult result = client.scan("Portfolio", null, null);
         return ResponseEntity.ok(result);

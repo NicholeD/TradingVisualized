@@ -1,4 +1,4 @@
-package com.kenzie.capstone.service.model;
+package com.kenzie.appserver.repositories.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
@@ -7,22 +7,22 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 import java.util.UUID;
 
-@DynamoDBTable(tableName = "Portfolio")
+@DynamoDBTable(tableName = "PurchasedStocks")
 public class PurchasedStockRecord {
 
     private String userId;
+    private String recordId;
     private String name;
     private String symbol;
     private String dateOfPurchase;
     private Double purchasePrice;
     private int shares;
 
-    public PurchasedStockRecord(){};
-
     public PurchasedStockRecord(String userId, String name, String symbol,
                                 String dateOfPurchase, Double purchasePrice,
                                 int shares) {
         this.userId = userId;
+        this.recordId = UUID.randomUUID().toString();
         this.name = name;
         this.symbol = symbol;
         this.dateOfPurchase = dateOfPurchase;
@@ -30,7 +30,7 @@ public class PurchasedStockRecord {
         this.shares = shares;
     }
 
-    @DynamoDBAttribute(attributeName = "UserId")
+    @DynamoDBHashKey(attributeName = "userId")
     public String getUserId() {
         return userId;
     }
@@ -38,6 +38,11 @@ public class PurchasedStockRecord {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+    @DynamoDBAttribute(attributeName = "RecordId")
+    public String getRecordId() { return recordId; }
+
+    public void setRecordId() { this.recordId = getRecordId(); }
 
     @DynamoDBAttribute(attributeName = "Name")
     public String getName() {
@@ -48,7 +53,7 @@ public class PurchasedStockRecord {
         this.name = name;
     }
 
-    @DynamoDBHashKey(attributeName = "Symbol")
+    @DynamoDBAttribute(attributeName = "symbol")
     public String getSymbol() {
         return symbol;
     }
@@ -84,4 +89,16 @@ public class PurchasedStockRecord {
         this.shares = shares;
     }
 
+    @Override
+    public String toString() {
+        return "PurchasedStockRecord{" +
+                "userId='" + userId + '\'' +
+                ", recordId=" + recordId +
+                ", name='" + name + '\'' +
+                ", symbol='" + symbol + '\'' +
+                ", dateOfPurchase='" + dateOfPurchase + '\'' +
+                ", purchasePrice=" + purchasePrice +
+                ", shares=" + shares +
+                '}';
+    }
 }

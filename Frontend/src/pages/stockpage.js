@@ -28,7 +28,7 @@ class StockPage extends BaseClass{
             let stockStocks = stock.stocks;
             let result = "";
             result += `<div>Stock Name: ${stock.name}</div>`
-            result += `<div>Stock Symbol: ${stock.symbol}</div>`
+            result += `<div>Stock Symbol: ${stock.symbol.toUpperCase()}</div>`
             result += `<div>Current Price: \$${stockStocks[0].purchasePrice}</div>`
             let date = new Date(stockStocks[0].purchaseDate.toString());
             let currentStock = stockStocks[0];
@@ -96,12 +96,6 @@ class StockPage extends BaseClass{
         }
     }
 
-//    function renderChart(series){
-//        JSC.chart('chart', {
-//            title_label_text: 'Stock Price over the last 30 days',
-//            series : series
-//        });
-//    }
     async onGet(event){
         event.preventDefault();
 
