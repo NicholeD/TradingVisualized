@@ -2,6 +2,7 @@ package com.kenzie.capstone.service.dependency;
 
 
 import com.kenzie.capstone.service.dao.ExampleDao;
+import com.kenzie.capstone.service.dao.StockDao;
 import com.kenzie.capstone.service.util.DynamoDbClientProvider;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -27,10 +28,10 @@ public class DaoModule {
 
     @Singleton
     @Provides
-    @Named("ExampleDao")
+    @Named("StockDao")
     @Inject
-    public ExampleDao provideExampleDao(@Named("DynamoDBMapper") DynamoDBMapper mapper) {
-        return new ExampleDao(mapper);
+    public StockDao provideStockDao(@Named("DynamoDBMapper") DynamoDBMapper mapper) {
+        return new StockDao(mapper);
     }
 
 }

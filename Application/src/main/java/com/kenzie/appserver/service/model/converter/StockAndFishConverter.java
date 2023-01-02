@@ -1,6 +1,7 @@
 package com.kenzie.appserver.service.model.converter;
 
-import com.kenzie.appserver.repositories.PurchasedStockRepository;
+import com.kenzie.appserver.repositories.FishRepository;
+import com.kenzie.appserver.repositories.StockRepository;
 import com.kenzie.appserver.service.StockService;
 import com.kenzie.appserver.service.model.Fish;
 import com.kenzie.appserver.service.model.Stock;
@@ -11,6 +12,16 @@ import java.util.stream.Collectors;
 
 public class StockAndFishConverter {
 
+    public StockRepository stockRepository;
+    public FishRepository fishRepository;
+
+    public static StockService stockService;
+
+    public StockAndFishConverter(StockRepository stockRepository, FishRepository fishRepository) {
+        this.stockRepository = stockRepository;
+        this.fishRepository = fishRepository;
+        this.stockService = new StockService(stockRepository, fishRepository);
+    }
 
     public static Fish stockToFish(Stock stock){
         Fish fish = new Fish();
@@ -23,7 +34,6 @@ public class StockAndFishConverter {
     }
 
     public static Stock fishToStock(Fish fish){
-        StockService stockService = new StockService();
         String dayOfPurchase = ""; //dont know if we want this to be accurate
         String name = stockService.getStockNameBySymbol(fish.getName());
         Stock stock = new Stock(fish.getName(), name, fish.getPrice(), LocalDateTime.now().toString());
@@ -37,7 +47,6 @@ public class StockAndFishConverter {
     }
 
     public static List<Stock> fishListToStockList(List<Fish> fishList){
-        StockService stockService = new StockService();
         return fishList.stream()
                 .map(f -> {
                     String name = stockService.getStockNameBySymbol(f.getName());

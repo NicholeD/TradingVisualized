@@ -1,4 +1,4 @@
-package com.kenzie.appserver.repositories.model;
+package com.kenzie.capstone.service.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
@@ -11,18 +11,18 @@ import java.util.UUID;
 public class PurchasedStockRecord {
 
     private String userId;
-    private UUID recordId;
     private String name;
     private String symbol;
     private String dateOfPurchase;
     private Double purchasePrice;
     private int shares;
 
+    public PurchasedStockRecord(){};
+
     public PurchasedStockRecord(String userId, String name, String symbol,
                                 String dateOfPurchase, Double purchasePrice,
                                 int shares) {
         this.userId = userId;
-        this.recordId = UUID.randomUUID();
         this.name = name;
         this.symbol = symbol;
         this.dateOfPurchase = dateOfPurchase;
@@ -39,12 +39,7 @@ public class PurchasedStockRecord {
         this.userId = userId;
     }
 
-    @DynamoDBRangeKey(attributeName = "RecordId")
-    public UUID getRecordId() { return recordId; }
-
-    public void setRecordId() { this.recordId = getRecordId(); }
-
-    @DynamoDBAttribute(attributeName = "Name")
+    @DynamoDBRangeKey(attributeName = "Name")
     public String getName() {
         return name;
     }

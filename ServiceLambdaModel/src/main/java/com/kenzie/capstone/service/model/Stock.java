@@ -1,9 +1,8 @@
-package com.kenzie.appserver.service.model;
+package com.kenzie.capstone.service.model;
 
 public class Stock {
 
     private String userId;
-
     private final String symbol;
 
     private final String name;
@@ -57,5 +56,4 @@ public class Stock {
     public String getPurchaseDate() {
         return purchaseDate;
     }
-
 }

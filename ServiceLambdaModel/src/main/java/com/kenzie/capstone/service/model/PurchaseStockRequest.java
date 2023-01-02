@@ -1,45 +1,30 @@
-package com.kenzie.appserver.controller.model;
-
-import com.amazonaws.services.dynamodbv2.xspec.S;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import javax.validation.constraints.NotEmpty;
+package com.kenzie.capstone.service.model;
 
 //TODO - need to delete bc now in lambda??
 public class PurchaseStockRequest {
 
-    @NotEmpty
-    @JsonProperty("userId")
     private String userId;
 
-    @JsonProperty("stockSymbol")
     private String stockSymbol;
 
-    @JsonProperty("stockName")
     private String stockName;
 
-    @JsonProperty("purchasePrice")
     private double purchasePrice;
 
-    @JsonProperty("shares")
     private int shares;
 
-    @JsonProperty("purchaseDate")
     private String purchaseDate;
 
-    @JsonProperty("orderDate")
-    private String orderDate;
 
     public PurchaseStockRequest(String userId, String stockSymbol,
                                 String stockName, double purchasePrice,
-                                int shares, String purchaseDate, String orderDate) {
+                                int shares, String purchaseDate) {
         this.userId = userId;
         this.stockSymbol = stockSymbol;
         this.stockName = stockName;
         this.purchasePrice = purchasePrice;
         this.shares = shares;
         this.purchaseDate = purchaseDate;
-        this.orderDate = orderDate;
     }
 
     public String getUserId() {
@@ -90,11 +75,4 @@ public class PurchaseStockRequest {
         this.purchaseDate = purchaseDate;
     }
 
-    public String getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(String orderDate) {
-        this.orderDate = orderDate;
-    }
 }

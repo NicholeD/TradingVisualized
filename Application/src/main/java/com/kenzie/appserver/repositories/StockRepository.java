@@ -10,4 +10,5 @@ import java.util.List;
 
 public interface StockRepository extends CrudRepository<StockRecord, String> {
     List<StockRecord> findStockBySymbol(String symbol);
+    List<StockRecord> findByUserId(String userId);
 }

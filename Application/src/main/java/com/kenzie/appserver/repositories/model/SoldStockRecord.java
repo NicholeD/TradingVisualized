@@ -10,7 +10,6 @@ import java.util.UUID;
 //@DynamoDBTable(tableName = "sold")
 public class SoldStockRecord {
     private String userId;
-    private UUID recordId;
     private String stockName;
     private String stockSymbol;
     private String dateOfSale;
@@ -21,11 +20,10 @@ public class SoldStockRecord {
     private int shares;
     private Double realizedProfit;
 
-    public SoldStockRecord(String userId, UUID recordId, String stockName, String stockSymbol,
+    public SoldStockRecord(String userId, String stockName, String stockSymbol,
                            String dateOfSale, String dateOfPurchase, Double purchasedStockPrice, Double saleStockPrice,
                            int shares) {
         this.userId = userId;
-        this.recordId = recordId;
         this.stockName = stockName;
         this.stockSymbol = stockSymbol;
         this.dateOfSale = dateOfSale;
@@ -45,11 +43,6 @@ public class SoldStockRecord {
     public void setUserId(String userId) {
         this.userId = userId;
     }
-
-    //@DynamoDBRangeKey(attributeName = "RecordId")
-    public UUID getRecordId() { return recordId; }
-
-    public void setRecordId(UUID recordId) { this.recordId = recordId; }
 
     //@DynamoDBAttribute(attributeName = "Name")
     public String getStockName() {
