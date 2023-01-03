@@ -6,6 +6,7 @@ import com.kenzie.capstone.service.exceptions.InvalidDataException;
 import com.kenzie.capstone.service.lambda.SellStock;
 import com.kenzie.capstone.service.model.*;
 
+
 import javax.inject.Inject;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -30,6 +31,7 @@ public class StockService {
             throw new InvalidDataException("Request must contain a valid userId");
         }
         PurchasedStockRecord record = PurchaseConverter.fromRequestToRecord(request);
+        System.out.println(record.toString());
         stockDao.addPurchasedStock(record);
         return PurchaseConverter.fromRecordToResponse(record);
     }

@@ -2,15 +2,11 @@ package com.kenzie.appserver.controller;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.ScanResult;
 
 import com.kenzie.appserver.controller.model.SearchStockResponse;
 
 import com.kenzie.appserver.controller.model.StockResponse;
-import com.kenzie.appserver.repositories.model.PurchasedStockRecord;
 import com.kenzie.appserver.repositories.model.SoldStockRecord;
-import com.kenzie.appserver.repositories.model.StockRecord;
 import com.kenzie.appserver.service.StockService;
 import com.kenzie.appserver.service.model.SoldStock;
 import com.kenzie.appserver.service.model.Stock;
@@ -40,7 +36,11 @@ public class StockController {
     //TODO - should this be lambda client?
     AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
 
-    public StockController(StockService stockService) { this.stockService = stockService; }
+    public StockController(StockService stockService, StockServiceClient stockServiceClient) {
+        this.stockService = stockService;
+        this.stockServiceClient = stockServiceClient;
+
+    }
 
     @GetMapping("/{symbol}")
     public ResponseEntity<SearchStockResponse> getStocksBySymbol(@PathVariable("symbol") String symbol) {
@@ -59,7 +59,7 @@ public class StockController {
     @PostMapping
     public ResponseEntity<PurchasedStockResponse> purchaseStock(
             @RequestBody PurchaseStockRequest purchasedStockRequest) throws InsufficientResourcesException {
-        String name = stockService.getStockNameBySymbol(purchasedStockRequest.getStockSymbol());
+        String name = stockService.getStockNameBySymbol(purchasedStockRequest.getSymbol());
         PurchasedStockResponse response = stockServiceClient.addPurchasedStock(purchasedStockRequest);
 
 
@@ -73,7 +73,7 @@ public class StockController {
 //
         PurchasedStockResponse purchasedStockResponse = new PurchasedStockResponse();
         purchasedStockResponse.setUserId(purchasedStockRequest.getUserId());
-        purchasedStockResponse.setStockSymbol(purchasedStockRequest.getStockSymbol());
+        purchasedStockResponse.setStockSymbol(purchasedStockRequest.getSymbol());
         purchasedStockResponse.setPurchasePrice(purchasedStockRequest.getPurchasePrice());
         purchasedStockResponse.setShares(purchasedStockRequest.getShares());
         purchasedStockResponse.setPurchasePrice(purchasedStockRequest.getPurchasePrice()*purchasedStockRequest.getShares());

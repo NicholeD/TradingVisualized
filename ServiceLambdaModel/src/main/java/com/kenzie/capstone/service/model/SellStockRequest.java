@@ -12,7 +12,7 @@ public class SellStockRequest {
     private String userId;
 
     @JsonProperty("recordId")
-    private UUID recordId;
+    private String recordId;
 
     @JsonProperty("stockSymbol")
     private String stockSymbol;
@@ -29,8 +29,8 @@ public class SellStockRequest {
     @JsonProperty("sellStockDate")
     private String sellStockDate;
 
-
-    public SellStockRequest(String userId, UUID recordId, String stockSymbol, String stockName,
+    public SellStockRequest (){}
+    public SellStockRequest(String userId, String recordId, String stockSymbol, String stockName,
                             double salePrice, int shares) {
         this.userId = userId;
 
@@ -50,7 +50,7 @@ public class SellStockRequest {
         this.userId = userId;
     }
 
-    public UUID getRecordId() {
+    public String getRecordId() {
         return recordId;
     }
 
@@ -92,5 +92,19 @@ public class SellStockRequest {
 
     public void setSellStockDate(String sellStockDate) {
         this.sellStockDate = sellStockDate;
+    }
+
+
+    @Override
+    public String toString() {
+        return "SellStockRequest{" +
+                "userId='" + userId + '\'' +
+                ", recordId=" + recordId +
+                ", stockSymbol='" + stockSymbol + '\'' +
+                ", stockName='" + stockName + '\'' +
+                ", salePrice=" + salePrice +
+                ", shares=" + shares +
+                ", sellStockDate='" + sellStockDate + '\'' +
+                '}';
     }
 }

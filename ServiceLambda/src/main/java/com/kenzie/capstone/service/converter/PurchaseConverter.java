@@ -1,16 +1,12 @@
 package com.kenzie.capstone.service.converter;
 
-import com.kenzie.capstone.service.model.PurchaseStockRequest;
-import com.kenzie.capstone.service.model.PurchasedStock;
-import com.kenzie.capstone.service.model.Stock;
-import com.kenzie.capstone.service.model.PurchasedStockRecord;
-import com.kenzie.capstone.service.model.PurchasedStockResponse;
+import com.kenzie.capstone.service.model.*;
 
 public class PurchaseConverter {
 
     public static PurchasedStockRecord fromRequestToRecord(PurchaseStockRequest request) {
-        return new PurchasedStockRecord(request.getUserId(), request.getStockName(),
-                request.getStockSymbol(), request.getPurchaseDate(), request.getPurchasePrice(), request.getShares());
+        return new PurchasedStockRecord(request.getUserId(), request.getName(),
+                request.getSymbol(), request.getPurchaseDate(), request.getPurchasePrice(), request.getShares());
 
     }
 

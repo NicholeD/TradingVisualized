@@ -31,7 +31,7 @@ public class AddPurchase implements RequestHandler<APIGatewayProxyRequestEvent, 
         StockService stockService = serviceComponent.provideStockService();
 
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
-
+        System.out.println(input.getBody());
         try {
             PurchaseStockRequest purchaseStockRequest = jsonStringToPurchasedStockConverter.convert(input.getBody());
             PurchasedStockResponse purchasedStockResponse = stockService.setPurchasedStock(purchaseStockRequest);
