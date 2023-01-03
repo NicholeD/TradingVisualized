@@ -26,7 +26,6 @@ public class DynamoDbConfig {
                 .standard()
                 .withEndpointConfiguration(endpointConfig)
                 .build();
-
     }
 
     @Bean(name = "amazonDynamoDB")
