@@ -1,8 +1,11 @@
 package com.kenzie.appserver;
 
 import com.kenzie.appserver.service.FishService;
+import com.kenzie.appserver.service.StockService;
 import com.kenzie.appserver.service.model.Fish;
 import com.kenzie.appserver.service.model.converter.JsonFishConverter;
+import com.kenzie.capstone.service.client.StockServiceClient;
+import com.kenzie.capstone.service.model.PurchasedStock;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -10,6 +13,9 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.io.*;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.kenzie.appserver.service.model.converter.StockAndFishConverter.stockService;
 
 @Component
 public class FileEventListener {
@@ -19,6 +25,7 @@ public class FileEventListener {
     private long lastModified;
     private File file;
     private FishService fishService;
+    private StockServiceClient stockServiceClient;
 
     public FileEventListener(FishService fishService) throws IOException {
         file = new File(filePath);
@@ -57,9 +64,14 @@ public class FileEventListener {
     @PostConstruct
     public void setDataFile() {
         //get all stocks via calling stockServiceClient.getPurchaseStock
-        //needs to get all the stocks in our portfolio
-        //use the jsonToFishConverter .purchaseStockToFish method?
+        List<PurchasedStock> purchasedStocks = stockServiceClient.getPurchasedStock();
+
         //convert the purchasedStock to Fish
+        List<Fish> fishList = purchasedStocks.stream()
+                .map(JsonFishConverter::purchaseStockToFish)
+                .collect(Collectors.toList());
+
         //call this convertToJsonFile from jsonToFishConverter on the list of Fish
+        JsonFishConverter.convertToJsonFile(fishList, file);
     }
 }
