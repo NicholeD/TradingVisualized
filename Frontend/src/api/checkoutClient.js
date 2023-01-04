@@ -25,12 +25,11 @@ export default class CheckoutClient extends BaseClass{
             console.log(purchasedStockRequest);
             const response = await this.client.post(`/stocks`, {
                 userId: purchasedStockRequest[0],
-                stockSymbol: purchasedStockRequest[1],
-                stockName: purchasedStockRequest[2],
+                symbol: purchasedStockRequest[1],
+                name: purchasedStockRequest[2],
                 purchasePrice: purchasedStockRequest[3],
                 shares: purchasedStockRequest[4],
-                purchaseDate: purchasedStockRequest[5],
-                orderDate: purchasedStockRequest[5]
+                purchaseDate: purchasedStockRequest[5]
             })
             console.log(response.data);
             return response.data;

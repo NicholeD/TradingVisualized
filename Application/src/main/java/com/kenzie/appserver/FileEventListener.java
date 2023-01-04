@@ -8,6 +8,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.*;
 import java.net.URL;
 import java.util.List;
@@ -27,13 +28,13 @@ public class FileEventListener {
 
     @Scheduled(fixedDelay = 5000)
     public void checkFileModified() {
-        System.out.println("FileModified");
+//        System.out.println("FileModified");
 
         long modified = file.lastModified();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line = null;
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
+//                System.out.println(line);
             }
             if (modified > lastModified) {
                 System.out.println("Modify detected");

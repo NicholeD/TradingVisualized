@@ -44,10 +44,10 @@ public class StockService {
                 .collect(Collectors.toList());
     }
 
-    public PurchasedStockRecord sellStock(SellStockRequest request){
+    public SellStockResponse sellStock(SellStockRequest request){
         PurchasedStockRecord record = stockDao.sellStock(request);
 
-        return record;
+        return PurchaseConverter.fromRecordToSellStock(record);
     }
 
 

@@ -15,13 +15,13 @@ public class PurchaseStockRequest {
 
     private String purchaseDate;
 
-    public PurchaseStockRequest(){};
-    public PurchaseStockRequest(String userId, String stockSymbol,
-                                String stockName, double purchasePrice,
+    public PurchaseStockRequest(){}
+    public PurchaseStockRequest(String userId, String symbol,
+                                String name, double purchasePrice,
                                 int shares, String purchaseDate) {
         this.userId = userId;
-        this.symbol = stockSymbol;
-        this.name = stockName;
+        this.symbol = symbol;
+        this.name =  name;
         this.purchasePrice = purchasePrice;
         this.shares = shares;
         this.purchaseDate = purchaseDate;
@@ -47,8 +47,8 @@ public class PurchaseStockRequest {
         return name;
     }
 
-    public void setName(String stockName) {
-        this.name = stockName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public double getPurchasePrice() {
@@ -75,4 +75,15 @@ public class PurchaseStockRequest {
         this.purchaseDate = purchaseDate;
     }
 
+    @Override
+    public String toString() {
+        return "PurchaseStockRequest{" +
+                "userId='" + userId + '\'' +
+                ", symbol='" + symbol + '\'' +
+                ", name='" + name + '\'' +
+                ", purchasePrice=" + purchasePrice +
+                ", shares=" + shares +
+                ", purchaseDate='" + purchaseDate + '\'' +
+                '}';
+    }
 }

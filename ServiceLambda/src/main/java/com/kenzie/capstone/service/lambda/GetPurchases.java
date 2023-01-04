@@ -26,7 +26,7 @@ public class GetPurchases implements RequestHandler<APIGatewayProxyRequestEvent,
         Gson gson = builder.create();
         //for debugging:
         log.info(gson.toJson(input));
-
+        System.out.println(gson.toJson(input));
         ServiceComponent serviceComponent = DaggerServiceComponent.create();
         StockService stockService = serviceComponent.provideStockService();
 
@@ -36,7 +36,7 @@ public class GetPurchases implements RequestHandler<APIGatewayProxyRequestEvent,
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent().withHeaders(headers);
 
         String userId = input.getPathParameters().get("userId");
-
+        System.out.println("USERID: " + userId);
         if (userId == null || userId.length() == 0) {
             return response
                     .withStatusCode(400)
@@ -45,6 +45,8 @@ public class GetPurchases implements RequestHandler<APIGatewayProxyRequestEvent,
 
         try {
             String output = gson.toJson(stockService.getPurchasedStocks(userId));
+            System.out.println("OUTPUT: " + output);
+
             return response
                     .withStatusCode(200)
                     .withBody(output);

@@ -37,10 +37,10 @@ public class SellStock implements RequestHandler<APIGatewayProxyRequestEvent, AP
         try {
             SellStockRequest request = mapper.readValue(input.getBody(), new TypeReference<SellStockRequest>() {
             });
-            PurchasedStockRecord recordResponse = stockService.sellStock(request);
+            SellStockResponse sellResponse = stockService.sellStock(request);
             return response
                     .withStatusCode(200)
-                    .withBody(gson.toJson(recordResponse));
+                    .withBody(gson.toJson(sellResponse));
 
         }
         catch(JsonProcessingException e){

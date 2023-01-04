@@ -116,7 +116,7 @@ class CheckoutPage extends BaseClass {
             let purchaseDate = stock[4];
 
             let purchasedStockRequest = [userId, stockSymbol, stockName, purchasePrice, shares, purchaseDate];
-
+            console.log(JSON.stringify(purchasedStockRequest));
             this.dataStore.set("stock", null);
             let purchased = await this.client.buyStock(purchasedStockRequest, this.errorHandler);
             this.dataStore.set("stock", purchased);
