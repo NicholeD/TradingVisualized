@@ -29,7 +29,7 @@ public class StockAndFishConverter {
         fish.setPrice(stock.getPurchasePrice());
         fish.setQuantity(stock.getQuantity());
         fish.setSize((float) stock.getPurchasePrice()*stock.getQuantity());
-        fish.setStatus("Active"); // might need to change this per scoots last message
+        fish.setStatus("Alive"); // might need to change this per scoots last message
         return fish;
     }
 

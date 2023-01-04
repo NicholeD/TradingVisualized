@@ -60,6 +60,8 @@ public class StockController {
     public ResponseEntity<PurchasedStockResponse> purchaseStock(
             @RequestBody PurchaseStockRequest purchasedStockRequest) throws InsufficientResourcesException {
         String name = stockService.getStockNameBySymbol(purchasedStockRequest.getSymbol());
+        System.out.println(name  + ":NAME");
+        System.out.println(purchasedStockRequest.toString());
         PurchasedStockResponse response = stockServiceClient.addPurchasedStock(purchasedStockRequest);
 
 
@@ -160,12 +162,11 @@ public class StockController {
     private SellStockResponse createSellStockResponse(SoldStock soldStock) {
         SellStockResponse sellStockResponse = new SellStockResponse();
         sellStockResponse.setUserId(soldStock.getUserId());
-        sellStockResponse.setRecordID(soldStock.getRecordId());
-        sellStockResponse.setStockSymbol(soldStock.getSymbol());
-        sellStockResponse.setStockName(soldStock.getName());
+        sellStockResponse.setSymbol(soldStock.getSymbol());
+        sellStockResponse.setName(soldStock.getName());
         sellStockResponse.setSalePrice(soldStock.getSoldPrice());
         sellStockResponse.setShares(soldStock.getQuantity());
-        sellStockResponse.setSellStockDate(soldStock.getSoldDate());
+        sellStockResponse.setSellDate(soldStock.getSoldDate());
 
         return sellStockResponse;
     }

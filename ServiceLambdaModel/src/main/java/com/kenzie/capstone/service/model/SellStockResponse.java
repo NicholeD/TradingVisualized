@@ -9,15 +9,11 @@ public class SellStockResponse {
     @JsonProperty("userId")
     private String userId;
 
-
-    @JsonProperty("recordId")
-    private UUID recordID;
-
-    @JsonProperty("stockSymbol")
-    private String stockSymbol;
+    @JsonProperty("symbol")
+    private String symbol;
 
     @JsonProperty("name")
-    private String stockName;
+    private String name;
 
     @JsonProperty("salePrice")
     private double salePrice;
@@ -26,7 +22,7 @@ public class SellStockResponse {
     private int shares;
 
     @JsonProperty("sellDate")
-    private String sellStockDate;
+    private String sellDate;
 
     public String getUserId() {
         return userId;
@@ -36,28 +32,21 @@ public class SellStockResponse {
         this.userId = userId;
     }
 
-    public UUID getRecordID() {
-        return recordID;
+
+    public String getSymbol() {
+        return symbol;
     }
 
-    public void setRecordID(UUID recordID) {
-        this.recordID = recordID;
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
-    public String getStockSymbol() {
-        return stockSymbol;
+    public String getName() {
+        return name;
     }
 
-    public void setStockSymbol(String stockSymbol) {
-        this.stockSymbol = stockSymbol;
-    }
-
-    public String getStockName() {
-        return stockName;
-    }
-
-    public void setStockName(String stockName) {
-        this.stockName = stockName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public double getSalePrice() {
@@ -76,11 +65,11 @@ public class SellStockResponse {
         this.shares = shares;
     }
 
-    public String getSellStockDate() {
-        return sellStockDate;
+    public String getSellDate() {
+        return sellDate;
     }
 
-    public void setSellStockDate(String sellStockDate) {
-        this.sellStockDate = sellStockDate;
+    public void setSellDate(String sellDate) {
+        this.sellDate = sellDate;
     }
 }

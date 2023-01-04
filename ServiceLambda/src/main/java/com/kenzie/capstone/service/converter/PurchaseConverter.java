@@ -2,6 +2,8 @@ package com.kenzie.capstone.service.converter;
 
 import com.kenzie.capstone.service.model.*;
 
+import java.time.LocalDate;
+
 public class PurchaseConverter {
 
     public static PurchasedStockRecord fromRequestToRecord(PurchaseStockRequest request) {
@@ -26,5 +28,16 @@ public class PurchaseConverter {
                 record.getShares(), record.getDateOfPurchase());
 
         return new PurchasedStock(record.getUserId(), stock, record.getDateOfPurchase());
+    }
+
+    public static SellStockResponse fromRecordToSellStock(PurchasedStockRecord record){
+        SellStockResponse response = new SellStockResponse();
+        response.setUserId(record.getUserId());
+        response.setSymbol(record.getSymbol());
+        response.setName(record.getName());
+        response.setSalePrice(record.getPurchasePrice());
+        response.setShares(record.getShares());
+        response.setSellDate(LocalDate.now().toString());
+        return response;
     }
 }

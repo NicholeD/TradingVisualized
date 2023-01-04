@@ -3,15 +3,16 @@ package com.kenzie.capstone.service.model;
 public class Stock {
 
     private String userId;
-    private final String symbol;
+    private String symbol;
 
-    private final String name;
+    private String name;
 
-    private final double purchasePrice;
+    private double purchasePrice;
 
-    private final int quantity;
+    private int quantity;
 
-    private final String purchaseDate;
+    private String purchaseDate;
+
 
     public Stock(String symbol, String name, double purchasePrice, int quantity, String purchaseDate) {
         this.symbol = symbol;
@@ -20,6 +21,8 @@ public class Stock {
         this.quantity = quantity;
         this.purchaseDate = purchaseDate;
     }
+    public Stock(){}
+
 
     public Stock(String symbol, String name, double purchasePrice, String purchaseDate) {
         this.symbol = symbol;
