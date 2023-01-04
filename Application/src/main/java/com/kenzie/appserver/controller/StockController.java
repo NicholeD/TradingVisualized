@@ -2,14 +2,16 @@ package com.kenzie.appserver.controller;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.ScanResult;
-import com.kenzie.appserver.controller.model.*;
+
+import com.kenzie.appserver.controller.model.SearchStockResponse;
+
+import com.kenzie.appserver.controller.model.StockResponse;
 import com.kenzie.appserver.repositories.model.SoldStockRecord;
-import com.kenzie.appserver.repositories.model.StockRecord;
 import com.kenzie.appserver.service.StockService;
 import com.kenzie.appserver.service.model.SoldStock;
 import com.kenzie.appserver.service.model.Stock;
+import com.kenzie.capstone.service.client.StockServiceClient;
+import com.kenzie.capstone.service.model.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,10 +32,15 @@ import java.util.stream.Collectors;
 public class StockController {
     private StockService stockService;
 
+    private StockServiceClient stockServiceClient;
     //TODO - should this be lambda client?
     AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
 
-    public StockController(StockService stockService) { this.stockService = stockService; }
+    public StockController(StockService stockService, StockServiceClient stockServiceClient) {
+        this.stockService = stockService;
+        this.stockServiceClient = stockServiceClient;
+
+    }
 
     @GetMapping("/{symbol}")
     public ResponseEntity<SearchStockResponse> getStocksBySymbol(@PathVariable("symbol") String symbol) {
@@ -52,58 +59,70 @@ public class StockController {
     @PostMapping
     public ResponseEntity<PurchasedStockResponse> purchaseStock(
             @RequestBody PurchaseStockRequest purchasedStockRequest) throws InsufficientResourcesException {
-        String name = stockService.getStockNameBySymbol(purchasedStockRequest.getStockSymbol());
+        String name = stockService.getStockNameBySymbol(purchasedStockRequest.getSymbol());
+        PurchasedStockResponse response = stockServiceClient.addPurchasedStock(purchasedStockRequest);
 
-        StockRecord stock = new StockRecord();
-        stock.setUserId(purchasedStockRequest.getUserId());
-        stock.setSymbol(purchasedStockRequest.getStockSymbol());
-        stock.setName(purchasedStockRequest.getStockName());
-        stock.setPurchasePrice(purchasedStockRequest.getPurchasePrice());
-        stock.setQuantity(purchasedStockRequest.getShares());
-        stock.setPurchaseDate(purchasedStockRequest.getPurchaseDate());
 
+//        StockRecord stock = new StockRecord();
+//        stock.setUserId(purchasedStockRequest.getUserId());
+//        stock.setSymbol(purchasedStockRequest.getStockSymbol());
+//        stock.setName(purchasedStockRequest.getStockName());
+//        stock.setPurchasePrice(purchasedStockRequest.getPurchasePrice());
+//        stock.setQuantity(purchasedStockRequest.getShares());
+//        stock.setPurchaseDate(purchasedStockRequest.getPurchaseDate());
+//
         PurchasedStockResponse purchasedStockResponse = new PurchasedStockResponse();
         purchasedStockResponse.setUserId(purchasedStockRequest.getUserId());
-        purchasedStockResponse.setStockSymbol(stock.getSymbol());
-        purchasedStockResponse.setUserId(name);
-        purchasedStockResponse.setPurchasePrice(stock.getPurchasePrice());
-        purchasedStockResponse.setShares(stock.getQuantity());
-        purchasedStockResponse.setPurchasePrice(stock.getPurchasePrice()*stock.getQuantity());
-        purchasedStockResponse.setPurchaseDate(stock.getPurchaseDate());
-        purchasedStockResponse.setOrderDate(purchasedStockRequest.getOrderDate());
+        purchasedStockResponse.setStockSymbol(purchasedStockRequest.getSymbol());
+        purchasedStockResponse.setPurchasePrice(purchasedStockRequest.getPurchasePrice());
+        purchasedStockResponse.setShares(purchasedStockRequest.getShares());
+        purchasedStockResponse.setPurchasePrice(purchasedStockRequest.getPurchasePrice()*purchasedStockRequest.getShares());
+        purchasedStockResponse.setPurchaseDate(purchasedStockRequest.getPurchaseDate());
+//
+//        PurchasedStockRecord record = new PurchasedStockRecord(stock.getUserId(),
+//                name, stock.getSymbol(), stock.getPurchaseDate(), stock.getPurchasePrice(),
+//                stock.getQuantity());
+//
+//        HashMap<String, AttributeValue> keyToGet = new HashMap<>();
+//        keyToGet.put("id", new AttributeValue(purchasedStockRequest.getUserId()));
+//        keyToGet.put("symbol", new AttributeValue(purchasedStockRequest.getStockSymbol()));
+//        keyToGet.put("quantity", new AttributeValue().withN(Integer.toString(purchasedStockRequest.getShares())));
+//        keyToGet.put("purchaseDate", new AttributeValue(purchasedStockRequest.getPurchaseDate()));
+//        keyToGet.put("purchasePrice", new AttributeValue().withN(Double.toString(purchasedStockRequest.getPurchasePrice())));
+//        keyToGet.put("recordId", new AttributeValue((record.getRecordId())));
+//        keyToGet.put("name", new AttributeValue(name));
+//        client.putItem("Portfolio", keyToGet);
 
-        HashMap<String, AttributeValue> keyToGet = new HashMap<>();
-        keyToGet.put("id", new AttributeValue(purchasedStockRequest.getUserId()));
-        keyToGet.put("symbol", new AttributeValue(purchasedStockRequest.getStockSymbol()));
-        keyToGet.put("quantity", new AttributeValue().withN(Integer.toString(purchasedStockRequest.getShares())));
-        keyToGet.put("purchaseDate", new AttributeValue(purchasedStockRequest.getPurchaseDate()));
-        keyToGet.put("purchasePrice", new AttributeValue().withN(Double.toString(purchasedStockRequest.getPurchasePrice())));
-        client.putItem("Portfolio", keyToGet);
-
-        return ResponseEntity.created(URI.create("/purchasedstocks/" + purchasedStockResponse.getUserId())).body(purchasedStockResponse);
+        return ResponseEntity.created(URI.create("/stocks/" + response.getUserId())).body(purchasedStockResponse);
     }
 
-    @PostMapping
+    @PostMapping("/sell")
     public ResponseEntity<SellStockResponse> sellStock(@RequestBody SellStockRequest sellStockRequest) {
 
-        SoldStockRecord soldStockRecord = stockService.sellStock(sellStockRequest);
+         SellStockResponse sellStockResponse = stockServiceClient.sellStock(sellStockRequest);
 
-        Stock stock = recordToStock(soldStockRecord);
 
-        SoldStock soldStock = new SoldStock(sellStockRequest.getUserId(),
-                sellStockRequest.getRecordId(), sellStockRequest.getStockSymbol(),
-                sellStockRequest.getStockName(), sellStockRequest.getsalePrice(),
-                sellStockRequest.getShares(), LocalDate.now().toString());
 
-        SellStockResponse response = createSellStockResponse(soldStock);
+//        SoldStockRecord soldStockRecord = stockService.sellStock(sellStockRequest);
+//
+//
+//        Stock stock = recordToStock(soldStockRecord);
+//
+//        SoldStock soldStock = new SoldStock(sellStockRequest.getUserId(),
+//                sellStockRequest.getRecordId(), sellStockRequest.getStockSymbol(),
+//                sellStockRequest.getStockName(), sellStockRequest.getsalePrice(),
+//                sellStockRequest.getShares(), LocalDate.now().toString());
+//
+//        SellStockResponse response = createSellStockResponse(soldStock);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(sellStockResponse);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<ScanResult> getPortfolioByUserId(@PathVariable("userId") String userId) {
-        ScanResult result = client.scan("Portfolio", null, null);
-        return ResponseEntity.ok(result);
+    @GetMapping("/portfolio/{userId}")
+    public ResponseEntity<List<PurchasedStock>> getPortfolioByUserId(@PathVariable("userId") String userId) {
+//        ScanResult result = client.scan("Portfolio", null, null);
+        List<PurchasedStock> stockList = stockServiceClient.getPurchasedStock(userId);
+        return ResponseEntity.ok(stockList);
     }
 
     /** Helpers */

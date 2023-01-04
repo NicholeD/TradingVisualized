@@ -23,13 +23,14 @@ export default class CheckoutClient extends BaseClass{
     async buyStock(purchasedStockRequest, errorCallback){
         try {
             console.log(purchasedStockRequest);
-            const response = await this.client.post(`/purchasedstocks`, {
+            const response = await this.client.post(`/stocks`, {
                 userId: purchasedStockRequest[0],
                 stockSymbol: purchasedStockRequest[1],
-                shares: purchasedStockRequest[3],
-                purchasePrice: purchasedStockRequest[2],
-                purchaseDate: purchasedStockRequest[4],
-                orderDate: purchasedStockRequest[4]
+                stockName: purchasedStockRequest[2],
+                purchasePrice: purchasedStockRequest[3],
+                shares: purchasedStockRequest[4],
+                purchaseDate: purchasedStockRequest[5],
+                orderDate: purchasedStockRequest[5]
             })
             console.log(response.data);
             return response.data;

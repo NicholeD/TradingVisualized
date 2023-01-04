@@ -2,21 +2,41 @@ import BaseClass from "../util/baseClass";
 import DataStore from "../util/DataStore";
 import PortalClient from "../api/portalClient";
 
+
+        async function sellReal(i, errorHandler){
+                  console.log("sellReal" + i);
+                  console.log("errorHandler" + errorHandler);
+                  let client = new PortalClient();
+                  console.log('client' + client);
+                  let portfolioStocks = JSON.parse(localStorage.getItem("portfolioStocks") || "[]" );
+                  console.log(portfolioStocks);
+                  let stock = portfolioStocks[i];
+                  console.log(stock);
+                  let result = await client.sellStock(stock, errorHandler);
+                  console.log(result.data);
+        }
+
+
+
 class PortalPage extends BaseClass {
 
         constructor() {
             super();
-            this.bindClassMethods(['onGet', 'renderPortfolio'], this);
+            this.bindClassMethods(['onGet', 'renderPortfolio', 'visualize'], this);
             this.dataStore = new DataStore();
         }
 
         async mount() {
             this.client = new PortalClient();
             this.onGet();
-
-            this.dataStore.addChangeListener(this.renderPortfolio)
+            this.dataStore.addChangeListener(this.renderPortfolio);
+            document.getElementById("visualize").addEventListener("click", this.visualize);
         }
+        async visualize() {
+          let result = this.client.visualize(this.errorHandler);
+           console.log(result.data);
 
+        }
         async renderPortfolio() {
             let resultArea = document.getElementById("results-area");
 
@@ -25,29 +45,33 @@ class PortalPage extends BaseClass {
             let Session = window.sessionStorage;
             if (portfolio) {
                 console.log(portfolio);
-                let portfolioStocks = portfolio.items;
-//                let count = 0;
-//                const cells = ["cellA1", "cellA2", "cellA3", "cellA4", "cellA5", "cellB1", "cellB2", "cellB3", "cellB4", "cellB5", "cellC1", "cellC2", "cellC3", "cellC4", "cellC5"];
-//                for(let i = 0; i < 15; i+=5){
-//                    let div = document.getElementById(cells[i]);
-//                    let div2 = document.getElementById(cells[i+1]);
-//                    let div3 = document.getElementById(cells[i+2]);
-//                    let div4 = document.getElementById(cells[i+3]);
-//                    let div5 = document.getElementById(cells[i+4]);
-//                    div.innerHTML = portfolioStocks[count].symbol.s;
-//                    div2.innerHTML = portfolioStocks[count].quantity.n;
-//                    div3.innerHTML = portfolioStocks[count].purchasePrice.n;
-//                    div5.innerHTML = portfolioStocks[count].purchaseDate.s;
-//                    div4.innerHTML = portfolioStocks[count].quantity.n * portfolioStocks[count].purchasePrice.n;
-//                    count++;
-//                }
-                let finale = "<table border='1' width='90%'><tr><th style='background-color: #B894FF; height: 3px;'>Symbol</th><th style='background-color: #B894FF; height: 3px;'>Quantity</th><th style='background-color: #B894FF; height: 3px;'>Purchase Price</th><th style='background-color: #B894FF; height: 3px;'>Price Paid</th><th style='background-color: #B894FF; height: 3px;'>Purchase Date</th></tr>";
+                var portfolioStocks = portfolio.items;
+
+                let finale = "<table border='1' width='90%'><tr><th style='background-color: #B894FF; height: 3px;'>Symbol</th><th style='background-color: #B894FF; height: 3px;'>Quantity</th><th style='background-color: #B894FF; height: 3px;'>Purchase Price</th><th style='background-color: #B894FF; height: 3px;'>Price Paid</th><th style='background-color: #B894FF; height: 3px;'>Purchase Date</th><th style='background-color: #B894FF; height: 3px;'>Sell</th></tr>";
                 let divy = document.getElementById("stocklist");
+                let funds = 10000.00;
+                console.log(JSON.stringify(portfolioStocks));
                 for(let i = 0; i < portfolioStocks.length; i++){
-                    finale += "<tr><td>" + portfolioStocks[i].symbol.s + "</td><td>" + portfolioStocks[i].quantity.n + "</td><td>" + portfolioStocks[i].purchasePrice.n + "</td><td>" + portfolioStocks[i].quantity.n * portfolioStocks[i].purchasePrice.n + "</td><td>" + portfolioStocks[i].purchaseDate.s + "</td></tr>";
+                    finale += "<tr><td>" + portfolioStocks[i].symbol.s + "</td><td>" + portfolioStocks[i].quantity.n + "</td><td>" + portfolioStocks[i].purchasePrice.n + "</td><td>" + portfolioStocks[i].quantity.n * portfolioStocks[i].purchasePrice.n + "</td><td>" + portfolioStocks[i].purchaseDate.s + "</td><td><button id='sell" + i + "' type='button' >  Sell</button></td></tr>";
+                    funds -= portfolioStocks[i].quantity.n*portfolioStocks[i].purchasePrice.n;
                 }
+
+
+
+                localStorage.setItem("funds", funds);
+                localStorage.setItem("portfolioStocks", JSON.stringify(portfolioStocks));
+                console.log(localStorage);
                 finale += "</table>";
                 divy.innerHTML = finale;
+                let buttons = document.querySelectorAll('button:not(#visualize)');
+                // Attach the sellReal() method to each button element using an event listener
+                for (let i = 0; i < buttons.length; i++){
+                    console.log(buttons[i]);
+                    document.getElementById('sell' + i).addEventListener('click',
+                    function() {
+                        sellReal(i, this.errorHandler);
+                    });
+                }
             } else {
                 resultArea.innerHTML = "";
             }
@@ -71,8 +95,11 @@ class PortalPage extends BaseClass {
 }
 
 const main = async () => {
-    const portalPage = new PortalPage();
-    portalPage.mount();
-    console.log("Mounted!");
+    console.log('Creating PortalPage instance...');
+     const portalPage = new PortalPage();
+     console.log('Mounting PortalPage instance...');
+     portalPage.mount();
+     console.log('Mounted!');
 };
 window.addEventListener('DOMContentLoaded', main);
+

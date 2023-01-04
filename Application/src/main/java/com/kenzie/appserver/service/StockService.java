@@ -88,10 +88,17 @@ public class StockService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Qty has to be greater than 0, one simply cannot sell nothing");
         }
-
+        System.out.println("IN SELL STOCK");
         //Retrieving record to update with new qty or delete
-        Optional<StockRecord> purchasedStockRecord = stockRepository.findById(
-                sellStockRequest.getRecordId().toString());
+        Optional<StockRecord> purchasedStockRecord = Optional.of(stockRepository.findStockBySymbol(
+                sellStockRequest.getStockSymbol()));
+        System.out.println("AFTER OPTIONAL");
+        try {
+            StockRecord record = purchasedStockRecord.get();
+        }
+        catch (Exception e){
+            throw new RuntimeException("STOCKREPOSITORY CANT FIND STOCK");
+        }
 
         int ownedShares = purchasedStockRecord.get().getQuantity();
 

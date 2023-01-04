@@ -54,4 +54,76 @@ Resources:
           Properties:
             Path: /example/
             Method: post
+  AddPurchaseFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ServiceLambda/build/distributions/ServiceLambda.zip
+      Handler: com.kenzie.capstone.service.lambda.AddPurchase
+      Runtime: java11
+      Description: Add stock purchase
+      MemorySize: 512
+      Timeout: 240
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - AmazonS3FullAccess
+        - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /purchasedstocks/add
+            Method: post
+  GetPurchaseFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ServiceLambda/build/distributions/ServiceLambda.zip
+      Handler: com.kenzie.capstone.service.lambda.GetPurchases
+      Runtime: java11
+      Description: Get Stock Purchases
+      MemorySize: 512
+      Timeout: 240
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - AmazonS3FullAccess
+        - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /purchasedstocks/{userId}
+            Method: get
 
+  SellStockFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ServiceLambda/build/distributions/ServiceLambda.zip
+      Handler: com.kenzie.capstone.service.lambda.SellStock
+      Runtime: java11
+      Description: Sell stock
+      MemorySize: 512
+      Timeout: 240
+      # Function's execution role
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambda_ReadOnlyAccess
+        - AWSXrayWriteOnlyAccess
+        - AWSLambdaVPCAccessExecutionRole
+        - AmazonS3FullAccess
+        - AmazonDynamoDBFullAccess
+      Tracing: Active
+      Events:
+        UpdateResource:
+          Type: Api
+          Properties:
+            Path: /purchasedstocks/sell/
+            Method: post

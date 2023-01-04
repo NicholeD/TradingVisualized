@@ -3,10 +3,9 @@ package com.kenzie.capstone.service;
 import com.kenzie.capstone.service.converter.PurchaseConverter;
 import com.kenzie.capstone.service.dao.StockDao;
 import com.kenzie.capstone.service.exceptions.InvalidDataException;
-import com.kenzie.capstone.service.model.PurchaseStockRequest;
-import com.kenzie.capstone.service.model.PurchasedStock;
-import com.kenzie.capstone.service.model.PurchasedStockRecord;
-import com.kenzie.capstone.service.model.PurchasedStockResponse;
+import com.kenzie.capstone.service.lambda.SellStock;
+import com.kenzie.capstone.service.model.*;
+
 
 import javax.inject.Inject;
 import java.util.List;
@@ -32,6 +31,7 @@ public class StockService {
             throw new InvalidDataException("Request must contain a valid userId");
         }
         PurchasedStockRecord record = PurchaseConverter.fromRequestToRecord(request);
+        System.out.println(record.toString());
         stockDao.addPurchasedStock(record);
         return PurchaseConverter.fromRecordToResponse(record);
     }
@@ -42,6 +42,12 @@ public class StockService {
         return stocks.stream()
                 .map(PurchaseConverter::fromRecordToPurchasedStock)
                 .collect(Collectors.toList());
+    }
+
+    public PurchasedStockRecord sellStock(SellStockRequest request){
+        PurchasedStockRecord record = stockDao.sellStock(request);
+
+        return record;
     }
 
 

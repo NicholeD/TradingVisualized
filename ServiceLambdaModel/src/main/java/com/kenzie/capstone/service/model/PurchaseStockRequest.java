@@ -5,9 +5,9 @@ public class PurchaseStockRequest {
 
     private String userId;
 
-    private String stockSymbol;
+    private String symbol;
 
-    private String stockName;
+    private String name;
 
     private double purchasePrice;
 
@@ -15,13 +15,13 @@ public class PurchaseStockRequest {
 
     private String purchaseDate;
 
-
+    public PurchaseStockRequest(){};
     public PurchaseStockRequest(String userId, String stockSymbol,
                                 String stockName, double purchasePrice,
                                 int shares, String purchaseDate) {
         this.userId = userId;
-        this.stockSymbol = stockSymbol;
-        this.stockName = stockName;
+        this.symbol = stockSymbol;
+        this.name = stockName;
         this.purchasePrice = purchasePrice;
         this.shares = shares;
         this.purchaseDate = purchaseDate;
@@ -35,20 +35,20 @@ public class PurchaseStockRequest {
         this.userId = userId;
     }
 
-    public String getStockSymbol() {
-        return stockSymbol;
+    public String getSymbol() {
+        return symbol;
     }
 
-    public void setStockSymbol(String stockSymbol) {
-        this.stockSymbol = stockSymbol;
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
     }
 
-    public String getStockName() {
-        return stockName;
+    public String getName() {
+        return name;
     }
 
-    public void setStockName(String stockName) {
-        this.stockName = stockName;
+    public void setName(String stockName) {
+        this.name = stockName;
     }
 
     public double getPurchasePrice() {

@@ -1,13 +1,13 @@
-package com.kenzie.capstone.service.model;
+package com.kenzie.appserver.repositories.model;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBIndexHashKey;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBRangeKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 import java.util.UUID;
 
-@DynamoDBTable(tableName = "Portfolio")
+@DynamoDBTable(tableName = "PurchasedStocks")
 public class PurchasedStockRecord {
 
     private String userId;
@@ -17,7 +17,7 @@ public class PurchasedStockRecord {
     private String dateOfPurchase;
     private Double purchasePrice;
     private int shares;
-    public PurchasedStockRecord(){}
+
     public PurchasedStockRecord(String userId, String name, String symbol,
                                 String dateOfPurchase, Double purchasePrice,
                                 int shares) {
@@ -29,8 +29,8 @@ public class PurchasedStockRecord {
         this.purchasePrice = purchasePrice;
         this.shares = shares;
     }
-    @DynamoDBIndexHashKey(globalSecondaryIndexName = "userIdRecord")
-    @DynamoDBAttribute(attributeName = "id")
+
+    @DynamoDBHashKey(attributeName = "userId")
     public String getUserId() {
         return userId;
     }
@@ -39,18 +39,12 @@ public class PurchasedStockRecord {
         this.userId = userId;
     }
 
-    @DynamoDBAttribute(attributeName = "recordId")
-    public String getRecordId() {
-        return recordId;
-    }
+    @DynamoDBAttribute(attributeName = "RecordId")
+    public String getRecordId() { return recordId; }
 
-    public void setRecordId(String recordId) {
-        this.recordId = recordId;
-    }
+    public void setRecordId() { this.recordId = getRecordId(); }
 
-
-
-    @DynamoDBAttribute(attributeName = "name")
+    @DynamoDBAttribute(attributeName = "Name")
     public String getName() {
         return name;
     }
@@ -59,7 +53,7 @@ public class PurchasedStockRecord {
         this.name = name;
     }
 
-    @DynamoDBHashKey(attributeName = "symbol")
+    @DynamoDBAttribute(attributeName = "symbol")
     public String getSymbol() {
         return symbol;
     }
@@ -68,7 +62,7 @@ public class PurchasedStockRecord {
         this.symbol = symbol;
     }
 
-    @DynamoDBAttribute(attributeName = "purchaseDate")
+    @DynamoDBAttribute(attributeName = "DateOfPurchase")
     public String getDateOfPurchase() {
         return dateOfPurchase;
     }
@@ -77,7 +71,7 @@ public class PurchasedStockRecord {
         this.dateOfPurchase = dateOfPurchase;
     }
 
-    @DynamoDBAttribute(attributeName = "purchasePrice")
+    @DynamoDBAttribute(attributeName = "PurchasePrice")
     public Double getPurchasePrice() {
         return purchasePrice;
     }
@@ -99,7 +93,7 @@ public class PurchasedStockRecord {
     public String toString() {
         return "PurchasedStockRecord{" +
                 "userId='" + userId + '\'' +
-                ", recordId='" + recordId + '\'' +
+                ", recordId=" + recordId +
                 ", name='" + name + '\'' +
                 ", symbol='" + symbol + '\'' +
                 ", dateOfPurchase='" + dateOfPurchase + '\'' +
