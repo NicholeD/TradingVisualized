@@ -4,7 +4,8 @@ import com.kenzie.appserver.repositories.FishRepository;
 import com.kenzie.appserver.repositories.StockRepository;
 import com.kenzie.appserver.service.StockService;
 import com.kenzie.appserver.service.model.Fish;
-import com.kenzie.appserver.service.model.Stock;
+import com.kenzie.capstone.service.model.PurchasedStock;
+import com.kenzie.capstone.service.model.Stock;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -55,5 +56,17 @@ public class StockAndFishConverter {
                 })
                 .collect(Collectors.toList());
     }
+
+    //purchaseStockToFish method?
+    public static Fish purchaseStockToFish(PurchasedStock purchasedStock) {
+        Stock stock = purchasedStock.getStock();
+        Fish fish = new Fish();
+        fish.setName(stock.getName());
+        fish.setPrice(stock.getPurchasePrice());
+        fish.setQuantity(stock.getPurchasePrice());
+        fish.setSize((float) stock.getPurchasePrice()*stock.getQuantity());
+        fish.setStatus("Active");
+        return fish;
+}
 
 }
