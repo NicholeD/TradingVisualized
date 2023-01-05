@@ -36,7 +36,7 @@ public class FileEventListener {
         stockServiceClient = new StockServiceClient();
     }
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 5000, initialDelay = 20000)
     public void checkFileModified() {
         System.out.println("FileModified");
 
