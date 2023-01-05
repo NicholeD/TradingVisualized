@@ -74,14 +74,16 @@ public class StockAndFishConverter {
     public static List<PurchaseStockRequest> fishListToRequestList(List<Fish> fishList) {
         return fishList.stream()
                 .map(f -> {
-                    PurchaseStockRequest purchaseStockRequest = new PurchaseStockRequest();
-                    purchaseStockRequest.setUserId("userId");
-                    purchaseStockRequest.setSymbol(f.getId());
-                    purchaseStockRequest.setName(f.getName());
-                    purchaseStockRequest.setPurchasePrice(f.getPrice());
-                    purchaseStockRequest.setShares((int)Math.round(f.getQuantity()));
-                    purchaseStockRequest.setPurchaseDate(LocalDate.now().toString());
-                    return purchaseStockRequest;
+                    if (f.isStatus().equals("Alive")); {
+                        PurchaseStockRequest purchaseStockRequest = new PurchaseStockRequest();
+                        purchaseStockRequest.setUserId("userId");
+                        purchaseStockRequest.setSymbol(f.getId());
+                        purchaseStockRequest.setName(f.getName());
+                        purchaseStockRequest.setPurchasePrice(f.getPrice());
+                        purchaseStockRequest.setShares((int) Math.round(f.getQuantity()));
+                        purchaseStockRequest.setPurchaseDate(LocalDate.now().toString());
+                        return purchaseStockRequest;
+                    }
                 })
                 .collect(Collectors.toList());
     }

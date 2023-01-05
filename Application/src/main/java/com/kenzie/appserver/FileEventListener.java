@@ -6,6 +6,7 @@ import com.kenzie.appserver.service.model.Fish;
 import com.kenzie.appserver.service.model.converter.JsonFishConverter;
 import com.kenzie.appserver.service.model.converter.StockAndFishConverter;
 import com.kenzie.capstone.service.client.StockServiceClient;
+import com.kenzie.capstone.service.model.PurchaseStockRequest;
 import com.kenzie.capstone.service.model.PurchasedStock;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -50,6 +51,10 @@ public class FileEventListener {
                 lastModified = modified;
                 try (FileReader reader = new FileReader(file)) {
                     List<Fish> fishList = JsonFishConverter.convertToFishFromFile(file);
+                    List<PurchaseStockRequest> purchaseStockRequestList = StockAndFishConverter.fishListToRequestList(fishList);
+                    for (PurchaseStockRequest request : purchaseStockRequestList) {
+                        stockServiceClient.addPurchasedStock(request);
+                    }
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
                 }
