@@ -4,6 +4,7 @@ import com.kenzie.appserver.service.FishService;
 import com.kenzie.appserver.service.StockService;
 import com.kenzie.appserver.service.model.Fish;
 import com.kenzie.appserver.service.model.converter.JsonFishConverter;
+import com.kenzie.appserver.service.model.converter.StockAndFishConverter;
 import com.kenzie.capstone.service.client.StockServiceClient;
 import com.kenzie.capstone.service.model.PurchasedStock;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +32,7 @@ public class FileEventListener {
         file = new File(filePath);
         lastModified = file.lastModified();
         this.fishService = fishService;
+        stockServiceClient = new StockServiceClient();
     }
 
     @Scheduled(fixedDelay = 5000)
@@ -48,10 +50,6 @@ public class FileEventListener {
                 lastModified = modified;
                 try (FileReader reader = new FileReader(file)) {
                     List<Fish> fishList = JsonFishConverter.convertToFishFromFile(file);
-                    for (Fish fish : fishList) {
-                        fishService.addNewFish(fish);
-                        System.out.println(fish.toString());
-                    }
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
                 }
@@ -64,11 +62,11 @@ public class FileEventListener {
     @PostConstruct
     public void setDataFile() {
         //get all stocks via calling stockServiceClient.getPurchaseStock
-        List<PurchasedStock> purchasedStocks = stockServiceClient.getPurchasedStock();
+        List<PurchasedStock> purchasedStocks = stockServiceClient.getPurchasedStock("userId");
 
         //convert the purchasedStock to Fish
         List<Fish> fishList = purchasedStocks.stream()
-                .map(JsonFishConverter::purchaseStockToFish)
+                .map(StockAndFishConverter::purchaseStockToFish)
                 .collect(Collectors.toList());
 
         //call this convertToJsonFile from jsonToFishConverter on the list of Fish
