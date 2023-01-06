@@ -3,7 +3,6 @@ package com.kenzie.appserver.service;
 import com.kenzie.appserver.repositories.FishRepository;
 import com.kenzie.appserver.repositories.model.FishRecord;
 import com.kenzie.appserver.service.model.Fish;
-import com.kenzie.capstone.service.client.LambdaServiceClient;
 import com.kenzie.capstone.service.client.StockServiceClient;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +40,7 @@ public class FishService {
         fishRecord.setSize(fish.getSize());
         fishRecord.setQuantity(fish.getQuantity());
         fishRecord.setPrice(fish.getPrice());
-        fishRecord.setStatus(fish.isStatus());
+        fishRecord.setStatus(fish.getStatus());
         fishRepository.save(fishRecord);
         return fish;
     }
