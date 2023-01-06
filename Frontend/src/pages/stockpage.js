@@ -57,9 +57,11 @@ class StockPage extends BaseClass{
                 if (count == 30){
                     break;
                 }
+
                 let price = stoc.purchasePrice;
                 let date = stoc.purchaseDate.slice(-5);
                 stockPrice.push({ x: date, y: price });
+
                 if (price > max){
                     max = price;
                 }
@@ -95,25 +97,26 @@ class StockPage extends BaseClass{
                             max: max + 10,
                             padding: 1
                         }
-
                     }
                 },
                 xAxis: {
-                    defaultTick_gridLine_visible: false,
-                    ticks: {
-                        autoSkip: false,
-                        maxRotation: 90,
-                        minRotation: 90,
-                        fontSize: 10,
-                        stepSize: 5,
-                        callback: function(value, index, values) {
-                            return index % 5 === 0 ? value : '';
-                        }
+                    defaultTick: {
+                        color: 'red',
+                        gridLine_visible: false,
                     }
-
-
+                    },
+                defaultSeries: {
+//
+                    color: '#45a29f',
+                     shape: { fill: currentFill }
+//                    fill:  {
+//                         gradient: {
+//                            startColor: '#FF0000',
+//                            endColor: '#FFFFFF',
+//                            direction: 'vertical'
+//                         }
+//                    }
                 },
-                defaultSeries_shape: { fill: currentFill },
                 defaultPoint: {
                     marker: {
                         visible: false

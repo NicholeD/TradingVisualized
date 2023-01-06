@@ -20,22 +20,23 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 
-public class DyanoDBStream implements RequestHandler<DynamodbEvent, Void> {
+//public class DyanoDBStream implements RequestHandler<DynamodbEvent, Void> {
+////
+////    @Override
+////    public Void handleRequest(DynamodbEvent event, Context context) {
+////        for (DynamodbEvent.DynamodbStreamRecord record : event.getRecords()) {
+////            String eventName = record.getEventName();
+////            if (eventName.equals("INSERT") || eventName.equals("MODIFY")) {
+////                Map<String, AttributeValue> map = record.getDynamodb().getNewImage();
+////
+////                Fish fish = new Fish();
+////
+////            } else if (eventName.equals("REMOVE")) {
+////                // process the stream record for removed item
+////            }
+////        }
+////        return null;
+////    }
+//    }
 
-    @Override
-    public Void handleRequest(DynamodbEvent event, Context context) {
-        for (DynamodbEvent.DynamodbStreamRecord record : event.getRecords()) {
-            String eventName = record.getEventName();
-            if (eventName.equals("INSERT") || eventName.equals("MODIFY")) {
-                Map<String, AttributeValue> map = record.getDynamodb().getNewImage();
-
-                Fish fish = new Fish();
-
-            } else if (eventName.equals("REMOVE")) {
-                // process the stream record for removed item
-            }
-        }
-        return null;
-    }
-    }
 
