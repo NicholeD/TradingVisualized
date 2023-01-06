@@ -6,12 +6,16 @@ import com.kenzie.appserver.controller.model.SearchStockResponse;
 import com.kenzie.appserver.controller.model.StockResponse;
 import com.kenzie.appserver.repositories.model.SoldStockRecord;
 import com.kenzie.appserver.service.StockService;
+import com.kenzie.appserver.service.model.Fish;
 import com.kenzie.appserver.service.model.SoldStock;
 import com.kenzie.appserver.service.model.Stock;
+import com.kenzie.appserver.service.model.converter.JsonFishConverter;
+import com.kenzie.appserver.service.model.converter.StockAndFishConverter;
 import com.kenzie.capstone.service.client.StockServiceClient;
 import com.kenzie.capstone.service.model.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.kenzie.appserver.FileEventListener;
 
 import javax.naming.InsufficientResourcesException;
 import java.net.URI;
@@ -121,6 +125,9 @@ public class StockController {
     public ResponseEntity<List<PurchasedStock>> getPortfolioByUserId(@PathVariable("userId") String userId) {
 //        ScanResult result = client.scan("Portfolio", null, null);
         List<PurchasedStock> stockList = stockServiceClient.getPurchasedStock(userId);
+        //convert stockList into a list of Fish
+        List<Fish> fishList = StockAndFishConverter.purchasedStockToFishList(stockList);
+        JsonFishConverter.convertToJsonFile(fishList, FileEventListener.getFile());
         return ResponseEntity.ok(stockList);
     }
 

@@ -4,12 +4,10 @@ import com.kenzie.appserver.repositories.FishRepository;
 import com.kenzie.appserver.repositories.StockRepository;
 import com.kenzie.appserver.service.StockService;
 import com.kenzie.appserver.service.model.Fish;
-
-import com.kenzie.capstone.service.model.Stock;
-import com.kenzie.capstone.service.client.StockServiceClient;
-
 import com.kenzie.capstone.service.model.PurchaseStockRequest;
 import com.kenzie.capstone.service.model.PurchasedStock;
+import com.kenzie.capstone.service.model.Stock;
+import com.kenzie.capstone.service.client.StockServiceClient;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -66,6 +64,13 @@ public class StockAndFishConverter {
                 .collect(Collectors.toList());
     }
 
+    public static List<Fish> purchasedStockToFishList (List<PurchasedStock> stockList){
+        return stockList.stream()
+                .map(r ->{
+                    Stock stock = r.getStock();
+                    return new Fish(stock.getSymbol(), stock.getName(), (float) (stock.getQuantity()*stock.getPurchasePrice()), stock.getQuantity(),stock.getPurchasePrice(), "Alive");
+                }).collect(Collectors.toList());
+    }
     public static List<Fish> purchasedStockListConvertToFishList(List<PurchasedStock> purcasedStockList) {
          return purcasedStockList.stream()
                 .map(f -> {

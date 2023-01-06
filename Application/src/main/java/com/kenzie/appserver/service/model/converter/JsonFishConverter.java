@@ -1,7 +1,6 @@
 package com.kenzie.appserver.service.model.converter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kenzie.appserver.service.model.Fish;
 
