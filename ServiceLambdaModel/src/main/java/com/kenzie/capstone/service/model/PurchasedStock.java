@@ -6,6 +6,7 @@ public class PurchasedStock {
     public Stock stock;
     public String purchasedDate;
 
+    public PurchasedStock(){}
     public PurchasedStock(String userId, Stock stock, String purchasedDate) {
         this.userId = userId;
         this.stock = stock;

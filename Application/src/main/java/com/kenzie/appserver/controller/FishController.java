@@ -29,7 +29,7 @@ public class FishController {
         fishResponse.setSize(fish.getSize());
         fishResponse.setQuantity(fish.getQuantity());
         fishResponse.setPrice(fish.getPrice());
-        fishResponse.setStatus(fish.isStatus());
+        fishResponse.setStatus(fish.getStatus());
         return ResponseEntity.ok(fishResponse);
     }
 
@@ -42,7 +42,7 @@ public class FishController {
         fishResponse.setSize(newFish.getSize());
         fishResponse.setQuantity(newFish.getQuantity());
         fishResponse.setPrice(newFish.getPrice());
-        fishResponse.setStatus(newFish.isStatus());
+        fishResponse.setStatus(newFish.getStatus());
 
         return ResponseEntity.ok(fishResponse);
     }

@@ -24,6 +24,7 @@ export default class PortalClient extends BaseClass {
     async getPortfolio(userId, errorCallBack) {
         try {
             const response = await this.client.get(`/stocks/portfolio/${userId}`);
+            console.log(response.data);
             return response.data;
         } catch (error) {
             this.handleError("getPortfolio", error, errorCallBack);
@@ -40,24 +41,22 @@ export default class PortalClient extends BaseClass {
     }
     async sellStock(stock, errorCallBack) {
         try {
-            let userId = stock.id.s;
-            let recordId = stock.recordId.s;
-            let stockSymbol = stock.symbol.s;
-            let name = stock.name.s;
-            let salePrice = stock.purchasePrice.n;
-            let shares = stock.quantity.n;
+            let userId = stock.userId;
+            let stockSymbol = stock.stock.symbol;
+            let name = stock.stock.name;
+            let salePrice = stock.stock.purchasePrice;
+            let shares = stock.stock.quantity;
             let sellStockDate = new Date().toLocaleDateString('en-US');
 
-            let sellStockRequest = [userId, recordId, stockSymbol, name, salePrice, shares, sellStockDate];
+            let sellStockRequest = [userId, stockSymbol, name, salePrice, shares, sellStockDate];
             console.log(sellStockRequest);
             const response = await this.client.post(`/stocks/sell`, {
-                userId: stock.id.s,
-                recordId: stock.recordId.s,
-                stockSymbol: stock.symbol.s,
-                name: stock.name.s,
-                salePrice: stock.purchasePrice.n,
-                shares: stock.quantity.n,
-                sellStockDate: new Date().toLocaleDateString('en-US')
+                userId: sellStockRequest[0],
+                stockSymbol: sellStockRequest[1],
+                name: sellStockRequest[2],
+                salePrice: sellStockRequest[3],
+                shares: sellStockRequest[4],
+                sellStockDate: sellStockRequest[5]
             });
             return response.data;
 

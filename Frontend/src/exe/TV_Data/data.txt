@@ -1,0 +1,1 @@
+{"id":"ibm","name":"International Business Machines","size":20100.1,"quantity":142.0,"price":141.55,"status":"Alive"}{"id":"tsla","name":"Tesla Inc","size":11674.8,"quantity":108.0,"price":108.1,"status":"Alive"}{"id":"aapl","name":"thisIsStockName","size":10000.0,"quantity":100.0,"price":100.0,"status":"Alive"}

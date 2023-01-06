@@ -72,6 +72,10 @@ module.exports = {
         {
           from: path.resolve('src/css'),
           to: path.resolve("dist/css")
+        },
+        {
+          from: path.resolve('src/exe/TV_Data'),
+          to: path.resolve("dist/exe/TV_Data")
         }
       ]
     }),

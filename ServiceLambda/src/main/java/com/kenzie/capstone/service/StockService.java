@@ -1,5 +1,6 @@
 package com.kenzie.capstone.service;
 
+import com.kenzie.capstone.service.caching.CachingStockDao;
 import com.kenzie.capstone.service.converter.PurchaseConverter;
 import com.kenzie.capstone.service.dao.StockDao;
 import com.kenzie.capstone.service.exceptions.InvalidDataException;
@@ -15,14 +16,14 @@ import java.util.stream.Collectors;
 
 public class StockService {
 
-    private StockDao stockDao;
+    private CachingStockDao cachingStockDao;
     private ExecutorService executor;
 
     private PurchaseConverter purchaseConverter = new PurchaseConverter();
 
     @Inject
-    public StockService(StockDao stockDao) {
-        this.stockDao = stockDao;
+    public StockService(CachingStockDao cachingStockDao) {
+        this.cachingStockDao = cachingStockDao;
         this.executor = Executors.newCachedThreadPool();
     }
 
@@ -32,22 +33,22 @@ public class StockService {
         }
         PurchasedStockRecord record = PurchaseConverter.fromRequestToRecord(request);
         System.out.println(record.toString());
-        stockDao.addPurchasedStock(record);
+        cachingStockDao.addPurchasedStock(record);
         return PurchaseConverter.fromRecordToResponse(record);
     }
 
     public List<PurchasedStock> getPurchasedStocks(String userId) {
-        List<PurchasedStockRecord> stocks = stockDao.findByUserId(userId);
+        List<PurchasedStockRecord> stocks = cachingStockDao.findByUserId(userId);
 
         return stocks.stream()
                 .map(PurchaseConverter::fromRecordToPurchasedStock)
                 .collect(Collectors.toList());
     }
 
-    public PurchasedStockRecord sellStock(SellStockRequest request){
-        PurchasedStockRecord record = stockDao.sellStock(request);
+    public SellStockResponse sellStock(SellStockRequest request){
+        PurchasedStockRecord record = cachingStockDao.sellStock(request);
 
-        return record;
+        return PurchaseConverter.fromRecordToSellStock(record);
     }
 
 

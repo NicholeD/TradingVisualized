@@ -6,53 +6,57 @@ import com.kenzie.appserver.service.model.converter.StockAndFishConverter;
 import com.kenzie.capstone.service.client.StockServiceClient;
 import com.kenzie.capstone.service.model.PurchaseStockRequest;
 import com.kenzie.capstone.service.model.PurchasedStock;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class FileEventListener {
 
-    private String filePath = "/home/tanner/Kenzie/capstone_projects/ata-capstone-project-tv/exe/TV_Data/data.txt";
-
     private long lastModified;
-
     public static File file;
-    private StockServiceClient stockServiceClient;
-
-    public FileEventListener() throws IOException {
-        file = new File(filePath);
-        lastModified = file.lastModified();
-        stockServiceClient = new StockServiceClient();
-    }
+    private StockServiceClient client;
 
     public static File getFile() {
         return file;
     }
+    public FileEventListener() throws IOException {
+        file = new File("../Frontend/src/exe/TV_Data/data.txt");
+        client = new StockServiceClient();
+    }
 
-    @Scheduled(fixedDelay = 5000, initialDelay = 20000)
+    @PostConstruct
+    public void init() {
+        List<PurchasedStock> stockList = client.getPurchasedStock("userId");
+        System.out.println("Application Starting...");
+        List<Fish> fishList = StockAndFishConverter.purchasedStockListConvertToFishList(stockList);
+        //Convert PurchasedStock to Fish
+        JsonFishConverter.convertToJsonFile(fishList, file);
+        //Convert Fish to JsonFile
+        lastModified = file.lastModified();
+    }
+
+    @Scheduled(fixedDelay = 5000, initialDelay = 10000)
     public void checkFileModified() {
-        System.out.println("FileModified");
+//        System.out.println("FileModified");
 
         long modified = file.lastModified();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line = null;
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
+//                System.out.println(line);
             }
             if (modified > lastModified) {
                 System.out.println("Modify detected");
                 lastModified = modified;
                 try (FileReader reader = new FileReader(file)) {
                     List<Fish> fishList = JsonFishConverter.convertToFishFromFile(file);
-                    List<PurchaseStockRequest> purchaseStockRequestList = StockAndFishConverter.fishListToRequestList(fishList);
-                    for (PurchaseStockRequest request : purchaseStockRequestList) {
-                        stockServiceClient.addPurchasedStock(request);
+                    List<PurchaseStockRequest> requestList = StockAndFishConverter.fishListToPurchasedStockRecord(fishList);
+                    for (PurchaseStockRequest request : requestList) {
+                        client.addPurchasedStock(request);
                     }
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
@@ -63,17 +67,17 @@ public class FileEventListener {
         }
     }
 
-    @PostConstruct
-    public void setDataFile() {
-        //get all stocks via calling stockServiceClient.getPurchaseStock
-        List<PurchasedStock> purchasedStocks = stockServiceClient.getPurchasedStock("userId");
-
-        //convert the purchasedStock to Fish
-        List<Fish> fishList = purchasedStocks.stream()
-                .map(StockAndFishConverter::purchaseStockToFish)
-                .collect(Collectors.toList());
-
-        //call this convertToJsonFile from jsonToFishConverter on the list of Fish
-        JsonFishConverter.convertToJsonFile(fishList, file);
-    }
+//    @PostConstruct
+//    public void setDataFile() {
+//        //get all stocks via calling stockServiceClient.getPurchaseStock
+//        List<PurchasedStock> purchasedStocks = stockServiceClient.getPurchasedStock("userId");
+//
+//        //convert the purchasedStock to Fish
+//        List<Fish> fishList = purchasedStocks.stream()
+//                .map(StockAndFishConverter::purchaseStockToFish)
+//                .collect(Collectors.toList());
+//
+//        //call this convertToJsonFile from jsonToFishConverter on the list of Fish
+//        JsonFishConverter.convertToJsonFile(fishList, file);
+//    }
 }

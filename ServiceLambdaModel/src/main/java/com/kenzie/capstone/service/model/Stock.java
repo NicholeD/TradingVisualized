@@ -20,6 +20,7 @@ public class Stock {
         this.quantity = quantity;
         this.purchaseDate = purchaseDate;
     }
+    public Stock(){}
 
     public Stock(String symbol, String name, double purchasePrice, String purchaseDate) {
         this.symbol = symbol;
@@ -27,9 +28,6 @@ public class Stock {
         this.purchasePrice = purchasePrice;
         this.quantity = 1;
         this.purchaseDate = purchaseDate;
-    }
-
-    public Stock() {
     }
 
     public String getUserId() {

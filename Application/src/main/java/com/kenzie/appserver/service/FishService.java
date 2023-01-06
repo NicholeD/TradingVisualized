@@ -40,7 +40,7 @@ public class FishService {
         fishRecord.setSize(fish.getSize());
         fishRecord.setQuantity(fish.getQuantity());
         fishRecord.setPrice(fish.getPrice());
-        fishRecord.setStatus(fish.isStatus());
+        fishRecord.setStatus(fish.getStatus());
         fishRepository.save(fishRecord);
         return fish;
     }

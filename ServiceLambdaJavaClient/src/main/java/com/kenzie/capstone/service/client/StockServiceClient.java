@@ -23,6 +23,7 @@ public class StockServiceClient {
 
         try {
             request = mapper.writeValueAsString(purchaseRequest);
+            System.out.println("REQUEST " + request);
         } catch(JsonProcessingException e) {
             throw new ApiGatewayException("Unable to serialize request: " + e);
         }
@@ -41,7 +42,8 @@ public class StockServiceClient {
         String response = endpointUtility.getEndpoint(GET_PURCHASED_STOCK_ENDPOINT.replace("{userId}", userId));
         List<PurchasedStock> stocks;
         try {
-            stocks = mapper.readValue(response, new TypeReference<>(){});
+            System.out.println(response + ":RESPONSE");
+            stocks = mapper.readValue(response, new TypeReference<List<PurchasedStock>>(){});
         } catch (Exception e) {
             throw new ApiGatewayException("Unable to map deserialize JSON: " + e);
         }
