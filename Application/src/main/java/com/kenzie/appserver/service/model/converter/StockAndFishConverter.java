@@ -63,18 +63,18 @@ public class StockAndFishConverter {
     public static Fish purchaseStockToFish(PurchasedStock purchasedStock) {
         Stock stock = purchasedStock.getStock();
         Fish fish = new Fish();
+        fish.setId(purchasedStock.getStock().getSymbol());
         fish.setName(stock.getName());
         fish.setPrice(stock.getPurchasePrice());
         fish.setQuantity(stock.getPurchasePrice());
         fish.setSize((float) stock.getPurchasePrice()*stock.getQuantity());
-        fish.setStatus("Active");
+        fish.setStatus("Alive");
         return fish;
     }
 
     public static List<PurchaseStockRequest> fishListToRequestList(List<Fish> fishList) {
         return fishList.stream()
                 .map(f -> {
-                    if (f.isStatus().equals("Alive")); {
                         PurchaseStockRequest purchaseStockRequest = new PurchaseStockRequest();
                         purchaseStockRequest.setUserId("userId");
                         purchaseStockRequest.setSymbol(f.getId());
@@ -83,8 +83,15 @@ public class StockAndFishConverter {
                         purchaseStockRequest.setShares((int) Math.round(f.getQuantity()));
                         purchaseStockRequest.setPurchaseDate(LocalDate.now().toString());
                         return purchaseStockRequest;
-                    }
                 })
                 .collect(Collectors.toList());
+    }
+
+    public static List<Fish> purchasedStockToFishList (List<PurchasedStock> stockList){
+        return stockList.stream()
+                .map(r ->{
+                    Stock stock = r.getStock();
+                    return new Fish(stock.getSymbol(), stock.getName(), (float) (stock.getQuantity()*stock.getPurchasePrice()), stock.getQuantity(),stock.getPurchasePrice(), "Alive");
+                }).collect(Collectors.toList());
     }
 }

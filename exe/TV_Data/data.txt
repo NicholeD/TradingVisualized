@@ -1,1 +1,1 @@
-{"id":0,"name":"IBM","size":10.0,"quantity":100.0,"price":30.0,"status":true}{"id":0,"name":"AZM","size":11.0,"quantity":88.0,"price":34.5,"status":true}{"id":0,"name":"BB","size":13.0,"quantity":14.0,"price":111.25,"status":true}{"id":0,"name":"APL","size":15.0,"quantity":56.0,"price":41.5,"status":true}
+{"id":"ibm","name":"International Business Machines","size":20100.1,"quantity":142.0,"price":141.55}{"id":"tsla","name":"Tesla Inc","size":11674.8,"quantity":108.0,"price":108.1}{"id":"aapl","name":"thisIsStockName","size":10000.0,"quantity":100.0,"price":100.0}

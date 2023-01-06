@@ -12,6 +12,9 @@ public class PurchasedStock {
         this.purchasedDate = purchasedDate;
     }
 
+    public PurchasedStock() {
+    }
+
     public String getUserId() {
         return userId;
     }

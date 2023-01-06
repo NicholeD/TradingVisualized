@@ -1,7 +1,6 @@
 package com.kenzie.appserver.service.model.converter;
 
 import com.kenzie.appserver.service.model.Fish;
-import io.swagger.v3.core.util.Json;
 
 import java.io.File;
 import java.util.List;

@@ -3,7 +3,6 @@ package com.kenzie.appserver.service;
 import com.kenzie.appserver.repositories.FishRepository;
 import com.kenzie.appserver.repositories.model.FishRecord;
 import com.kenzie.appserver.service.model.Fish;
-import com.kenzie.capstone.service.client.LambdaServiceClient;
 import com.kenzie.capstone.service.client.StockServiceClient;
 import org.springframework.stereotype.Service;
 

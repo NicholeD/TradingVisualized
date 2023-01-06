@@ -1,7 +1,5 @@
 package com.kenzie.appserver;
 
-import com.kenzie.appserver.service.FishService;
-import com.kenzie.appserver.service.StockService;
 import com.kenzie.appserver.service.model.Fish;
 import com.kenzie.appserver.service.model.converter.JsonFishConverter;
 import com.kenzie.appserver.service.model.converter.StockAndFishConverter;
@@ -17,16 +15,14 @@ import java.io.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.kenzie.appserver.service.model.converter.StockAndFishConverter.stockService;
-
 @Component
 public class FileEventListener {
-    @Value("${app.file.path}")
-    private String filePath;
+
+    private String filePath = "/home/tanner/Kenzie/capstone_projects/ata-capstone-project-tv/exe/TV_Data/data.txt";
 
     private long lastModified;
 
-    private File file;
+    public static File file;
     private StockServiceClient stockServiceClient;
 
     public FileEventListener() throws IOException {
@@ -35,7 +31,7 @@ public class FileEventListener {
         stockServiceClient = new StockServiceClient();
     }
 
-    public File getFile() {
+    public static File getFile() {
         return file;
     }
 
