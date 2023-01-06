@@ -4,6 +4,7 @@ import com.kenzie.appserver.controller.model.StockResponse;
 import com.kenzie.appserver.repositories.FishRepository;
 import com.kenzie.appserver.repositories.StockRepository;
 import com.kenzie.appserver.repositories.model.FishRecord;
+import com.kenzie.appserver.repositories.model.PurchasedStockRecord;
 import com.kenzie.appserver.repositories.model.SoldStockRecord;
 import com.kenzie.appserver.repositories.model.StockRecord;
 import com.kenzie.appserver.service.model.Stock;
@@ -49,12 +50,12 @@ public class StockService {
     }
 
     public List<Stock> findByUserId(String userId) {
-        List<StockRecord> stockRecords = stockRepository
+        List<PurchasedStockRecord> stockRecords = stockRepository
                 .findByUserId(userId);
 
         List<Stock> purchasedStock = new ArrayList<>();
 
-        for (StockRecord record : stockRecords) {
+        for (PurchasedStockRecord record : stockRecords) {
             purchasedStock.add(recordToStock(record));
         }
 
@@ -79,14 +80,14 @@ public class StockService {
             }
         }
 
-        StockRecord record = purchaseRequestToRecord(updatedRequest);
+        PurchasedStockRecord record = purchaseRequestToRecord(updatedRequest);
         stockServiceClient.addPurchasedStock(updatedRequest);
         stockRepository.save(record);
 
         FishRecord fishRecord= new FishRecord();
         fishRecord.setName(record.getName());
         fishRecord.setPrice(record.getPurchasePrice());
-        fishRecord.setQuantity(record.getQuantity());
+        fishRecord.setQuantity(record.getShares());
         fishRepository.save(fishRecord);
 
         PurchasedStockResponse response = recordToResponse(record);
@@ -100,75 +101,50 @@ public class StockService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Qty has to be greater than 0, one simply cannot sell nothing");
         }
-        System.out.println("IN SELL STOCK");
-        //Retrieving record to update with new qty or delete
-        Optional<StockRecord> purchasedStockRecord = Optional.of(stockRepository.findStockBySymbol(
-                sellStockRequest.getStockSymbol()));
-        System.out.println("AFTER OPTIONAL");
-        try {
-            StockRecord record = purchasedStockRecord.get();
-        }
-        catch (Exception e){
-            throw new RuntimeException("STOCKREPOSITORY CANT FIND STOCK");
-        }
 
-        int ownedShares = purchasedStockRecord.get().getQuantity();
+        SellStockResponse record = stockServiceClient.sellStock(sellStockRequest);
 
-        if (sellStockRequest.getShares() < ownedShares) {
-            purchasedStockRecord.get().setQuantity((ownedShares - sellStockRequest.getShares()));
-            //saving over the record for ease rather than implementing @Transactional
-            stockServiceClient.sellStock(sellStockRequest);
-            stockRepository.save(purchasedStockRecord.get());
-
-        } else if (sellStockRequest.getShares() == ownedShares) {
-
-            stockRepository.delete(purchasedStockRecord.get());
-        } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "One cannot simply sell more than one owns.");
-        }
-
-        return requestToSellRecord(sellStockRequest, purchasedStockRecord.get());
-
+        return requestToSellRecord(sellStockRequest, record);
     }
 
     /** Helpers */
-    private StockRecord purchaseRequestToRecord(PurchaseStockRequest request) {
-        StockRecord stockRecord = new StockRecord();
+    private PurchasedStockRecord purchaseRequestToRecord(PurchaseStockRequest request) {
+        PurchasedStockRecord stockRecord = new PurchasedStockRecord();
         stockRecord.setUserId(request.getUserId());
         stockRecord.setSymbol(request.getSymbol());
         stockRecord.setName(request.getName());
         stockRecord.setPurchasePrice(request.getPurchasePrice());
-        stockRecord.setQuantity(request.getShares());
-        stockRecord.setPurchaseDate(request.getPurchaseDate());
+        stockRecord.setShares(request.getShares());
+        stockRecord.setDateOfPurchase(request.getPurchaseDate());
 
-        stockRepository.save(stockRecord);
+//        stockRepository.save(stockRecord);
 
         return stockRecord;
     }
 
-    private Stock recordToStock(StockRecord record) {
+    private Stock recordToStock(PurchasedStockRecord record) {
         Stock stock = new Stock(record.getSymbol(), record.getName(), record.getPurchasePrice(),
-                record.getQuantity(), record.getPurchaseDate());
+                record.getShares(), record.getDateOfPurchase());
         stock.setUserId(record.getUserId());
 
         return stock;
     }
 
-    private SoldStockRecord requestToSellRecord(SellStockRequest request, StockRecord record) {
+    private SoldStockRecord requestToSellRecord(SellStockRequest request, SellStockResponse record) {
         SoldStockRecord soldRecord = new SoldStockRecord(request.getUserId(),
-                request.getStockName(), request.getStockSymbol(), record.getPurchaseDate(),
-                request.getSellStockDate(), record.getPurchasePrice(), request.getsalePrice(), request.getShares());
+                request.getStockName(), request.getStockSymbol(), record.getSellDate(),
+                request.getSellStockDate(), record.getSalePrice(), request.getsalePrice(), request.getShares());
 
         return soldRecord;
     }
 
-    private PurchasedStockResponse recordToResponse(StockRecord record) {
+    private PurchasedStockResponse recordToResponse(PurchasedStockRecord record) {
         PurchasedStockResponse response = new PurchasedStockResponse();
         response.setUserId(record.getUserId());
         response.setStockSymbol(record.getSymbol());
         response.setPurchasePrice(record.getPurchasePrice());
-        response.setShares(record.getQuantity());
-        response.setPurchaseDate(record.getPurchaseDate());
+        response.setShares(record.getShares());
+        response.setPurchaseDate(record.getDateOfPurchase());
 
         return response;
     }
