@@ -51,6 +51,8 @@ class StockPage extends BaseClass{
 //            result += `<div id="chart" style="width:50%; height:600px; margin:0 auto;"> </div>`;
             var stockPrice = [];
             let count = 0;
+            var max = 0;
+            var min = 1000;
             for (let stoc of stockStocks.reverse()){
                 if (count == 30){
                     break;
@@ -58,10 +60,65 @@ class StockPage extends BaseClass{
                 let price = stoc.purchasePrice;
                 let date = stoc.purchaseDate.slice(-5);
                 stockPrice.push({ x: date, y: price });
+                if (price > max){
+                    max = price;
+                }
+                if (price < min){
+                    min = price;
+                }
                 count++;
             }
+
+            var currentAngle = 360;
+
+            var fillStylesObj = {
+                 'currentColor -> lightenMore': ['currentColor', 'lightenMore'],
+                 'currentColor -> lighten': ['currentColor', 'lighten'],
+                 'currentColor -> darkenMore': ['currentColor', 'darkenMore'],
+                 'currentColor -> darken': ['currentColor', 'darken'],
+                 'lighten -> darken': ['lighten', 'darken'],
+                 'lightenMore -> darkenMore': ['lightenMore', 'darkenMore']
+            };
+
+            var currentColors = fillStylesObj['currentColor -> lightenMore'];
+            var currentFill = currentColors.concat(currentAngle);
             const chart = new JSC.chart("chart", {
+                type: 'area spline',
                 title_label_text: `Stock Price over the last ${stockStocks.length} days`,
+                yAxis: {
+//                    visible: false,
+//                    scale_range: { min: min, max: max, padding: 0.8 }
+                    defaultTick_gridLine_visible: false,
+                    scale: {
+                        range: {
+                            min: min - 10,
+                            max: max + 10,
+                            padding: 1
+                        }
+
+                    }
+                },
+                xAxis: {
+                    defaultTick_gridLine_visible: false,
+                    ticks: {
+                        autoSkip: false,
+                        maxRotation: 90,
+                        minRotation: 90,
+                        fontSize: 10,
+                        stepSize: 5,
+                        callback: function(value, index, values) {
+                            return index % 5 === 0 ? value : '';
+                        }
+                    }
+
+
+                },
+                defaultSeries_shape: { fill: currentFill },
+                defaultPoint: {
+                    marker: {
+                        visible: false
+                    }
+                },
                 series: [{points: stockPrice}],
                 legend_visible: false,
                 autoFit: false,
