@@ -25,15 +25,18 @@ public class FileEventListener {
     private String filePath;
 
     private long lastModified;
+
     private File file;
-    private FishService fishService;
     private StockServiceClient stockServiceClient;
 
-    public FileEventListener(FishService fishService) throws IOException {
+    public FileEventListener() throws IOException {
         file = new File(filePath);
         lastModified = file.lastModified();
-        this.fishService = fishService;
         stockServiceClient = new StockServiceClient();
+    }
+
+    public File getFile() {
+        return file;
     }
 
     @Scheduled(fixedDelay = 5000, initialDelay = 20000)
