@@ -2,6 +2,7 @@ package com.kenzie.capstone.service.dependency;
 
 import com.kenzie.capstone.service.LambdaService;
 import com.kenzie.capstone.service.StockService;
+import com.kenzie.capstone.service.caching.CachingStockDao;
 import com.kenzie.capstone.service.dao.ExampleDao;
 
 import com.kenzie.capstone.service.dao.StockDao;
@@ -20,8 +21,8 @@ public class ServiceModule {
     @Singleton
     @Provides
     @Inject
-    public StockService provideStockService(@Named("StockDao") StockDao stockDao) {
-        return new StockService(stockDao);
+    public StockService provideStockService(@Named("CachingDao") CachingStockDao cachingStockDao) {
+        return new StockService(cachingStockDao);
     }
 }
 

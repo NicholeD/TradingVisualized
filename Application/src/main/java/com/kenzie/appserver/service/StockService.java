@@ -1,7 +1,5 @@
 package com.kenzie.appserver.service;
 
-import com.kenzie.appserver.controller.model.PurchaseStockRequest;
-import com.kenzie.appserver.controller.model.SellStockRequest;
 import com.kenzie.appserver.controller.model.StockResponse;
 import com.kenzie.appserver.repositories.FishRepository;
 import com.kenzie.appserver.repositories.StockRepository;
@@ -9,6 +7,8 @@ import com.kenzie.appserver.repositories.model.FishRecord;
 import com.kenzie.appserver.repositories.model.SoldStockRecord;
 import com.kenzie.appserver.repositories.model.StockRecord;
 import com.kenzie.appserver.service.model.Stock;
+import com.kenzie.capstone.service.client.StockServiceClient;
+import com.kenzie.capstone.service.model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,13 +20,14 @@ import java.util.*;
 @Service
 public class StockService {
     private RestTemplate restTemplate = new RestTemplate();
-
     private StockRepository stockRepository;
     private FishRepository fishRepository;
+    private StockServiceClient stockServiceClient;
 
-    public StockService(StockRepository stockRepository, FishRepository fishRepository) {
+    public StockService(StockRepository stockRepository, FishRepository fishRepository, StockServiceClient stockServiceClient) {
         this.stockRepository = stockRepository;
         this.fishRepository = fishRepository;
+        this.stockServiceClient = stockServiceClient;
     }
 
     @GetMapping
@@ -47,7 +48,6 @@ public class StockService {
         return response.get("Name");
     }
 
-    //TODO - change implementation to wire to lambda's dao to call api (get rid of above methods and put in lambda)
     public List<Stock> findByUserId(String userId) {
         List<StockRecord> stockRecords = stockRepository
                 .findByUserId(userId);
@@ -62,13 +62,25 @@ public class StockService {
 
     }
 
-    public Stock purchaseStock(PurchaseStockRequest purchaseStockRequest) {
+    public PurchasedStockResponse purchaseStock(PurchaseStockRequest purchaseStockRequest) {
         if (purchaseStockRequest.getShares() <=0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Qty has to be greater than 0, one simply cannot purchase nothing");
         }
 
-        StockRecord record = purchaseRequestToRecord(purchaseStockRequest);
+        //Checking if userId already owns requested stock
+        List<Stock> stocks = findByUserId(purchaseStockRequest.getUserId());
+        PurchaseStockRequest updatedRequest = purchaseStockRequest;
+
+        for (Stock stock : stocks) {
+            //If user already owns stock, update request with owned stock shares + request shares
+            if (stock.getSymbol().equals(purchaseStockRequest.getSymbol())) {
+                updatedRequest.setShares(stock.getQuantity() + purchaseStockRequest.getShares());
+            }
+        }
+
+        StockRecord record = purchaseRequestToRecord(updatedRequest);
+        stockServiceClient.addPurchasedStock(updatedRequest);
         stockRepository.save(record);
 
         FishRecord fishRecord= new FishRecord();
@@ -77,9 +89,9 @@ public class StockService {
         fishRecord.setQuantity(record.getQuantity());
         fishRepository.save(fishRecord);
 
-        Stock stock = recordToStock(record);
+        PurchasedStockResponse response = recordToResponse(record);
 
-        return stock;
+        return response;
     }
 
     public SoldStockRecord sellStock(SellStockRequest sellStockRequest) {
@@ -105,9 +117,11 @@ public class StockService {
         if (sellStockRequest.getShares() < ownedShares) {
             purchasedStockRecord.get().setQuantity((ownedShares - sellStockRequest.getShares()));
             //saving over the record for ease rather than implementing @Transactional
+            stockServiceClient.sellStock(sellStockRequest);
             stockRepository.save(purchasedStockRecord.get());
 
         } else if (sellStockRequest.getShares() == ownedShares) {
+
             stockRepository.delete(purchasedStockRecord.get());
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "One cannot simply sell more than one owns.");
@@ -121,8 +135,8 @@ public class StockService {
     private StockRecord purchaseRequestToRecord(PurchaseStockRequest request) {
         StockRecord stockRecord = new StockRecord();
         stockRecord.setUserId(request.getUserId());
-        stockRecord.setSymbol(request.getStockSymbol());
-        stockRecord.setName(request.getStockName());
+        stockRecord.setSymbol(request.getSymbol());
+        stockRecord.setName(request.getName());
         stockRecord.setPurchasePrice(request.getPurchasePrice());
         stockRecord.setQuantity(request.getShares());
         stockRecord.setPurchaseDate(request.getPurchaseDate());
@@ -146,5 +160,16 @@ public class StockService {
                 request.getSellStockDate(), record.getPurchasePrice(), request.getsalePrice(), request.getShares());
 
         return soldRecord;
+    }
+
+    private PurchasedStockResponse recordToResponse(StockRecord record) {
+        PurchasedStockResponse response = new PurchasedStockResponse();
+        response.setUserId(record.getUserId());
+        response.setStockSymbol(record.getSymbol());
+        response.setPurchasePrice(record.getPurchasePrice());
+        response.setShares(record.getQuantity());
+        response.setPurchaseDate(record.getPurchaseDate());
+
+        return response;
     }
 }

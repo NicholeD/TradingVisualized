@@ -5,6 +5,7 @@ import com.kenzie.appserver.repositories.StockRepository;
 import com.kenzie.appserver.service.StockService;
 import com.kenzie.appserver.service.model.Fish;
 import com.kenzie.appserver.service.model.Stock;
+import com.kenzie.capstone.service.client.StockServiceClient;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,10 +18,13 @@ public class StockAndFishConverter {
 
     public static StockService stockService;
 
-    public StockAndFishConverter(StockRepository stockRepository, FishRepository fishRepository) {
+    private StockServiceClient stockServiceClient;
+
+    public StockAndFishConverter(StockRepository stockRepository, FishRepository fishRepository, StockServiceClient stockServiceClient) {
         this.stockRepository = stockRepository;
         this.fishRepository = fishRepository;
-        this.stockService = new StockService(stockRepository, fishRepository);
+        this.stockServiceClient = stockServiceClient;
+        this.stockService = new StockService(stockRepository, fishRepository, stockServiceClient);
     }
 
     public static Fish stockToFish(Stock stock){
