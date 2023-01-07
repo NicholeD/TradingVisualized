@@ -5,12 +5,11 @@ import net.andreinc.mockneat.MockNeat;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 @IntegrationTest
-public class ControllerIntegrationTests {
+public class ControllerIntegrationTests_sell {
 
     @Autowired
     private MockMvc mvc;
@@ -28,33 +27,6 @@ public class ControllerIntegrationTests {
     }
 
     @Test
-    public void getPurchasedStock_returnsPurchasedStock() {
-        //GIVEN
-
-        //WHEN
-
-        //THEN
-    }
-
-    @Test
-    public void purchaseStock_stockIsAddedToPortfolio() {
-        //GIVEN
-
-        //WHEN
-
-        //THEN
-    }
-
-    @Test
-    public void purchaseMoreStock_ownedStockIncreases() {
-        //GIVEN
-
-        //WHEN
-
-        //THEN
-    }
-
-    @Test
     public void sellStock_ownedStockDecreases() {
         //GIVEN
 
@@ -63,23 +35,5 @@ public class ControllerIntegrationTests {
         //THEN
     }
 
-
-    @Test
-    public void userContacts_communicationReceived() {
-        //GIVEN
-
-        //WHEN
-
-        //THEN
-    }
-
-    @Test
-    public void userContacts_incompleteForm_throwsException() {
-        //GIVEN
-
-        //WHEN
-
-        //THEN
-    }
-
+    //Add more tests for higher coverage
 }
