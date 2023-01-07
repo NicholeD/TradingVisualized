@@ -94,7 +94,7 @@ class CheckoutPage extends BaseClass {
          else
              result += `Realized Loss: $${dollars.format(net*quantity)}<br>`
 
-         result +=`</br><div>Avail funds for trading: $${dollars.format(funds)}</div>`
+         result +=`</br><div>Total Value of your current portfolio $${dollars.format(funds)}</div>`
         result += `Total Cost: $${dollars.format(100000.00 - (net*quantity))}<br>`
          resultArea.innerHTML = result;
      }
