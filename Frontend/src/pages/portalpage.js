@@ -3,23 +3,18 @@ import DataStore from "../util/DataStore";
 import PortalClient from "../api/portalClient";
 
 
-        async function sellReal(i, errorHandler){
+        async function sellReal(i, stock, errorHandler){
                   let sellQuantity = document.getElementById("sellQuantity").value;
                   console.log("SellQUANTITIY: " + sellQuantity);
                   console.log("sellReal" + i);
-                  console.log("errorHandler" + errorHandler);
                   let client = new PortalClient();
-                  console.log('client' + client);
-                  let portfolioStocks = JSON.parse(localStorage.getItem("portfolioStocks") || "[]" );
-                  console.log(portfolioStocks);
-                  let stock = portfolioStocks[i];
                   console.log(stock);
                   let result = await client.sellStock(stock, errorHandler);
                   console.log(result.data);
                   window.location.reload();
         }
 
-        function displayPopup(i, errorHandler) {
+        function displayPopup(i, stock, errorHandler) {
                     // Create the popup element
                     let popup = document.createElement('div');
                     popup.classList.add('popup');
@@ -30,8 +25,28 @@ import PortalClient from "../api/portalClient";
 
                     // Add an event listener to the confirm button that triggers the sellShares function when the button is clicked
                     let sellConfirm = document.getElementById('sellConfirm');
+                   /* let sellShares = parseInt(sellQuantity.value);*/
+                    let ownedShares = stock.stock.quantity;
+                    console.log("STOCK:" + JSON.stringify(stock));
+
+                    console.log("OWNEDSHARES: " + ownedShares);
                     sellConfirm.addEventListener('click', function(){
-                    sellReal(i, errorHandler)
+                    let sellShares = parseInt(document.getElementById('sellQuantity').value);
+                    console.log("SELLSHARES: " + sellShares);
+                    if (sellShares == 0){
+                        popup.innerHTML = "<div class='errorMessage'>One cannot sell nothing</div>";
+                        setTimeout(function() {
+                            displayPopup(i, stock, errorHandler);
+                        }, 3000);
+                    }
+                    else if (sellShares > ownedShares){
+                        popup.innerHTML = "<div class='errorMessage'>One cannot sell more than one has</div>";
+                        setTimeout(function() {
+                            displayPopup(i, stock, errorHandler);
+                        }, 3000);                    }
+                    else {
+                    sellReal(i, stock, errorHandler)
+                    }
                     });
         }
 
@@ -86,7 +101,7 @@ class PortalPage extends BaseClass {
                     console.log(buttons[i]);
                     document.getElementById('sell' + i).addEventListener('click',
                     function() {
-                        displayPopup(i, this.errorHandler);
+                        displayPopup(i, portfolio[i], this.errorHandler);
                         return false;
                     });
                 }

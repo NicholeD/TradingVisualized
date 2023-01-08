@@ -109,8 +109,6 @@ class StockPage extends BaseClass{
                 series: [{points: stockPrice}],
                 legend_visible: false,
                 autoFit: false,
-                height: 400,
-                width: 700,
 
             });
             var chartElement = document.getElementById("chart");
