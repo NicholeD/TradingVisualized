@@ -47,7 +47,7 @@ class PortalPage extends BaseClass {
             if (portfolio) {
                 console.log(portfolio);
 
-                let finale = "<table border='1' width='90%'><tr><th style='background-color: #B894FF; height: 3px;'>Symbol</th><th style='background-color: #B894FF; height: 3px;'>Quantity</th><th style='background-color: #B894FF; height: 3px;'>Purchase Price</th><th style='background-color: #B894FF; height: 3px;'>Total Value</th><th style='background-color: #B894FF; height: 3px;'>Purchase Date</th><th style='background-color: #B894FF; height: 3px;'>Sell</th></tr>";
+                let finale = "<table id='table' border='1' width='90%'><tr><th style='background-color: #4fbbb7; height: 3px;'>Symbol</th><th style='background-color: #4fbbb7; height: 3px;'>Quantity</th><th style='background-color: #4fbbb7; height: 3px;'>Purchase Price</th><th style='background-color: #4fbbb7; height: 3px;'>Total Value</th><th style='background-color: #4fbbb7; height: 3px;'>Purchase Date</th><th style='background-color: #4fbbb7; height: 3px;'>Sell</th></tr>";
                 let divy = document.getElementById("stocklist");
                 let funds = 0.00;
 

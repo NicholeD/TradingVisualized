@@ -47,16 +47,16 @@ function setResult(stock, quantity, purchasedate, funds){
     let resultArea = document.getElementById("purchase");
     let result = "";
     result += `<h4>${stock[0]}</h4><br>`
-    result += `Symbol: ${stock[1]}<br>`
-    result += `Current Price: $${stock[2]}<br>`
-    result += `Purchase Price: $${(stock[3]*quantity).toFixed(2)}<br>`
+    result += `Symbol: ${stock[1].toUpperCase()}<br>`
+    result += `Current Stock Price: $${stock[2]}<br>`
+    result += `Total Purchase Price: $${(stock[3]*quantity).toFixed(2)}<br>`
     result += `Purchase Date: ${purchasedate.toLocaleDateString()}<br><br>`
 
 //    if(net > 0)
 //        result += `Realized Profit: $${dollars.format(net*quantity)}<br>`
 //    else
 //        result += `Realized Loss: $${dollars.format(net*quantity)}<br>`
-    result +=`</br><div>Avail funds for trading: $${funds}</div>`
+    result +=`</br><div>Total value of your current portfolio: $${funds}</div>`
 
 
 
