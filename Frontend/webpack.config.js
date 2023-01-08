@@ -36,6 +36,7 @@ module.exports = {
           '/fish',
           '/purchasedstocks',
           '/stocks',
+          '/visualize'
         ],
         target: 'http://localhost:5001'
       }

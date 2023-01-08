@@ -17,10 +17,10 @@ public class VisualizeController {
 
     @GetMapping
     public ResponseEntity<String> visualize(){
-        File file = FileEventListener.getFile();
+        String file = "../Frontend/src/exe/TV.exe";
         try {
             Runtime run = Runtime.getRuntime();
-            Process proc = run.exec(file.getAbsolutePath());
+            Process proc = run.exec(file);
             return ResponseEntity.ok("started");
         }
         catch (IOException e){
