@@ -53,7 +53,7 @@ export default class PortalClient extends BaseClass {
             const response = await this.client.post(`/stocks/sell`, {
                 userId: sellStockRequest[0],
                 stockSymbol: sellStockRequest[1],
-                name: sellStockRequest[2],
+                stockName: sellStockRequest[2],
                 salePrice: sellStockRequest[3],
                 shares: sellStockRequest[4],
                 sellStockDate: sellStockRequest[5]

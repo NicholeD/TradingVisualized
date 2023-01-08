@@ -67,17 +67,5 @@ public class FileEventListener {
         }
     }
 
-//    @PostConstruct
-//    public void setDataFile() {
-//        //get all stocks via calling stockServiceClient.getPurchaseStock
-//        List<PurchasedStock> purchasedStocks = stockServiceClient.getPurchasedStock("userId");
-//
-//        //convert the purchasedStock to Fish
-//        List<Fish> fishList = purchasedStocks.stream()
-//                .map(StockAndFishConverter::purchaseStockToFish)
-//                .collect(Collectors.toList());
-//
-//        //call this convertToJsonFile from jsonToFishConverter on the list of Fish
-//        JsonFishConverter.convertToJsonFile(fishList, file);
-//    }
+
 }

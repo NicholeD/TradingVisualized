@@ -53,13 +53,17 @@
     border: 3px solid #003366;
     position: relative;
     float: left;
+    color: #3133ff
+
 }
 
 .stock a:hover{
     background-image: url("https://zastrow.com/kenzie/ttt/images/buy2.png");
     background-position: center;
 }
-
+#table {
+    text-align: center;
+}
 #stocklist {
 }
 #stockresults {
@@ -67,12 +71,14 @@
     display: inline;
 }
 #chart {
-    display: inline;
-    width: 100px;
-    height: 100px;
-    max-width: 100px;
-    max-height: 100px;
-    float: left;
+    display: inline-block;
+    width: 200px;
+    height: 200px;
+    max-width: 300px;
+    max-height: 300px;
+    margin: auto;
+    padding: 0 25vh;
+
 }
 #chart :hover {
     cursor: pointer;

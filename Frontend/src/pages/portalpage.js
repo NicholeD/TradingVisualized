@@ -46,17 +46,18 @@ class PortalPage extends BaseClass {
             let Session = window.sessionStorage;
             if (portfolio) {
                 console.log(portfolio);
-//                const portfolioStocks = Object.assign({}, portfolio);
-//                console.log(portfolioStocks);
-                let finale = "<table border='1' width='90%'><tr><th style='background-color: #B894FF; height: 3px;'>Symbol</th><th style='background-color: #B894FF; height: 3px;'>Quantity</th><th style='background-color: #B894FF; height: 3px;'>Purchase Price</th><th style='background-color: #B894FF; height: 3px;'>Price Paid</th><th style='background-color: #B894FF; height: 3px;'>Purchase Date</th><th style='background-color: #B894FF; height: 3px;'>Sell</th></tr>";
+
+                let finale = "<table id='table' border='1' width='90%'><tr><th style='background-color: #4fbbb7; height: 3px;'>Symbol</th><th style='background-color: #4fbbb7; height: 3px;'>Quantity</th><th style='background-color: #4fbbb7; height: 3px;'>Purchase Price</th><th style='background-color: #4fbbb7; height: 3px;'>Total Value</th><th style='background-color: #4fbbb7; height: 3px;'>Purchase Date</th><th style='background-color: #4fbbb7; height: 3px;'>Sell</th></tr>";
                 let divy = document.getElementById("stocklist");
-                let funds = 10000.00;
+                let funds = 0.00;
 
                 for(let i = 0; i < portfolio.length; i++){
-                    finale += "<tr><td>" + portfolio[i].stock.symbol + "</td><td>" + portfolio[i].stock.quantity + "</td><td>" + portfolio[i].stock.purchasePrice + "</td><td>" + portfolio[i].stock.quantity * portfolio[i].stock.purchasePrice + "</td><td>" + portfolio[i].stock.purchaseDate + "</td><td><button id='sell" + i + "' type='button' >  Sell</button></td></tr>";
-                    funds -= portfolio[i].stock.quantity.n*portfolio[i].stock.purchasePrice.n;
+                    let symbol = (portfolio[i].stock.symbol).toString();
+                    finale += "<tr><td>" + symbol.toUpperCase() + "</td><td>" + portfolio[i].stock.quantity + "</td><td>" + '$' + portfolio[i].stock.purchasePrice + "</td><td>" + '$' + (portfolio[i].stock.quantity*portfolio[i].stock.purchasePrice).toFixed(2) + "</td><td>" + new Date(portfolio[i].stock.purchaseDate).toLocaleDateString() + "</td><td><button id='sell" + i + "' type='button' >  Sell</button></td></tr>";
+                    funds += portfolio[i].stock.quantity*portfolio[i].stock.purchasePrice;
                 }
-
+                let totalValue = document.getElementById("totalValue");
+                totalValue.innerHTML = `Portfolio Value: $${funds}`
                 localStorage.setItem("funds", funds);
                 localStorage.setItem("portfolioStocks", JSON.stringify(portfolio));
                 console.log(localStorage);

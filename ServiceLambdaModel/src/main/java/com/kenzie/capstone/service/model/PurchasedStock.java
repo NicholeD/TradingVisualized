@@ -12,7 +12,7 @@ public class PurchasedStock {
         this.stock = stock;
         this.purchasedDate = purchasedDate;
     }
-
+    
     public String getUserId() {
         return userId;
     }
