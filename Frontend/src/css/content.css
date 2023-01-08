@@ -64,6 +64,24 @@
 #table {
     text-align: center;
 }
+.popup {
+  position: absolute;
+  top: 40%;
+  right: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-20%, -20%);
+    height: 100px;
+    width: 300px;
+    background-color: rgba(0, 0, 0, 0);
+    border: 2px solid #45a29f;
+    text-align: center;
+    color: white;
+  /* Additional styles for the popup */
+}
+.sellBox {
+    background-color: white;
+}
 #stocklist {
 }
 #stockresults {
