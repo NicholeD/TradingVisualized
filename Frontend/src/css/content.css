@@ -64,6 +64,30 @@
 #table {
     text-align: center;
 }
+.popup {
+display: flex;
+align-items: center;
+justify-content: center;
+  position: absolute;
+  top: 9%;
+  right: 0;
+  bottom: 0;
+  left: 40%;
+    height: 100px;
+    width: 300px;
+    background-color: #1f2833;
+    border: 2px solid #45a29f;
+    text-align: center;
+    color: #45a29f;
+  /* Additional styles for the popup */
+}
+.errorMessage {
+    color: red;
+    line-break: central !important;
+}
+.sellBox {
+    background-color: white;
+}
 #stocklist {
 }
 #stockresults {
@@ -71,13 +95,11 @@
     display: inline;
 }
 #chart {
-    display: inline-block;
-    width: 200px;
-    height: 200px;
-    max-width: 300px;
-    max-height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
     margin: auto;
-    padding: 0 25vh;
 
 }
 #chart :hover {

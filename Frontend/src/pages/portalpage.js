@@ -3,21 +3,52 @@ import DataStore from "../util/DataStore";
 import PortalClient from "../api/portalClient";
 
 
-        async function sellReal(i, errorHandler){
+        async function sellReal(i, stock, errorHandler){
+                  let sellQuantity = document.getElementById("sellQuantity").value;
+                  console.log("SellQUANTITIY: " + sellQuantity);
                   console.log("sellReal" + i);
-                  console.log("errorHandler" + errorHandler);
                   let client = new PortalClient();
-                  console.log('client' + client);
-                  let portfolioStocks = JSON.parse(localStorage.getItem("portfolioStocks") || "[]" );
-                  console.log(portfolioStocks);
-                  let stock = portfolioStocks[i];
                   console.log(stock);
                   let result = await client.sellStock(stock, errorHandler);
                   console.log(result.data);
                   window.location.reload();
         }
 
+        function displayPopup(i, stock, errorHandler) {
+                    // Create the popup element
+                    let popup = document.createElement('div');
+                    popup.classList.add('popup');
+                    popup.innerHTML = '<div id="sellBox"><p>How many shares would you like to sell?</p><input type="text" id="sellQuantity"><button id="sellConfirm" type="button">Confirm</button></div>';
 
+                    // Add the popup to the page
+                    document.body.appendChild(popup);
+
+                    // Add an event listener to the confirm button that triggers the sellShares function when the button is clicked
+                    let sellConfirm = document.getElementById('sellConfirm');
+                   /* let sellShares = parseInt(sellQuantity.value);*/
+                    let ownedShares = stock.stock.quantity;
+                    console.log("STOCK:" + JSON.stringify(stock));
+
+                    console.log("OWNEDSHARES: " + ownedShares);
+                    sellConfirm.addEventListener('click', function(){
+                    let sellShares = parseInt(document.getElementById('sellQuantity').value);
+                    console.log("SELLSHARES: " + sellShares);
+                    if (sellShares == 0){
+                        popup.innerHTML = "<div class='errorMessage'>One cannot sell nothing</div>";
+                        setTimeout(function() {
+                            displayPopup(i, stock, errorHandler);
+                        }, 3000);
+                    }
+                    else if (sellShares > ownedShares){
+                        popup.innerHTML = "<div class='errorMessage'>One cannot sell more than one has</div>";
+                        setTimeout(function() {
+                            displayPopup(i, stock, errorHandler);
+                        }, 3000);                    }
+                    else {
+                    sellReal(i, stock, errorHandler)
+                    }
+                    });
+        }
 
 class PortalPage extends BaseClass {
 
@@ -38,6 +69,7 @@ class PortalPage extends BaseClass {
            console.log(result.data);
 
         }
+
         async renderPortfolio() {
             let resultArea = document.getElementById("results-area");
 
@@ -53,7 +85,7 @@ class PortalPage extends BaseClass {
 
                 for(let i = 0; i < portfolio.length; i++){
                     let symbol = (portfolio[i].stock.symbol).toString();
-                    finale += "<tr><td>" + symbol.toUpperCase() + "</td><td>" + portfolio[i].stock.quantity + "</td><td>" + '$' + portfolio[i].stock.purchasePrice + "</td><td>" + '$' + (portfolio[i].stock.quantity*portfolio[i].stock.purchasePrice).toFixed(2) + "</td><td>" + new Date(portfolio[i].stock.purchaseDate).toLocaleDateString() + "</td><td><button id='sell" + i + "' type='button' >  Sell</button></td></tr>";
+                    finale += "<tr><td>" + symbol.toUpperCase() + "</td><td>" + portfolio[i].stock.quantity + "</td><td>" + '$' + (portfolio[i].stock.purchasePrice).toFixed(2) + "</td><td>" + '$' + (portfolio[i].stock.quantity*portfolio[i].stock.purchasePrice).toFixed(2) + "</td><td>" + new Date(portfolio[i].stock.purchaseDate).toLocaleDateString() + "</td><td><button id='sell" + i + "' type='button' >  Sell</button></td></tr>";
                     funds += portfolio[i].stock.quantity*portfolio[i].stock.purchasePrice;
                 }
                 let totalValue = document.getElementById("totalValue");
@@ -69,7 +101,8 @@ class PortalPage extends BaseClass {
                     console.log(buttons[i]);
                     document.getElementById('sell' + i).addEventListener('click',
                     function() {
-                        sellReal(i, this.errorHandler);
+                        displayPopup(i, portfolio[i], this.errorHandler);
+                        return false;
                     });
                 }
             } else {
