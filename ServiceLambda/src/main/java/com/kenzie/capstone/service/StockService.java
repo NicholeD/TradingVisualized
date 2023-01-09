@@ -32,7 +32,7 @@ public class StockService {
             throw new InvalidDataException("Request must contain a valid userId");
         }
         PurchasedStockRecord record = PurchaseConverter.fromRequestToRecord(request);
-        System.out.println(record.toString());
+        System.out.println( "IN STOCKSERVICE SETPURCHASEDSTOCK: " + record.toString());
         cachingStockDao.addPurchasedStock(record);
         return PurchaseConverter.fromRecordToResponse(record);
     }

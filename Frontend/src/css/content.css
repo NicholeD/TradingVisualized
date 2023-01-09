@@ -81,6 +81,9 @@ justify-content: center;
     color: #45a29f;
   /* Additional styles for the popup */
 }
+.show{
+    display: flex !important;
+}
 .errorMessage {
     color: red;
     line-break: central !important;
