@@ -84,8 +84,8 @@ public class ControllerIntegrationTests_sell {
         purchaseStockRequest.setName(mockNeat.names().get());
         purchaseStockRequest.setPurchasePrice(32.00);
         purchaseStockRequest.setShares(30);
-
         purchaseStockRequest.setPurchaseDate(mockNeat.localDates().valStr());
+
         stockService.purchaseStock(purchaseStockRequest);
 
         SellStockRequest sellStockRequest = new SellStockRequest();
@@ -94,6 +94,7 @@ public class ControllerIntegrationTests_sell {
         sellStockRequest.setShares(purchaseStockRequest.getShares());
         sellStockRequest.setsalePrice(100.00);
         sellStockRequest.setSellStockDate(mockNeat.localDates().valStr());
+
         stockService.sellStock(sellStockRequest);
 
         //WHEN

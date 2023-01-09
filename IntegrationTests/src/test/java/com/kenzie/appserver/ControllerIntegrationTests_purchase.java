@@ -130,6 +130,12 @@ public class ControllerIntegrationTests_purchase {
     }
 
     //Add more tests for higher coverage
+    @Test
+    public void getStocksBySymbol() throws Exception {
 
+
+
+
+    }
 }
 
