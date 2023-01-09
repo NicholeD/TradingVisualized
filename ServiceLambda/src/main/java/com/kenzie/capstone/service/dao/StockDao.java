@@ -10,19 +10,20 @@ import com.kenzie.capstone.service.model.PurchasedStockRecord;
 import com.kenzie.capstone.service.model.SellStockRequest;
 
 
-
+import javax.inject.Inject;
 import java.util.List;
 
 public class StockDao implements Dao {
     private DynamoDBMapper mapper;
 
+    @Inject
     public StockDao(DynamoDBMapper mapper) {
         this.mapper = mapper;
     }
 
     public PurchasedStockRecord addPurchasedStock(PurchasedStockRecord record) {
         try {
-            System.out.println(record.toString());
+            System.out.println("STOCKKDDAAO " + record.toString());
             mapper.save(record);
 
         } catch (ConditionalCheckFailedException e) {

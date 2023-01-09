@@ -48,6 +48,7 @@ public class CachingStockDao implements Dao {
     public PurchasedStockRecord addPurchasedStock(PurchasedStockRecord record) {
         // Invalidate
         cacheClient.invalidate(String.format(STOCK_KEY, record.getName()));
+        System.out.println("IN CACHINGSTOCKDAO" + record);
         // Add referral to database
         return stockDao.addPurchasedStock(record);
     }
