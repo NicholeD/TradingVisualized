@@ -53,13 +53,44 @@
     border: 3px solid #003366;
     position: relative;
     float: left;
+    color: #3133ff
+
 }
 
 .stock a:hover{
     background-image: url("https://zastrow.com/kenzie/ttt/images/buy2.png");
     background-position: center;
 }
-
+#table {
+    text-align: center;
+}
+.popup {
+display: flex;
+align-items: center;
+justify-content: center;
+  position: absolute;
+  top: 9%;
+  right: 0;
+  bottom: 0;
+  left: 40%;
+    height: 100px;
+    width: 300px;
+    background-color: #1f2833;
+    border: 2px solid #45a29f;
+    text-align: center;
+    color: #45a29f;
+  /* Additional styles for the popup */
+}
+.show{
+    display: flex !important;
+}
+.errorMessage {
+    color: red;
+    line-break: central !important;
+}
+.sellBox {
+    background-color: white;
+}
 #stocklist {
 }
 #stockresults {
@@ -67,12 +98,12 @@
     display: inline;
 }
 #chart {
-    display: inline;
-    width: 100px;
-    height: 100px;
-    max-width: 100px;
-    max-height: 100px;
-    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+    margin: auto;
+
 }
 #chart :hover {
     cursor: pointer;

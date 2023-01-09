@@ -2,18 +2,20 @@ package com.kenzie.appserver.controller;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
-
 import com.kenzie.appserver.controller.model.SearchStockResponse;
-
 import com.kenzie.appserver.controller.model.StockResponse;
 import com.kenzie.appserver.repositories.model.SoldStockRecord;
 import com.kenzie.appserver.service.StockService;
+import com.kenzie.appserver.service.model.Fish;
 import com.kenzie.appserver.service.model.SoldStock;
 import com.kenzie.appserver.service.model.Stock;
+import com.kenzie.appserver.service.model.converter.JsonFishConverter;
+import com.kenzie.appserver.service.model.converter.StockAndFishConverter;
 import com.kenzie.capstone.service.client.StockServiceClient;
 import com.kenzie.capstone.service.model.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.kenzie.appserver.FileEventListener;
 
 import javax.naming.InsufficientResourcesException;
 import java.net.URI;
@@ -33,7 +35,7 @@ public class StockController {
     private StockService stockService;
 
     private StockServiceClient stockServiceClient;
-    //TODO - should this be lambda client?
+
     AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
 
     public StockController(StockService stockService, StockServiceClient stockServiceClient) {
@@ -62,8 +64,7 @@ public class StockController {
         String name = stockService.getStockNameBySymbol(purchasedStockRequest.getSymbol());
         System.out.println(name  + ":NAME");
         System.out.println(purchasedStockRequest.toString());
-        PurchasedStockResponse response = stockServiceClient.addPurchasedStock(purchasedStockRequest);
-
+        PurchasedStockResponse response = stockService.purchaseStock(purchasedStockRequest);
 
 //        StockRecord stock = new StockRecord();
 //        stock.setUserId(purchasedStockRequest.getUserId());
@@ -73,13 +74,13 @@ public class StockController {
 //        stock.setQuantity(purchasedStockRequest.getShares());
 //        stock.setPurchaseDate(purchasedStockRequest.getPurchaseDate());
 //
-        PurchasedStockResponse purchasedStockResponse = new PurchasedStockResponse();
-        purchasedStockResponse.setUserId(purchasedStockRequest.getUserId());
-        purchasedStockResponse.setStockSymbol(purchasedStockRequest.getSymbol());
-        purchasedStockResponse.setPurchasePrice(purchasedStockRequest.getPurchasePrice());
-        purchasedStockResponse.setShares(purchasedStockRequest.getShares());
-        purchasedStockResponse.setPurchasePrice(purchasedStockRequest.getPurchasePrice()*purchasedStockRequest.getShares());
-        purchasedStockResponse.setPurchaseDate(purchasedStockRequest.getPurchaseDate());
+//        PurchasedStockResponse purchasedStockResponse = new PurchasedStockResponse();
+//        purchasedStockResponse.setUserId(purchasedStockRequest.getUserId());
+//        purchasedStockResponse.setStockSymbol(purchasedStockRequest.getSymbol());
+//        purchasedStockResponse.setPurchasePrice(purchasedStockRequest.getPurchasePrice());
+//        purchasedStockResponse.setShares(purchasedStockRequest.getShares());
+//        purchasedStockResponse.setPurchasePrice(purchasedStockRequest.getPurchasePrice()*purchasedStockRequest.getShares());
+//        purchasedStockResponse.setPurchaseDate(purchasedStockRequest.getPurchaseDate());
 //
 //        PurchasedStockRecord record = new PurchasedStockRecord(stock.getUserId(),
 //                name, stock.getSymbol(), stock.getPurchaseDate(), stock.getPurchasePrice(),
@@ -95,7 +96,7 @@ public class StockController {
 //        keyToGet.put("name", new AttributeValue(name));
 //        client.putItem("Portfolio", keyToGet);
 
-        return ResponseEntity.created(URI.create("/stocks/" + response.getUserId())).body(purchasedStockResponse);
+        return ResponseEntity.created(URI.create("/stocks/" + response.getUserId())).body(response);
     }
 
     @PostMapping("/sell")
@@ -124,6 +125,9 @@ public class StockController {
     public ResponseEntity<List<PurchasedStock>> getPortfolioByUserId(@PathVariable("userId") String userId) {
 //        ScanResult result = client.scan("Portfolio", null, null);
         List<PurchasedStock> stockList = stockServiceClient.getPurchasedStock(userId);
+        //convert stockList into a list of Fish
+        List<Fish> fishList = StockAndFishConverter.purchasedStockToFishList(stockList);
+        JsonFishConverter.convertToJsonFile(fishList, FileEventListener.getFile());
         return ResponseEntity.ok(stockList);
     }
 

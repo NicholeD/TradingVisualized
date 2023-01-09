@@ -9,6 +9,7 @@ import com.google.gson.stream.JsonWriter;
 import com.kenzie.capstone.service.dao.Dao;
 import com.kenzie.capstone.service.dao.StockDao;
 import com.kenzie.capstone.service.model.PurchasedStockRecord;
+import com.kenzie.capstone.service.model.SellStockRequest;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -18,8 +19,7 @@ import java.util.List;
 
 public class CachingStockDao implements Dao {
     private static final int STOCK_READ_TTL = 60 * 60;
-    private static final String STOCK_KEY = "ReferralKey::%s";
-
+    private static final String STOCK_KEY = "StockKey::%s";
     private final CacheClient cacheClient;
     private final StockDao stockDao;
     private final Gson gson;
@@ -48,8 +48,15 @@ public class CachingStockDao implements Dao {
     public PurchasedStockRecord addPurchasedStock(PurchasedStockRecord record) {
         // Invalidate
         cacheClient.invalidate(String.format(STOCK_KEY, record.getName()));
+        System.out.println("IN CACHINGSTOCKDAO" + record);
         // Add referral to database
         return stockDao.addPurchasedStock(record);
+    }
+
+    @Override
+    public PurchasedStockRecord sellStock(SellStockRequest request) {
+        cacheClient.invalidate(String.format(STOCK_KEY, request.getStockName()));
+        return stockDao.sellStock(request);
     }
 
     @Override

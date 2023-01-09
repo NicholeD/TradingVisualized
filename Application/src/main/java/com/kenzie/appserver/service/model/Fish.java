@@ -21,6 +21,7 @@ public class Fish {
         this.status = status;
     }
     public Fish(String name, float size, double quantity, double price, String status) {
+        this.id = "Undefined";
         this.name = name;
         this.size = size;
         this.quantity = quantity;
@@ -65,7 +66,7 @@ public class Fish {
         this.price = price;
     }
 
-    public String isStatus() {
+    public String getStatus() {
         return status;
     }
 

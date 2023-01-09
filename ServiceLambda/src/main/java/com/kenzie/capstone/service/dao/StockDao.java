@@ -10,19 +10,20 @@ import com.kenzie.capstone.service.model.PurchasedStockRecord;
 import com.kenzie.capstone.service.model.SellStockRequest;
 
 
-
+import javax.inject.Inject;
 import java.util.List;
 
 public class StockDao implements Dao {
     private DynamoDBMapper mapper;
 
+    @Inject
     public StockDao(DynamoDBMapper mapper) {
         this.mapper = mapper;
     }
 
     public PurchasedStockRecord addPurchasedStock(PurchasedStockRecord record) {
         try {
-            System.out.println(record.toString());
+            System.out.println("STOCKKDDAAO " + record.toString());
             mapper.save(record);
 
         } catch (ConditionalCheckFailedException e) {
@@ -58,15 +59,17 @@ public class StockDao implements Dao {
         System.out.println(request.toString());
 
         PurchasedStockRecord purchasedStockRecord = mapper.load(PurchasedStockRecord.class, record.getSymbol());
-
+        System.out.println(purchasedStockRecord.toString());
         int ownedShares = purchasedStockRecord.getShares();
 
         if (request.getShares() < ownedShares) {
             purchasedStockRecord.setShares((ownedShares - request.getShares()));
             //saving over the record for ease rather than implementing @Transactional
+            System.out.println("IN IF STATEMENT, SAVE/UPDATE");
             mapper.save(purchasedStockRecord);
 
         } else if (request.getShares() == ownedShares) {
+            System.out.println("IN ELSE IF DELETE");
             mapper.delete(purchasedStockRecord);
         } else {
             throw new ResponseStatusException( "One cannot simply sell more than one owns.");

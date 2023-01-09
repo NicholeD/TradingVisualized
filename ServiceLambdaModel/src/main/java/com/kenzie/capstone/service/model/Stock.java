@@ -13,7 +13,6 @@ public class Stock {
 
     private String purchaseDate;
 
-
     public Stock(String symbol, String name, double purchasePrice, int quantity, String purchaseDate) {
         this.symbol = symbol;
         this.name = name;
@@ -22,7 +21,6 @@ public class Stock {
         this.purchaseDate = purchaseDate;
     }
     public Stock(){}
-
 
     public Stock(String symbol, String name, double purchasePrice, String purchaseDate) {
         this.symbol = symbol;

@@ -30,7 +30,7 @@ class StockPage extends BaseClass{
             result += `<div>Stock Name: ${stock.name}</div>`
             result += `<div>Stock Symbol: ${stock.symbol.toUpperCase()}</div>`
             result += `<div>Current Price: \$${stockStocks[0].purchasePrice}</div>`
-            let date = new Date(stockStocks[0].purchaseDate.toString());
+            var date = new Date(Date.now());
             let currentStock = stockStocks[0];
             const purchasePrices = stockStocks.map(stock => stock.purchasePrice);
             console.log(purchasePrices);
@@ -43,30 +43,72 @@ class StockPage extends BaseClass{
             ${stockStocks.length} day low: $${Math.min(...purchasePrices)}
             <a class="hyperlink" href="checkout.html?name=${currentStock.name}&symbol=${currentStock.symbol}&currentprice=${currentStock.purchasePrice}&purchaseprice=${currentStock.purchasePrice}&purchasedate=${currentStock.purchaseDate}"><span></br></span></a></div>`;
 
-//            result += `<div class = "oldStockPrice">This stock price ${stockStocks.length} days ago was $${stockStocks[stockStocks.length - 1].purchasePrice}.</div>`;
-           // for (let stock of stockStocks) {
-           //     let date = new Date(stock.purchaseDate.toString());
-            //    result += `<div class="stock"><h3>\$${stock.purchasePrice}</h3>${date.toLocaleDateString()}<a class="hyperlink" href="checkout.html?name=${stock.name}&symbol=${stock.symbol}&currentprice=${stockStocks[0].purchasePrice}&purchaseprice=${stock.purchasePrice}&purchasedate=${stock.purchaseDate}"><span></br></span></a></div>`;
-            //}
-//            result += `<div id="chart" style="width:50%; height:600px; margin:0 auto;"> </div>`;
             var stockPrice = [];
             let count = 0;
+            var max = 0;
+            var min = 1000;
             for (let stoc of stockStocks.reverse()){
                 if (count == 30){
                     break;
                 }
+
                 let price = stoc.purchasePrice;
                 let date = stoc.purchaseDate.slice(-5);
                 stockPrice.push({ x: date, y: price });
+
+                if (price > max){
+                    max = price;
+                }
+                if (price < min){
+                    min = price;
+                }
                 count++;
             }
+
+            var currentAngle = 360;
+
+            var fillStylesObj = {
+                 'currentColor -> lightenMore': ['currentColor', 'lightenMore'],
+                 'currentColor -> lighten': ['currentColor', 'lighten'],
+                 'currentColor -> darkenMore': ['currentColor', 'darkenMore'],
+                 'currentColor -> darken': ['currentColor', 'darken'],
+                 'lighten -> darken': ['lighten', 'darken'],
+                 'lightenMore -> darkenMore': ['lightenMore', 'darkenMore']
+            };
+
+            var currentColors = fillStylesObj['currentColor -> lightenMore'];
+            var currentFill = currentColors.concat(currentAngle);
             const chart = new JSC.chart("chart", {
+                type: 'area spline',
                 title_label_text: `Stock Price over the last ${stockStocks.length} days`,
+                yAxis: {
+                    defaultTick_gridLine_visible: false,
+                    scale: {
+                        range: {
+                            min: min - 10,
+                            max: max + 10,
+                            padding: 1
+                        }
+                    }
+                },
+                xAxis: {
+                    defaultTick: {
+                        color: 'red',
+                        gridLine_visible: false,
+                    }
+                    },
+                defaultSeries: {
+                    color: '#45a29f',
+                     shape: { fill: currentFill }
+                },
+                defaultPoint: {
+                    marker: {
+                        visible: false
+                    }
+                },
                 series: [{points: stockPrice}],
                 legend_visible: false,
                 autoFit: false,
-                height: 300,
-                width: 500,
 
             });
             var chartElement = document.getElementById("chart");
@@ -77,7 +119,33 @@ class StockPage extends BaseClass{
             chartElement.addEventListener("click", function() {
                 overlay.style.display = "block";
                 const expandedChart = new JSC.chart(expandedChartContainer, {
+                    type: 'area spline',
                     title_label_text: `Stock Price over the last ${stockStocks.length} days`,
+                     yAxis: {
+                           defaultTick_gridLine_visible: false,
+                           scale: {
+                               range: {
+                                    min: min - 10,
+                                    max: max + 10,
+                                    padding: 1
+                               }
+                           }
+                     },
+                     xAxis: {
+                           defaultTick: {
+                               color: 'red',
+                               gridLine_visible: false,
+                           }
+                     },
+                     defaultSeries: {
+                           color: '#45a29f',
+                           shape: { fill: currentFill }
+                     },
+                     defaultPoint: {
+                           marker: {
+                                visible: false
+                           }
+                     },
                     series: [{points: stockPrice}],
                     legend_visible: false,
                     autoFit: false,

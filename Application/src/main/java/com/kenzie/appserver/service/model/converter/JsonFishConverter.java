@@ -1,6 +1,6 @@
 package com.kenzie.appserver.service.model.converter;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kenzie.appserver.service.model.Fish;
 
@@ -77,6 +77,7 @@ public class JsonFishConverter {
             return;
         }
         try {
+            System.out.println(mapper.writeValueAsString(fishList));
             mapper.writeValue(file, fishList);
             BufferedReader reader = new BufferedReader(new java.io.FileReader(file));
             StringBuffer buffer = new StringBuffer();
@@ -133,7 +134,18 @@ public class JsonFishConverter {
             }
         } catch (IOException e) {
             System.out.println("An Error has Occurred with the File Reader");
+            System.out.println(e.getMessage());
         }
         return substrings;
+    }
+
+    public static void convertToJsonString(List<Fish> fishList) throws JsonProcessingException {
+        if(fishList == null) {
+            return;
+        }
+        for(Fish f : fishList) {
+            Fish fish = mapper.readValue(f.toString(), Fish.class);
+            System.out.println(mapper.writeValueAsString(fish));
+        }
     }
 }

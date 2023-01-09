@@ -48,8 +48,6 @@ public class PurchasedStockRecord {
         this.recordId = recordId;
     }
 
-
-
     @DynamoDBAttribute(attributeName = "name")
     public String getName() {
         return name;

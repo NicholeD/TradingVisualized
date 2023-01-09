@@ -1,32 +1,45 @@
 package com.kenzie.appserver;
 
-import com.kenzie.appserver.service.FishService;
 import com.kenzie.appserver.service.model.Fish;
 import com.kenzie.appserver.service.model.converter.JsonFishConverter;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
+import com.kenzie.appserver.service.model.converter.StockAndFishConverter;
+import com.kenzie.capstone.service.client.StockServiceClient;
+import com.kenzie.capstone.service.model.PurchaseStockRequest;
+import com.kenzie.capstone.service.model.PurchasedStock;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
-import java.net.URL;
 import java.util.List;
 
 @Component
 public class FileEventListener {
 
     private long lastModified;
-    private File file;
-    private FishService fishService;
+    public static File file;
+    private StockServiceClient client;
 
-    public FileEventListener(FishService fishService) throws IOException {
-        file = new File("C:/Users/zchal/kenzie/ata-capstone-project-tv/exe/TV_Data/data.txt");
-        lastModified = file.lastModified();
-        this.fishService = fishService;
+    public static File getFile() {
+        return file;
+    }
+    public FileEventListener() throws IOException {
+        file = new File("../Frontend/src/exe/TV_Data/data.txt");
+        client = new StockServiceClient();
     }
 
-    @Scheduled(fixedDelay = 5000)
+    @PostConstruct
+    public void init() {
+        List<PurchasedStock> stockList = client.getPurchasedStock("userId");
+        System.out.println("Application Starting...");
+        List<Fish> fishList = StockAndFishConverter.purchasedStockListConvertToFishList(stockList);
+        //Convert PurchasedStock to Fish
+        JsonFishConverter.convertToJsonFile(fishList, file);
+        //Convert Fish to JsonFile
+        lastModified = file.lastModified();
+    }
+
+    @Scheduled(fixedDelay = 5000, initialDelay = 10000)
     public void checkFileModified() {
 //        System.out.println("FileModified");
 
@@ -41,9 +54,9 @@ public class FileEventListener {
                 lastModified = modified;
                 try (FileReader reader = new FileReader(file)) {
                     List<Fish> fishList = JsonFishConverter.convertToFishFromFile(file);
-                    for (Fish fish : fishList) {
-                        fishService.addNewFish(fish);
-                        System.out.println(fish.toString());
+                    List<PurchaseStockRequest> requestList = StockAndFishConverter.fishListToPurchasedStockRecord(fishList);
+                    for (PurchaseStockRequest request : requestList) {
+                        client.addPurchasedStock(request);
                     }
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
@@ -53,4 +66,6 @@ public class FileEventListener {
             throw new RuntimeException(e);
         }
     }
+
+
 }

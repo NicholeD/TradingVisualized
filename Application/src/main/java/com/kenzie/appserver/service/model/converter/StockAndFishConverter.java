@@ -4,8 +4,12 @@ import com.kenzie.appserver.repositories.FishRepository;
 import com.kenzie.appserver.repositories.StockRepository;
 import com.kenzie.appserver.service.StockService;
 import com.kenzie.appserver.service.model.Fish;
-import com.kenzie.appserver.service.model.Stock;
+import com.kenzie.capstone.service.model.PurchaseStockRequest;
+import com.kenzie.capstone.service.model.PurchasedStock;
+import com.kenzie.capstone.service.model.Stock;
+import com.kenzie.capstone.service.client.StockServiceClient;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,14 +21,18 @@ public class StockAndFishConverter {
 
     public static StockService stockService;
 
-    public StockAndFishConverter(StockRepository stockRepository, FishRepository fishRepository) {
+    private StockServiceClient stockServiceClient;
+
+    public StockAndFishConverter(StockRepository stockRepository, FishRepository fishRepository, StockServiceClient stockServiceClient) {
         this.stockRepository = stockRepository;
         this.fishRepository = fishRepository;
-        this.stockService = new StockService(stockRepository, fishRepository);
+        this.stockServiceClient = stockServiceClient;
+        this.stockService = new StockService(stockRepository, fishRepository, stockServiceClient);
     }
 
     public static Fish stockToFish(Stock stock){
         Fish fish = new Fish();
+        fish.setId(stock.getSymbol());
         fish.setName(stock.getName()); //not sure if fish name should be stock name or stock symbol
         fish.setPrice(stock.getPurchasePrice());
         fish.setQuantity(stock.getQuantity());
@@ -56,4 +64,32 @@ public class StockAndFishConverter {
                 .collect(Collectors.toList());
     }
 
+    public static List<Fish> purchasedStockToFishList (List<PurchasedStock> stockList){
+        return stockList.stream()
+                .map(r ->{
+                    Stock stock = r.getStock();
+                    return new Fish(stock.getSymbol(), stock.getName(), (float) (stock.getQuantity()*stock.getPurchasePrice()), stock.getQuantity(),stock.getPurchasePrice(), "Alive");
+                }).collect(Collectors.toList());
+    }
+    public static List<Fish> purchasedStockListConvertToFishList(List<PurchasedStock> purcasedStockList) {
+         return purcasedStockList.stream()
+                .map(f -> {
+                    Stock current = f.getStock();
+                    Fish fish = stockToFish(current);
+                    return fish;
+                }).collect(Collectors.toList());
+    }
+
+    public static List<PurchaseStockRequest> fishListToPurchasedStockRecord(List<Fish> fishList) {
+        return fishList.stream()
+                .map(f -> {
+                    PurchaseStockRequest request = new PurchaseStockRequest();
+                    if(f.getStatus().equals("Alive")) {
+                        request = new PurchaseStockRequest("userId", f.getId(), f.getName(), f.getPrice(), (int)Math.round(f.getQuantity()), LocalDate.now().toString());
+                    }
+                    return request;
+                })
+                .filter(purchaseStockRequest -> purchaseStockRequest.getName() != null)
+                .collect(Collectors.toList());
+    }
 }

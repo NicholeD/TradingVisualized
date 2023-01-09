@@ -39,21 +39,21 @@ export default class PortalClient extends BaseClass {
             this.handleError("visualize", error, errorCallBack);
         }
     }
-    async sellStock(stock, errorCallBack) {
+    async sellStock(stock, shares, errorCallBack) {
         try {
+
             let userId = stock.userId;
             let stockSymbol = stock.stock.symbol;
             let name = stock.stock.name;
             let salePrice = stock.stock.purchasePrice;
-            let shares = stock.stock.quantity;
             let sellStockDate = new Date().toLocaleDateString('en-US');
-
+            console.log("SHARES: " + shares)
             let sellStockRequest = [userId, stockSymbol, name, salePrice, shares, sellStockDate];
             console.log(sellStockRequest);
             const response = await this.client.post(`/stocks/sell`, {
                 userId: sellStockRequest[0],
                 stockSymbol: sellStockRequest[1],
-                name: sellStockRequest[2],
+                stockName: sellStockRequest[2],
                 salePrice: sellStockRequest[3],
                 shares: sellStockRequest[4],
                 sellStockDate: sellStockRequest[5]
