@@ -3,7 +3,6 @@ package com.kenzie.capstone.service.dependency;
 
 import com.kenzie.capstone.service.caching.CacheClient;
 import com.kenzie.capstone.service.caching.CachingStockDao;
-import com.kenzie.capstone.service.dao.ExampleDao;
 import com.kenzie.capstone.service.dao.StockDao;
 import com.kenzie.capstone.service.util.DynamoDbClientProvider;
 
