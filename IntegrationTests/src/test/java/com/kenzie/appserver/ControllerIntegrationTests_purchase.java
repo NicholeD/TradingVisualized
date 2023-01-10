@@ -4,6 +4,7 @@ import com.kenzie.appserver.service.StockService;
 import com.kenzie.capstone.service.model.PurchaseStockRequest;
 import com.kenzie.capstone.service.model.PurchasedStock;
 import com.kenzie.capstone.service.model.PurchasedStockResponse;
+import com.kenzie.capstone.service.model.SellStockRequest;
 import net.andreinc.mockneat.MockNeat;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -11,12 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.server.ResponseStatusException;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.type.TypeReference;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -44,10 +48,10 @@ public class ControllerIntegrationTests_purchase {
         //GIVEN
         PurchaseStockRequest request = new PurchaseStockRequest();
         request.setUserId(mockNeat.strings().get());
-        request.setSymbol("amzn");
+        request.setSymbol("PURCHASETEST");
         request.setName(mockNeat.names().get());
         request.setPurchasePrice(mockNeat.doubles().get());
-        request.setShares(mockNeat.ints().get());
+        request.setShares(10);
         request.setPurchaseDate(mockNeat.localDates().valStr());
 
         PurchasedStockResponse response = stockService.purchaseStock(request);
@@ -62,7 +66,10 @@ public class ControllerIntegrationTests_purchase {
         List<PurchasedStock> purchasedStock = mapper.readValue(responseBody, new TypeReference<List<PurchasedStock>>() {});
 
         //THEN
-        assertThat(purchasedStock.get(0).getStock().getUserId().equals(request.getUserId()));
+        assertThat(purchasedStock.get(0).getUserId().equals(request.getUserId()));
+        assertEquals(purchasedStock.get(0).getStock().getSymbol(), request.getSymbol());
+        assertEquals(purchasedStock.get(0).getStock().getName(), request.getName());
+        assertEquals(purchasedStock.get(0).getStock().getQuantity(), request.getShares());
     }
 
     @Test
@@ -70,10 +77,10 @@ public class ControllerIntegrationTests_purchase {
         //GIVEN
         PurchaseStockRequest request = new PurchaseStockRequest();
         request.setUserId(mockNeat.strings().get());
-        request.setSymbol("amzn");
+        request.setSymbol("PURCHASETEST2");
         request.setName(mockNeat.names().get());
         request.setPurchasePrice(mockNeat.doubles().get());
-        request.setShares(mockNeat.ints().get());
+        request.setShares(10);
         request.setPurchaseDate(mockNeat.localDates().valStr());
         stockService.purchaseStock(request);
 
@@ -89,7 +96,7 @@ public class ControllerIntegrationTests_purchase {
         //THEN
         assertThat(purchasedStock).isNotEmpty();
         assertThat(purchasedStock.get(0).getStock().getSymbol()).isEqualTo(request.getSymbol());
-        assertThat(purchasedStock.get(0).getStock().getUserId()).isEqualTo(request.getUserId());
+        assertThat(purchasedStock.get(0).getUserId()).isEqualTo(request.getUserId());
     }
 
     @Test
@@ -97,7 +104,7 @@ public class ControllerIntegrationTests_purchase {
         //GIVEN
         PurchaseStockRequest request = new PurchaseStockRequest();
         request.setUserId(mockNeat.strings().get());
-        request.setSymbol("amzn");
+        request.setSymbol("PURCHASETEST3");
         request.setName(mockNeat.names().get());
         request.setPurchasePrice(55.00);
         request.setShares(20);
@@ -106,12 +113,12 @@ public class ControllerIntegrationTests_purchase {
         stockService.purchaseStock(request);
 
         PurchaseStockRequest request2 = new PurchaseStockRequest();
-        request.setUserId(request.getUserId());
-        request.setSymbol(request.getSymbol());
-        request.setName(request.getUserId());
-        request.setPurchasePrice(45.00);
-        request.setShares(5);
-        request.setPurchaseDate(mockNeat.localDates().valStr());
+        request2.setUserId(request.getUserId());
+        request2.setSymbol(request.getSymbol());
+        request2.setName(request.getUserId());
+        request2.setPurchasePrice(45.00);
+        request2.setShares(5);
+        request2.setPurchaseDate(mockNeat.localDates().valStr());
 
         PurchasedStockResponse response = stockService.purchaseStock(request2);
 
@@ -129,13 +136,21 @@ public class ControllerIntegrationTests_purchase {
         assertThat(purchasedStock.get(0).getStock().getQuantity() == (request.getShares() + request2.getShares()));
     }
 
-    //Add more tests for higher coverage
+
     @Test
-    public void getStocksBySymbol() throws Exception {
+    void purchaseStockZeroSharesThrowsException() {
+        PurchaseStockRequest request = new PurchaseStockRequest();
+        request.setUserId(mockNeat.names().valStr());
+        request.setName(mockNeat.names().valStr());
+        request.setSymbol("TEST");
+        request.setPurchaseDate(mockNeat.localDates().toString());
+        request.setPurchasePrice(35.00);
+        request.setShares(0);
 
-
-
+        assertThrows(ResponseStatusException.class, () -> stockService.purchaseStock(request));
 
     }
+    //Add more tests for higher coverage
+
 }
 

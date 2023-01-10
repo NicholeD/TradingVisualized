@@ -30,7 +30,7 @@ public class PurchaseConverter {
         return new PurchasedStock(record.getUserId(), stock, record.getDateOfPurchase());
     }
 
-    public static SellStockResponse fromRecordToSellStock(PurchasedStockRecord record){
+    public static SellStockResponse  fromRecordToSellStock(PurchasedStockRecord record){
         SellStockResponse response = new SellStockResponse();
         response.setUserId(record.getUserId());
         response.setSymbol(record.getSymbol());

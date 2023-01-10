@@ -4,10 +4,12 @@ import com.kenzie.capstone.service.caching.CachingStockDao;
 import com.kenzie.capstone.service.model.*;
 import net.andreinc.mockneat.MockNeat;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.mockito.ArgumentCaptor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,7 +25,7 @@ public class StockServiceTest {
 
     private final MockNeat mockNeat = MockNeat.threadLocal();
 
-    @BeforeAll
+    @BeforeEach
     void setup() {
         this.dao = mock(CachingStockDao.class);
         this.stockService = new StockService(dao);
@@ -72,6 +74,10 @@ public class StockServiceTest {
         assertNotNull(response, "RECORD SHOULD NOT BE NULL");
 
         String userId = request.getUserId();
+        List<PurchasedStockRecord> stocks = new ArrayList<>();
+        stocks.add(new PurchasedStockRecord(request.getUserId(), request.getName(), request.getSymbol(), request.getPurchaseDate(),request.getPurchasePrice(),request.getShares()));
+        when(dao.findByUserId(any())).thenReturn(stocks);
+
         List<PurchasedStock> stockList = stockService.getPurchasedStocks(userId);
         assertTrue(!stockList.isEmpty());
 
@@ -106,8 +112,14 @@ public class StockServiceTest {
         sellRequest.setsalePrice(35.00);
         sellRequest.setShares(10);
 
+        when(dao.sellStock(sellRequest)).thenReturn(new PurchasedStockRecord(request.getUserId(), request.getName(), request.getSymbol(), request.getPurchaseDate(),request.getPurchasePrice(),request.getShares()));
+
         SellStockResponse sellResponse = stockService.sellStock(sellRequest);
         assertNotNull(response, "SellResponse SHOULD NOT BE NULL");
+
+        List<PurchasedStockRecord> stocks = new ArrayList<>();
+        stocks.add(new PurchasedStockRecord(request.getUserId(), request.getName(), request.getSymbol(), request.getPurchaseDate(),request.getPurchasePrice(),request.getShares()));
+        when(dao.findByUserId(any())).thenReturn(stocks);
 
         String userId = sellRequest.getUserId();
         List<PurchasedStock> stockList = stockService.getPurchasedStocks(userId);

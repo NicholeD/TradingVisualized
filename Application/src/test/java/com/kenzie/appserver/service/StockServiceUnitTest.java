@@ -41,6 +41,12 @@ public class StockServiceUnitTest {
         this.fishRepository = mock(FishRepository.class);
         this.stockServiceClient = mock(StockServiceClient.class);
         this.stockService = new StockService(stockRepository, fishRepository, stockServiceClient);
+        try {
+            //too many consecutive calls to external api causes it to fail
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
@@ -95,7 +101,7 @@ public class StockServiceUnitTest {
 
 
     @Test
-    void purchaseStockTestThrowsException() {
+    void purchaseStockZeroSharesTestThrowsException() {
         PurchaseStockRequest request = new PurchaseStockRequest();
         request.setUserId(mockNeat.names().valStr());
         request.setName(mockNeat.names().valStr());
@@ -137,7 +143,7 @@ public class StockServiceUnitTest {
     }
 
     @Test
-    void sellStockThrowsException() {
+    void sellStockZeroSharesThrowsException() {
         SellStockRequest sellRequest = new SellStockRequest();
         sellRequest.setUserId(mockNeat.names().valStr());
         sellRequest.setStockName(mockNeat.names().valStr());

@@ -47,7 +47,7 @@ build.dependsOn buildZip
 
 def wflowToTestsMap = [
         'run-integration-tests': [
-                'com.kenzie.appserver.controller.*',
+                'com.kenzie.appserver.*',
         ]
 ]
 

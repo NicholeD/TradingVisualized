@@ -12,12 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.server.ResponseStatusException;
 import org.testcontainers.shaded.com.fasterxml.jackson.core.type.TypeReference;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,7 +45,7 @@ public class ControllerIntegrationTests_sell {
     public void sellStock_ownedStockDecreases() throws Exception {
         //GIVEN
         String userId = mockNeat.strings().get();
-        String symbol = "amzn";
+        String symbol = "SELLTEST";
         int sharesToSell = 5;
 
         PurchaseStockRequest purchaseStockRequest = new PurchaseStockRequest();
@@ -80,7 +82,7 @@ public class ControllerIntegrationTests_sell {
         //GIVEN
         PurchaseStockRequest purchaseStockRequest = new PurchaseStockRequest();
         purchaseStockRequest.setUserId(mockNeat.strings().get());
-        purchaseStockRequest.setSymbol("amzn");
+        purchaseStockRequest.setSymbol("SELLTEST2");
         purchaseStockRequest.setName(mockNeat.names().get());
         purchaseStockRequest.setPurchasePrice(32.00);
         purchaseStockRequest.setShares(30);
@@ -109,6 +111,17 @@ public class ControllerIntegrationTests_sell {
         //THEN
         assertThat(response).isEmpty();
     }
+    @Test
+    void sellStockZeroSharesThrowsException() {
+        SellStockRequest sellRequest = new SellStockRequest();
+        sellRequest.setUserId(mockNeat.names().valStr());
+        sellRequest.setStockName(mockNeat.names().valStr());
+        sellRequest.setStockSymbol("TEST");
+        sellRequest.setSellStockDate(mockNeat.localDates().valStr());
+        sellRequest.setsalePrice(35.00);
+        sellRequest.setShares(0);
 
+        assertThrows(ResponseStatusException.class, () -> stockService.sellStock(sellRequest));
+    }
     //Add more tests for higher coverage
 }
