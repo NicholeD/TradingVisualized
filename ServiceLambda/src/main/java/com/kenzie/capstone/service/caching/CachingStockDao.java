@@ -47,7 +47,7 @@ public class CachingStockDao implements Dao {
     @Override
     public PurchasedStockRecord addPurchasedStock(PurchasedStockRecord record) {
         // Invalidate
-        cacheClient.invalidate(String.format(STOCK_KEY, record.getName()));
+        cacheClient.invalidate(String.format(STOCK_KEY, record.getUserId()));
         System.out.println("IN CACHINGSTOCKDAO" + record);
         // Add referral to database
         return stockDao.addPurchasedStock(record);
@@ -55,7 +55,7 @@ public class CachingStockDao implements Dao {
 
     @Override
     public PurchasedStockRecord sellStock(SellStockRequest request) {
-        cacheClient.invalidate(String.format(STOCK_KEY, request.getStockName()));
+        cacheClient.invalidate(String.format(STOCK_KEY, request.getUserId()));
         return stockDao.sellStock(request);
     }
 
@@ -74,8 +74,8 @@ public class CachingStockDao implements Dao {
         return gson.fromJson(json, new TypeToken<ArrayList<PurchasedStockRecord>>() { }.getType());
     }
 
-    private List<PurchasedStockRecord> addToCache(List<PurchasedStockRecord> records, String referrerId) {
-        cacheClient.setValue(String.format(STOCK_KEY, referrerId),
+    private List<PurchasedStockRecord> addToCache(List<PurchasedStockRecord> records, String userId) {
+        cacheClient.setValue(String.format(STOCK_KEY, userId),
                 STOCK_READ_TTL, gson.toJson(records)
         );
         return records;

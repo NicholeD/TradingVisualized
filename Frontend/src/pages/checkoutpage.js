@@ -56,7 +56,7 @@ function setResult(stock, quantity, purchasedate, funds){
 //        result += `Realized Profit: $${dollars.format(net*quantity)}<br>`
 //    else
 //        result += `Realized Loss: $${dollars.format(net*quantity)}<br>`
-    result +=`</br><div>Total value of your current portfolio: $${funds}</div>`
+    result +=`</br><div>Total value of your current portfolio: $${funds.toFixed(2)}</div>`
 
 
 
