@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CachingStockDao implements Dao {
-    private static final int STOCK_READ_TTL = 60 * 60;
+    private static final int STOCK_READ_TTL = 60;
     private static final String STOCK_KEY = "StockKey::%s";
     private final CacheClient cacheClient;
     private final StockDao stockDao;
