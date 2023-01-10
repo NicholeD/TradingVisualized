@@ -1,1 +1,4 @@
-{"id":"SELLTEST","name":"Therese Cichonski","size":160.0,"quantity":5.0,"price":32.0,"status":"Alive"}
+
+
+{"id":"tsla","name":"Tesla Inc","size":4522.4,"quantity":40.0,"price":113.06,"status":"Alive"}{"id":"aapl","name":"Apple Inc","size":2592.4,"quantity":20.0,"price":129.62,"status":"Alive"}{"id":"thisIsStockSymbol","name":"thisIsStockName","size":100.0,"quantity":1.0,"price":100.0,"status":"Alive"}{"id":"amzn","name":"Angelia Galow","size":2.90815296E8,"quantity":1.304714969E9,"price":0.22289565567239422,"status":"Alive"}
+
