@@ -3,6 +3,7 @@ package com.kenzie.appserver.service;
 import com.kenzie.appserver.repositories.FishRepository;
 import com.kenzie.appserver.repositories.StockRepository;
 import com.kenzie.appserver.service.model.Fish;
+import com.kenzie.appserver.service.model.converter.JsonFishConverter;
 import com.kenzie.appserver.service.model.converter.StockAndFishConverter;
 import com.kenzie.capstone.service.client.StockServiceClient;
 import com.kenzie.capstone.service.model.PurchaseStockRequest;
@@ -10,6 +11,8 @@ import com.kenzie.capstone.service.model.PurchasedStock;
 import com.kenzie.capstone.service.model.Stock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonProcessingException;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
 
 public class ConverterTests {
@@ -25,9 +29,12 @@ public class ConverterTests {
     public StockService stockService;
     private StockServiceClient stockServiceClient;
     private StockAndFishConverter converter;
+    private JsonFishConverter jsonFishConverter;
+    private ObjectMapper mapper = new ObjectMapper();
 
     @BeforeEach
     void setup() {
+        this.jsonFishConverter = mock(JsonFishConverter.class);
         this.stockRepository = mock(StockRepository.class);
         this.fishRepository = mock(FishRepository.class);
         this.stockServiceClient = mock(StockServiceClient.class);
@@ -205,5 +212,45 @@ public class ConverterTests {
         //THEN
         assertEquals(purchaseStockRequests.size(), convertedList.size());
         assertEquals(purchaseStockRequests.get(0).getSymbol(), convertedList.get(0).getSymbol());
+    }
+
+    @Test
+    void convertToJson_withNullFish() {
+        //GIVEN
+        Fish fish = null;
+
+        //WHEN
+        String json = jsonFishConverter.convertToJson(fish);
+
+        //THEN
+        assertNull(json);
+    }
+
+    @Test
+    void convertToFish_withNullJson() {
+        //GIVEN
+        String json = null;
+
+        //WHEN
+        List<Fish> fish = jsonFishConverter.convertToFish(json);
+
+        //THEN
+        assertNull(fish);
+    }
+
+    @Test
+    void convertToJson_convertSuccessful() throws JsonProcessingException {
+        //GIVEN
+        List<Fish> fishList = new ArrayList<>();
+        Fish fish = new Fish("amzn","name",(float) 10*4, 4,10.00,"Alive");
+        fishList.add(fish);
+
+        String json = mapper.writeValueAsString(fishList);
+
+        //WHEN
+        String convertedJson = jsonFishConverter.convertToJson(fishList);
+
+        //THEN
+        assertEquals(json, convertedJson);
     }
 }
