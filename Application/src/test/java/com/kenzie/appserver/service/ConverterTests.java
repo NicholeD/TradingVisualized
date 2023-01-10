@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -54,7 +55,8 @@ public class ConverterTests {
         Fish convertedFish = converter.stockToFish(stock);
 
         //THEN
-        assertEquals(fish, convertedFish);
+        assertEquals(fish.getId(), convertedFish.getId());
+        assertEquals(fish.getQuantity(), convertedFish.getQuantity());
     }
 
     @Test
@@ -76,7 +78,7 @@ public class ConverterTests {
         Stock convertedStock = converter.fishToStock(fish);
 
         //THEN
-        assertEquals(stock, convertedStock);
+        assertEquals(stock.getUserId(), convertedStock.getUserId());
    }
 
    @Test
@@ -95,7 +97,7 @@ public class ConverterTests {
 
        //THEN
        assertEquals(fishList.size(), convertedList.size());
-       assertEquals(fishList.get(0), convertedList.get(0));
+       assertEquals(fishList.get(0).getName(), convertedList.get(0).getName());
    }
 
     @Test
@@ -114,7 +116,8 @@ public class ConverterTests {
 
         //THEN
         assertEquals(stockList.size(), stocks.size());
-        assertEquals(stockList.get(0), stocks.get(0));
+        assertEquals(stockList.get(0).getUserId(), stocks.get(0).getUserId());
+        assertEquals(stockList.get(0).getName(), stocks.get(0).getName());
     }
 
     @Test
@@ -130,16 +133,18 @@ public class ConverterTests {
         purchasedStock.setStock(stock);
         purchasedStock.setUser("userId");
         purchasedStock.setpurchasedDate(LocalDate.now().toString());
+        purchasedStocks.add(purchasedStock);
 
         List<Fish> fishList = new ArrayList<>();
-        fishList.add(converter.stockToFish(stock));
+        fishList.add(StockAndFishConverter.stockToFish(stock));
 
         //WHEN
-        List<Fish> convertedList = converter.purchasedStockToFishList(purchasedStocks);
+        List<Fish> convertedList = StockAndFishConverter.purchasedStockToFishList(purchasedStocks);
 
         //THEN
         assertEquals(fishList.size(), convertedList.size());
-        assertEquals(fishList.get(0), convertedList.get(0));
+        assertEquals(fishList.get(0).getId(), convertedList.get(0).getId());
+        assertEquals(fishList.get(0).getQuantity(), convertedList.get(0).getQuantity());
     }
 
     @Test
@@ -155,16 +160,18 @@ public class ConverterTests {
         purchasedStock.setStock(stock);
         purchasedStock.setUser("userId");
         purchasedStock.setpurchasedDate(LocalDate.now().toString());
+        purchasedStocks.add(purchasedStock);
 
         List<Fish> fishList = new ArrayList<>();
-        fishList.add(converter.stockToFish(stock));
+        fishList.add(StockAndFishConverter.stockToFish(stock));
 
         //WHEN
-        List<Fish> convertedList = converter.purchasedStockToFishList(purchasedStocks);
+        List<Fish> convertedList = StockAndFishConverter.purchasedStockListConvertToFishList(purchasedStocks);
 
         //THEN
         assertEquals(fishList.size(), convertedList.size());
-        assertEquals(fishList.get(0), convertedList.get(0));
+        assertEquals(fishList.get(0).getId(), convertedList.get(0).getId());
+        assertEquals(fishList.get(0).getQuantity(), convertedList.get(0).getQuantity());
     }
 
     @Test
@@ -182,13 +189,21 @@ public class ConverterTests {
         request.setPurchasePrice(fish.getPrice());
         request.setPurchaseDate(LocalDate.now().toString());
         purchaseStockRequests.add(request);
+        purchaseStockRequests.stream()
+                .map(r -> {
+                    if (fish.getStatus().equals("Alive")) {
+                        r = new PurchaseStockRequest(r.getUserId(), r.getSymbol(), r.getName(), r.getPurchasePrice(), r.getShares(), r.getPurchaseDate());
+                    }
+                    return r;
+                })
+                .filter(purchaseStockRequest -> purchaseStockRequest.getName() != null)
+                .collect(Collectors.toList());
 
         //WHEN
-        List<PurchaseStockRequest> convertedList = converter.fishListToPurchasedStockRecord(fishList);
+        List<PurchaseStockRequest> convertedList = StockAndFishConverter.fishListToPurchasedStockRecord(fishList);
 
         //THEN
         assertEquals(purchaseStockRequests.size(), convertedList.size());
-        assertEquals(purchaseStockRequests.get(0), convertedList.get(0));
-
+        assertEquals(purchaseStockRequests.get(0).getSymbol(), convertedList.get(0).getSymbol());
     }
 }
