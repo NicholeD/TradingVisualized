@@ -1,7 +1,5 @@
 package com.kenzie.capstone.service.dependency;
 
-import com.kenzie.capstone.service.LambdaService;
-
 import com.kenzie.capstone.service.StockService;
 import dagger.Component;
 import redis.clients.jedis.Jedis;
