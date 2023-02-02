@@ -1,5 +1,5 @@
 
-![TV Logo](/Users/nicholedavidson/kenzie/ata-capstone-project-tv/Frontend/src/css/images/logo-no-background.png)
+![logo-no-background](https://user-images.githubusercontent.com/41700043/216448885-ffcba4ee-c59b-46f2-818e-5239627e111e.png)
 
 ---
 
@@ -15,16 +15,15 @@ This is a capstone project demonstrating Java, JUnit, AWS, ASP.NET, C#, HTML, CS
 
 ##### Visualize your portfolio
 
-![Visualize](/Users/nicholedavidson/kenzie/ata-capstone-project-tv/Frontend/src/css/images/FishVisualize.gif)
+![FishVisualize](https://user-images.githubusercontent.com/41700043/216448869-45860f75-1839-4b40-9fe9-b46aae95fef6.gif)
 
 ##### Search and buy stock
 
-![BuyingStock](/Users/nicholedavidson/kenzie/ata-capstone-project-tv/Frontend/src/css/images/TradingVisualized_BuyingStock.gif)
+![BuyStock](https://user-images.githubusercontent.com/41700043/216448654-4f97735c-1e6a-43c1-8613-416901ab0bd1.gif)
 
 ##### Sell purchased stock from you portfolio
 
-![SellingStock](/Users/nicholedavidson/kenzie/ata-capstone-project-tv/Frontend/src/css/images/TradingVisualized_SellStock.gif)
-
+![SellStock](https://user-images.githubusercontent.com/41700043/216448714-25fdfac8-7fdd-4cb8-a390-35b4ba5f7ade.gif)
 
 ##### Challenges faced and future feature implementations
 
