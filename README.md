@@ -1,41 +1,44 @@
-# ATA-Capstone-Project
 
-Follow the instructions in the course for completing the group Capstone project.
+![TV Logo](/Users/nicholedavidson/kenzie/ata-capstone-project-tv/Frontend/src/css/images/logo-no-background.png)
 
-### Fill out the environment variables
-Complete `setupEnvironment.sh` with the group repo name and the github username of the team member holding the repo.
-Confirm these are in lower case.
-The repo owner should confirm that all team members have been added to collaborate on the repo.
+---
 
-### To create the Lambda Example table in DynamoDB:
+# Introduction
 
-You must do this for the ServiceLambda to work!
+---
 
-```
-aws cloudformation create-stack --stack-name lambda-table --template-body file://LambdaExampleTable.yml --capabilities CAPABILITY_IAM
-```
+This is a capstone project demonstrating Java, JUnit, AWS, ASP.NET, C#, HTML, CSS, and Javascript skills.
 
-### To deploy the Development Environment
+## Project Description
 
-Run `./deployDev.sh`
+---
 
-As you are taking a break from work, use the END LAB button in Vocareum instead of removing the pipeline each time.
-The End Lab button will pause the lab and resources, not allowing the budget to be used. When you're ready to start again,
-click the Start Lab button to begin again with renewed AWS credentials.
+##### Visualize your portfolio
 
-To tear down the deployment then run `./cleanupDev.sh`
+![Visualize](/Users/nicholedavidson/kenzie/ata-capstone-project-tv/Frontend/src/css/images/FishVisualize.gif)
 
-### To deploy the CI/CD Pipeline
+##### Search and buy stock
 
-Fill out `setupEnvironment.sh` with the url of the github repo and the username (in all lowercase) of the 
-team member who is maintaining the repo. Confirm that the team member has added your username as a contributor to the repo.
+![BuyingStock](/Users/nicholedavidson/kenzie/ata-capstone-project-tv/Frontend/src/css/images/TradingVisualized_BuyingStock.gif)
 
-Run `./createPipeline.sh`
+##### Sell purchased stock from you portfolio
 
-As you are taking a break from work, use the END LAB button in Vocareum instead of removing the pipeline each time.
-The End Lab button will pause the lab and resources, not allowing the budget to be used. When you're ready to start again,
-click the Start Lab button to begin again with renewed AWS credentials.
+![SellingStock](/Users/nicholedavidson/kenzie/ata-capstone-project-tv/Frontend/src/css/images/TradingVisualized_SellStock.gif)
 
-To teardown the pipeline, run `./cleanupPipeline.sh`
 
+##### Challenges faced and future feature implementations
+
+## How to install & run project
+
+---
+
+## How to use the project
+
+---
+
+- PC users only - issues with mac users with visualization file ???
+
+## Credits
+
+---
 
