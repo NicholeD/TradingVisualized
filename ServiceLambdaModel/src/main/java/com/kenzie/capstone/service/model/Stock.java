@@ -4,13 +4,9 @@ public class Stock {
 
     private String userId;
     private String symbol;
-
     private String name;
-
     private double purchasePrice;
-
     private int quantity;
-
     private String purchaseDate;
 
     public Stock(String symbol, String name, double purchasePrice, int quantity, String purchaseDate) {

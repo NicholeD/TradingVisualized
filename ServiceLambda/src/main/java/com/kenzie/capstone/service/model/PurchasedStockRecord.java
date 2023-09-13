@@ -18,6 +18,7 @@ public class PurchasedStockRecord {
     private Double purchasePrice;
     private int shares;
     public PurchasedStockRecord(){}
+
     public PurchasedStockRecord(String userId, String name, String symbol,
                                 String dateOfPurchase, Double purchasePrice,
                                 int shares) {
@@ -29,6 +30,7 @@ public class PurchasedStockRecord {
         this.purchasePrice = purchasePrice;
         this.shares = shares;
     }
+
     @DynamoDBIndexHashKey(globalSecondaryIndexName = "userIdRecord")
     @DynamoDBAttribute(attributeName = "id")
     public String getUserId() {

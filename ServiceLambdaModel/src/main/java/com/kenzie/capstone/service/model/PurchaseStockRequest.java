@@ -16,6 +16,7 @@ public class PurchaseStockRequest {
     private String purchaseDate;
 
     public PurchaseStockRequest(){}
+
     public PurchaseStockRequest(String userId, String symbol,
                                 String name, double purchasePrice,
                                 int shares, String purchaseDate) {

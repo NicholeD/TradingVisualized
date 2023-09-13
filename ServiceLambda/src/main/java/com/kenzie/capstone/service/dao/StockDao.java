@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 public class StockDao implements Dao {
+
     private DynamoDBMapper mapper;
 
     @Inject
@@ -25,7 +26,6 @@ public class StockDao implements Dao {
         try {
             System.out.println("STOCKKDDAAO " + record.toString());
             mapper.save(record);
-
         } catch (ConditionalCheckFailedException e) {
                 throw new InvalidDataException("User does not exists");
         }
@@ -47,8 +47,7 @@ public class StockDao implements Dao {
 
     public PurchasedStockRecord sellStock(SellStockRequest request){
         if (request.getShares() <= 0) {
-            throw new ResponseStatusException(
-                    "Qty has to be greater than 0, one simply cannot sell nothing");
+            throw new ResponseStatusException("Qty has to be greater than 0, one simply cannot sell nothing");
         }
         System.out.println("IN SELL STOCK");
         //Retrieving record to update with new qty or delete

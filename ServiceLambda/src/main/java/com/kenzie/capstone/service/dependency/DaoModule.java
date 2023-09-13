@@ -43,5 +43,4 @@ public class DaoModule {
     public StockDao provideStockDao(@Named("DynamoDBMapper") DynamoDBMapper mapper) {
         return new StockDao(mapper);
     }
-
 }

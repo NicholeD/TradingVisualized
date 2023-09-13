@@ -27,8 +27,10 @@ public class StockServiceClient {
         } catch(JsonProcessingException e) {
             throw new ApiGatewayException("Unable to serialize request: " + e);
         }
+
         String response = endpointUtility.postEndpoint(ADD_PURCHASE_ENDPOINT, request);
         PurchasedStockResponse purchaseResponse;
+
         try {
             purchaseResponse = mapper.readValue(response, PurchasedStockResponse.class);
         } catch (Exception e) {
@@ -41,6 +43,7 @@ public class StockServiceClient {
         EndpointUtility endpointUtility = new EndpointUtility();
         String response = endpointUtility.getEndpoint(GET_PURCHASED_STOCK_ENDPOINT.replace("{userId}", userId));
         List<PurchasedStock> stocks;
+
         try {
             System.out.println(response + ":RESPONSE");
             stocks = mapper.readValue(response, new TypeReference<List<PurchasedStock>>(){});
@@ -61,6 +64,7 @@ public class StockServiceClient {
 
         String response = endpointUtility.postEndpoint(SELL_PURCHASED_STOCK_ENDPOINT, request);
         SellStockResponse sellStockResponse;
+
         try {
             sellStockResponse = mapper.readValue(response, SellStockResponse.class);
         } catch (Exception e) {
@@ -68,6 +72,4 @@ public class StockServiceClient {
         }
         return sellStockResponse;
     }
-
-
 }

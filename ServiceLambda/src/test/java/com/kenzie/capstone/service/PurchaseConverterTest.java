@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class PurchaseConverterTest {
     private final MockNeat mockNeat = MockNeat.threadLocal();
 
-
     @Test
     void fromRequestToRecordTest (){
         PurchaseStockRequest request = new PurchaseStockRequest();
@@ -92,6 +91,5 @@ public class PurchaseConverterTest {
         assertEquals(record.getShares(), response.getShares());
         assertEquals(record.getName(), response.getName());
         assertNotNull(response.getSellDate());
-
     }
 }

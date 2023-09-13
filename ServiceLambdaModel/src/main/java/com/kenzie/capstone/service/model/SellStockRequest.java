@@ -27,6 +27,7 @@ public class SellStockRequest {
     private String sellStockDate;
 
     public SellStockRequest (){}
+
     public SellStockRequest(String userId, String stockSymbol, String stockName,
                             double salePrice, int shares) {
         this.userId = userId;
@@ -84,7 +85,6 @@ public class SellStockRequest {
     public void setSellStockDate(String sellStockDate) {
         this.sellStockDate = sellStockDate;
     }
-
 
     @Override
     public String toString() {

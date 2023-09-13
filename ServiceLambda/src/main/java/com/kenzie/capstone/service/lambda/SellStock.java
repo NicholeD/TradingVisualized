@@ -41,13 +41,11 @@ public class  SellStock implements RequestHandler<APIGatewayProxyRequestEvent, A
             return response
                     .withStatusCode(200)
                     .withBody(gson.toJson(sellResponse));
-
         }
         catch(JsonProcessingException e){
             return response
                     .withStatusCode(400)
                     .withBody(gson.toJson(e.getMessage()));
-
         }
         catch (InvalidDataException e) {
             return response

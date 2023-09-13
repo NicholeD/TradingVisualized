@@ -9,7 +9,6 @@ public class PurchaseConverter {
     public static PurchasedStockRecord fromRequestToRecord(PurchaseStockRequest request) {
         return new PurchasedStockRecord(request.getUserId(), request.getName(),
                 request.getSymbol(), request.getPurchaseDate(), request.getPurchasePrice(), request.getShares());
-
     }
 
     public static PurchasedStockResponse fromRecordToResponse(PurchasedStockRecord record) {

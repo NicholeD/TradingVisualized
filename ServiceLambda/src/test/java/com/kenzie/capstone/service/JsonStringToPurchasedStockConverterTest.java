@@ -14,9 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class JsonStringToPurchasedStockConverterTest {
 
     private final MockNeat mockNeat = MockNeat.threadLocal();
-
     private ObjectMapper mapper = new ObjectMapper();
-
     private JsonStringToPurchasedStockConverter converter = new JsonStringToPurchasedStockConverter();
 
     @Test
@@ -38,6 +36,4 @@ public class JsonStringToPurchasedStockConverterTest {
         assertNotNull(body);
         PurchaseStockRequest response = converter.convert(body);
     }
-
-
 }

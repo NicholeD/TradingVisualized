@@ -18,6 +18,7 @@ public class CacheClient {
             cache.setex(key, seconds, value);
         };
     }
+
     public Optional<String> getValue(String key) {
         checkNonNullKey(key);
 
@@ -25,6 +26,7 @@ public class CacheClient {
             return Optional.ofNullable(cache.get(key));
         }
     }
+
     public Boolean invalidate(String key) {
         checkNonNullKey(key);
 
@@ -32,6 +34,7 @@ public class CacheClient {
             return cache.del(key) > 0;
         }
     }
+
     private void checkNonNullKey(String key) {
         if (key == null) {
             throw new IllegalArgumentException("Key cannot be null");

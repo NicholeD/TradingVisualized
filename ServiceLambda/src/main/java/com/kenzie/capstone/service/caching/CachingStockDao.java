@@ -76,9 +76,7 @@ public class CachingStockDao implements Dao {
 
     private List<PurchasedStockRecord> addToCache(List<PurchasedStockRecord> records, String userId) {
         cacheClient.setValue(String.format(STOCK_KEY, userId),
-                STOCK_READ_TTL, gson.toJson(records)
-        );
+                STOCK_READ_TTL, gson.toJson(records));
         return records;
     }
-
 }

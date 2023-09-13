@@ -32,7 +32,6 @@ public class SellStockResponse {
         this.userId = userId;
     }
 
-
     public String getSymbol() {
         return symbol;
     }

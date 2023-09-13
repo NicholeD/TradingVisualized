@@ -18,7 +18,6 @@ public class StockService {
 
     private CachingStockDao cachingStockDao;
     private ExecutorService executor;
-
     private PurchaseConverter purchaseConverter = new PurchaseConverter();
 
     @Inject
@@ -50,6 +49,4 @@ public class StockService {
 
         return PurchaseConverter.fromRecordToSellStock(record);
     }
-
-
 }

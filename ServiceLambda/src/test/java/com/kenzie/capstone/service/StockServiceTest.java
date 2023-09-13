@@ -20,9 +20,7 @@ import static org.mockito.Mockito.*;
 public class StockServiceTest {
 
     private CachingStockDao dao;
-
     private StockService stockService;
-
     private final MockNeat mockNeat = MockNeat.threadLocal();
 
     @BeforeEach
@@ -46,7 +44,6 @@ public class StockServiceTest {
         PurchasedStockResponse response = stockService.setPurchasedStock(request);
 
         verify(dao, times(1)).addPurchasedStock(recordCaptor.capture());
-
 
         assertNotNull(recordCaptor.getValue(), "RECORD SHOULD NOT BE NULL");
 
@@ -87,7 +84,6 @@ public class StockServiceTest {
         assertEquals(stockList.get(0).getStock().getPurchaseDate(), request.getPurchaseDate());
         assertEquals(stockList.get(0).getStock().getPurchasePrice(), request.getPurchasePrice());
         assertEquals(stockList.get(0).getStock().getQuantity(), request.getShares());
-
     }
 
     @Test
@@ -102,7 +98,6 @@ public class StockServiceTest {
 
         PurchasedStockResponse response = stockService.setPurchasedStock(request);
         assertNotNull(response, "PURCHASERESPONSE SHOULD NOT BE NULL");
-
 
         SellStockRequest sellRequest = new SellStockRequest();
         sellRequest.setUserId(request.getUserId());
@@ -125,8 +120,5 @@ public class StockServiceTest {
         List<PurchasedStock> stockList = stockService.getPurchasedStocks(userId);
 
         assertTrue(!stockList.isEmpty());
-
     }
-
-
 }
